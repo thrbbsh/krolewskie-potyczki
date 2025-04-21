@@ -1,4 +1,4 @@
-package com.лещkrolewskie_potyczki;
+package com.krolewskie_potyczki;
 
 import com.badlogic.gdx.Screen;
 
