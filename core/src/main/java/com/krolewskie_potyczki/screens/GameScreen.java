@@ -4,16 +4,18 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.krolewskie_potyczki.Main;
+import com.krolewskie_potyczki.view.GameView;
 
 /** First screen of the application. Displayed after the application is created. */
 public class GameScreen implements Screen {
     private Main game;
-    public Stage stage;
-    private Skin skin;
+    public GameView view;
 
     public GameScreen(Main game) {
         this.game = game;
+        view = new GameView(game);
     }
 
     @Override public void show() {
@@ -22,22 +24,23 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.2f, 0.3f, 0.4f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        stage.act(delta);
-        stage.draw();
+        view.render(delta);
     }
 
     @Override public void resize(int w, int h) {
-        stage.getViewport().update(w, h, true);
+        view.resize(w, h);
     }
 
-    @Override public void pause() { }
-    @Override public void resume() { }
-    @Override public void hide() { }
+    @Override public void pause() {
+        view.pause();
+    }
+    @Override public void resume() {
+        view.resume();
+    }
+    @Override public void hide() {
+        view.hide();
+    }
     @Override public void dispose() {
-        stage.dispose();
-        skin.dispose();
+        view.dispose();
     }
 }
