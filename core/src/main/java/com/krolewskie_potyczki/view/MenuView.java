@@ -2,11 +2,17 @@ package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.krolewskie_potyczki.Main;
+import com.krolewskie_potyczki.controller.MenuController;
+import com.krolewskie_potyczki.screens.GameScreen;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
+import javax.swing.event.ChangeEvent;
 
 public class MenuView implements Disposable {
     private Stage stage;
@@ -16,6 +22,8 @@ public class MenuView implements Disposable {
     public MenuView(Main game) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
+        MenuController controller = new MenuController(game);
 
         skin = new Skin(Gdx.files.internal("skins/craftacular-ui.json"));
 
@@ -34,16 +42,16 @@ public class MenuView implements Disposable {
         ImageTextButton exitButton = new ImageTextButton("Exit", skin, "default");
         exitButton.getLabel().setFontScale(4f);
 
-        startButton.addListener(event -> {
-            if (startButton.isPressed()) {
-                System.out.println("Начать игру!");
+        startButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                controller.onPlayClicked();
             }
-            return true;
         });
 
         exitButton.addListener(event -> {
             if (exitButton.isPressed()) {
-                Gdx.app.exit();
+                controller.onExitClicked();
             }
             return true;
         });
@@ -52,8 +60,8 @@ public class MenuView implements Disposable {
         table.add(titleLabel).padTop(150);
         table.row();
 
-        table.add(startButton).size(400, 150).padTop(100).padBottom(40).row();
-        table.add(exitButton).size(400, 150);
+        table.add(startButton).size(800, 150).padTop(100).padBottom(40).row();
+        table.add(exitButton).size(800, 150);
     }
 
     public void show() {
