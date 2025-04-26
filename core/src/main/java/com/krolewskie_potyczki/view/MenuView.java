@@ -3,10 +3,7 @@ package com.krolewskie_potyczki.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.krolewskie_potyczki.Main;
@@ -20,21 +17,21 @@ public class MenuView implements Disposable {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("skins/craftacular-ui.json"));
 
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = skin.getFont("default-font");
+        labelStyle.font = skin.getFont("font");
         Label titleLabel = new Label("KROLEWSKIE POTYCZKI", labelStyle);
-        titleLabel.setFontScale(10f);
+        titleLabel.setFontScale(3f);
 
-        TextButton startButton = new TextButton("Start", skin);
+        ImageTextButton startButton = new ImageTextButton("Start", skin, "default");
         startButton.getLabel().setFontScale(4f);
 
-        TextButton exitButton = new TextButton("Exit", skin);
+        ImageTextButton exitButton = new ImageTextButton("Exit", skin, "default");
         exitButton.getLabel().setFontScale(4f);
 
         startButton.addListener(event -> {
@@ -55,8 +52,8 @@ public class MenuView implements Disposable {
         table.add(titleLabel).padTop(150);
         table.row();
 
-        table.add(startButton).height(150).width(400).padTop(100).padBottom(40).row();
-        table.add(exitButton).height(150).width(400);
+        table.add(startButton).size(400, 150).padTop(100).padBottom(40).row();
+        table.add(exitButton).size(400, 150);
     }
 
     public void show() {
