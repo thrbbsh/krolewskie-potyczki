@@ -1,0 +1,52 @@
+package com.krolewskie_potyczki.screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.krolewskie_potyczki.Main;
+import com.krolewskie_potyczki.view.MenuView;
+
+public class MenuScreen implements Screen {
+    private Main game;
+    private MenuView view;
+
+    public MenuScreen(Main game) {
+        this.game = game;
+        this.view = new MenuView(game);
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
+        view.render(delta);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        view.resize(width, height);
+    }
+
+    @Override
+    public void pause() {
+        view.pause();
+    }
+
+    @Override
+    public void resume() {
+        view.resume();
+    }
+
+    @Override
+    public void hide() {
+        view.hide();
+    }
+
+    @Override
+    public void dispose() {
+        view.dispose();
+    }
+}
