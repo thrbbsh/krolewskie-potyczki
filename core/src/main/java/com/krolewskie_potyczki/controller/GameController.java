@@ -4,10 +4,12 @@ import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.EntityType;
+import com.krolewskie_potyczki.screens.MenuScreen;
 
 public class GameController {
     private final Main game;
     private final Arena arena;
+    private boolean paused = false;
     public GameController(Main game, Arena arena) {
         this.game = game;
         this.arena = arena;
@@ -17,7 +19,18 @@ public class GameController {
         arena.addEntity(e);
         return e;
     }
+    public boolean isPaused() {
+        return paused;
+    }
     public void onPauseClicked() {
-        //TO_DO
+        paused = true;
+    }
+
+    public void onResumeClicked() {
+        paused = false;
+    }
+
+    public void onMenuClicked() {
+        game.setScreen(new MenuScreen(game));
     }
 }
