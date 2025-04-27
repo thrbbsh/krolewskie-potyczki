@@ -4,6 +4,7 @@ import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.EntityType;
+import com.krolewskie_potyczki.screens.MenuScreen;
 
 public class GameController {
     private final Main game;
@@ -23,5 +24,13 @@ public class GameController {
     }
     public void onPauseClicked() {
         paused = true;
+    }
+
+    public void onResumeClicked() {
+        paused = false;
+    }
+
+    public void onMenuClicked() {
+        game.setScreen(new MenuScreen(game));
     }
 }

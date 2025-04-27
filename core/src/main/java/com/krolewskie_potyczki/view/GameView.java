@@ -23,12 +23,14 @@ public class GameView implements Disposable {
     private GameController controller;
     private Arena arena;
     private Label currentElixir;
+    private Stage pauseStage;
 
     public GameView(Arena arena, GameController gc) {
         this.controller = gc;
         this.arena = arena;
         arenaView = new ArenaView(arena);
         stage = new Stage();
+        pauseStage = new Stage();
         skin = new Skin(Gdx.files.internal("assets/skins/craftacular-ui.json"));
 
         TextButton spawnButton = new TextButton("Spawn square", skin);
@@ -49,6 +51,7 @@ public class GameView implements Disposable {
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                Gdx.input.setInputProcessor(pauseStage);
                 controller.onPauseClicked();
             }
         });
@@ -60,6 +63,28 @@ public class GameView implements Disposable {
         stage.addActor(currentElixir);
         stage.addActor(spawnButton);
         stage.addActor(pauseButton);
+
+        TextButton resumeButton = new TextButton("Resume", skin);
+        resumeButton.setPosition(1120, 780);
+        resumeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                Gdx.input.setInputProcessor(stage);
+                controller.onResumeClicked();
+            }
+        });
+
+        TextButton menuButton = new TextButton("Menu", skin);
+        menuButton.setPosition(1120, 700);
+        menuButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                controller.onMenuClicked();
+            }
+        });
+
+        pauseStage.addActor(resumeButton);
+        pauseStage.addActor(menuButton);
     }
 
     public void render(float delta) {
@@ -72,6 +97,10 @@ public class GameView implements Disposable {
         arenaView.render(delta);
         stage.act(delta);
         stage.draw();
+        if (controller.isPaused()) {
+            pauseStage.act(delta);
+            pauseStage.draw();
+        }
     }
 
     public void show() {
@@ -82,12 +111,14 @@ public class GameView implements Disposable {
     public void resize(int width, int height) {
         arenaView.resize(width, height);
         stage.getViewport().update(width, height, true);
+        pauseStage.getViewport().update(width, height, true);
     }
 
     @Override
     public void dispose() {
         arenaView.dispose();
         stage.dispose();
+        pauseStage.dispose();
         skin.dispose();
     }
 
