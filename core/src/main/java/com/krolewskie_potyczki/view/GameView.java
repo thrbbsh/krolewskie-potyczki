@@ -22,7 +22,8 @@ public class GameView implements Disposable {
     private Stage stage;
     private GameController controller;
     private Arena arena;
-    private Label currentElixir;
+    private Label currentElixirLabel;
+    private Label timerLabel;
     private Stage pauseStage;
 
     public GameView(Arena arena, GameController gc) {
@@ -56,11 +57,16 @@ public class GameView implements Disposable {
             }
         });
 
-        currentElixir = new Label("Current elixir: " + arena.getPlayerElixir() + "/" + arena.getMaxElixir(), skin);
-        currentElixir.setPosition(1900, 10);
-        currentElixir.setFontScale(1.5F);
+        currentElixirLabel = new Label("Current elixir: " + arena.getPlayerElixir() + "/" + arena.getMaxElixir(), skin);
+        currentElixirLabel.setPosition(1900, 10);
+        currentElixirLabel.setFontScale(1.5F);
 
-        stage.addActor(currentElixir);
+        timerLabel = new Label("Time left: " + arena.getFormattedTimeLeft(), skin);
+        timerLabel.setPosition(1900, 1300);
+        timerLabel.setFontScale(1.5F);
+
+        stage.addActor(currentElixirLabel);
+        stage.addActor(timerLabel);
         stage.addActor(spawnButton);
         stage.addActor(pauseButton);
 
@@ -90,9 +96,16 @@ public class GameView implements Disposable {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if (!controller.isPaused()) {
-            arena.update(delta);
-            currentElixir.setText("Current elixir: " + arena.getPlayerElixir() + "/" + arena.getMaxElixir());
+        if (!controller.isEnded()) {
+            if (!controller.isPaused()) {
+                arena.update(delta);
+                if (arena.getTimeLeft() < 0) {
+                    controller.endOfMatch();
+                } else {
+                    currentElixirLabel.setText("Current elixir: " + arena.getPlayerElixir() + "/" + arena.getMaxElixir());
+                    timerLabel.setText("Time left: " + arena.getFormattedTimeLeft());
+                }
+            }
         }
         arenaView.render(delta);
         stage.act(delta);

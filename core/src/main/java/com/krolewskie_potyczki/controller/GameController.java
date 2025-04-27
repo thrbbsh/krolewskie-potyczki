@@ -10,6 +10,7 @@ public class GameController {
     private final Main game;
     private final Arena arena;
     private boolean paused = false;
+    private boolean ended = false;
     public GameController(Main game, Arena arena) {
         this.game = game;
         this.arena = arena;
@@ -19,18 +20,26 @@ public class GameController {
         arena.addEntity(e);
         return e;
     }
+
     public boolean isPaused() {
         return paused;
     }
+    public boolean isEnded() {
+        return ended;
+    }
+
     public void onPauseClicked() {
         paused = true;
     }
-
     public void onResumeClicked() {
         paused = false;
     }
 
     public void onMenuClicked() {
         game.setScreen(new MenuScreen(game));
+    }
+
+    public void endOfMatch() {
+        ended = true;
     }
 }
