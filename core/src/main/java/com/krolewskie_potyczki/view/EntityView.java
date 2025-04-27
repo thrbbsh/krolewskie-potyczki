@@ -35,7 +35,6 @@ public class EntityView implements Disposable {
     }
 
     public void render(float delta) {
-        entity.move(delta);
         batch.begin();
         batch.draw(texture, entity.getX(), entity.getY());
         batch.end();

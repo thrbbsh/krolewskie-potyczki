@@ -18,14 +18,14 @@ import javax.swing.event.ChangeEvent;
 
 public class GameView implements Disposable {
     private ArenaView arenaView;
-    private TextButton spawnBtn;
     private Skin skin;
     private Stage stage;
     private GameController controller;
     private Arena arena;
     private Label currentElixir;
 
-    public GameView(Arena arena, GameController controller) {
+    public GameView(Arena arena, GameController gc) {
+        this.controller = gc;
         this.arena = arena;
         arenaView = new ArenaView(arena);
         stage = new Stage();
@@ -44,21 +44,32 @@ public class GameView implements Disposable {
             }
         });
 
+        TextButton pauseButton = new TextButton("Pause", skin);
+        pauseButton.setPosition(10, 1300);
+        pauseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                controller.onPauseClicked();
+            }
+        });
+
         currentElixir = new Label("Current elixir: " + arena.getPlayerElixir() + "/" + arena.getMaxElixir(), skin);
         currentElixir.setPosition(1900, 10);
         currentElixir.setFontScale(1.5F);
 
         stage.addActor(currentElixir);
         stage.addActor(spawnButton);
+        stage.addActor(pauseButton);
     }
 
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        currentElixir.setText("Current elixir: " + arena.getPlayerElixir() + "/" + arena.getMaxElixir());
-        arena.update(delta);
+        if (!controller.isPaused()) {
+            arena.update(delta);
+            currentElixir.setText("Current elixir: " + arena.getPlayerElixir() + "/" + arena.getMaxElixir());
+        }
         arenaView.render(delta);
-        stage.getActors();
         stage.act(delta);
         stage.draw();
     }

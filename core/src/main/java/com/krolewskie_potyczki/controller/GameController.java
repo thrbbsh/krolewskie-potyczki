@@ -8,6 +8,7 @@ import com.krolewskie_potyczki.model.EntityType;
 public class GameController {
     private final Main game;
     private final Arena arena;
+    private boolean paused = false;
     public GameController(Main game, Arena arena) {
         this.game = game;
         this.arena = arena;
@@ -17,7 +18,10 @@ public class GameController {
         arena.addEntity(e);
         return e;
     }
+    public boolean isPaused() {
+        return paused;
+    }
     public void onPauseClicked() {
-        //TO_DO
+        paused = true;
     }
 }
