@@ -6,12 +6,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.krolewskie_potyczki.Main;
+import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.view.GameView;
 
 /** First screen of the application. Displayed after the application is created. */
 public class GameScreen implements Screen {
     private Main game;
     public GameView view;
+    public Arena arena;
 
     public GameScreen(Main game) {
         this.game = game;
