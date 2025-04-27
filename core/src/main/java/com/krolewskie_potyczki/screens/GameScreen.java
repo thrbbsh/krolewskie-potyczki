@@ -6,33 +6,30 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.krolewskie_potyczki.Main;
+import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.view.GameView;
 
-/** First screen of the application. Displayed after the application is created. */
 public class GameScreen implements Screen {
     private Main game;
+    private Arena arena;
     public GameView view;
-    public Arena arena;
+    private GameController controller;
 
     public GameScreen(Main game) {
         this.game = game;
-        view = new GameView(game);
+        arena = new Arena();
+        controller = new GameController(game, arena);
+        view = new GameView(arena, controller);
     }
 
-    @Override public void show() {
-
-    }
-
-    @Override
-    public void render(float delta) {
+    @Override public void show() { view.show(); }
+    @Override public void render(float delta) {
         view.render(delta);
     }
-
     @Override public void resize(int w, int h) {
         view.resize(w, h);
     }
-
     @Override public void pause() {
         view.pause();
     }

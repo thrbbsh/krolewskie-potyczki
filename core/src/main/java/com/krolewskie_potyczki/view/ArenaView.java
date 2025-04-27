@@ -15,54 +15,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArenaView implements Disposable {
-    private Texture background;
-    private SpriteBatch batch;
-    private Stage stage;
-    private Arena arena;
     private List<EntityView> entityViews;
 
-    public ArenaView(Main game) {
-        stage = new Stage(new ScreenViewport());
-        batch = new SpriteBatch();
-        arena = new Arena();
+    public ArenaView(Arena arena) {
         entityViews = new ArrayList<>();
-        for (Entity e: arena.getActiveEntities()) {
-            entityViews.add(new EntityView(e));
+        for (Entity entity: arena.getActiveEntities()) {
+            entityViews.add(new EntityView(entity));
         }
-        //background = new Texture(Gdx.files.internal("images/pexels-pixabay-104827.jpg"));
     }
 
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        /*
-        batch.begin();
-        batch.draw(background,
-            0, 0,
-            Gdx.graphics.getWidth(),
-            Gdx.graphics.getHeight());
-        batch.end();
-        */
-
-        stage.act(delta);
-        stage.draw();
+        for (EntityView entityView: entityViews)
+            entityView.render(delta);
     }
 
     public void show() {
-        Gdx.input.setInputProcessor(stage);
+        for (EntityView entityView: entityViews)
+            entityView.show();
     }
 
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        for (EntityView entityView: entityViews)
+            entityView.resize(width, height);
     }
 
     @Override
     public void dispose() {
-        stage.dispose();
+        for (EntityView entityView: entityViews)
+            entityView.dispose();
     }
 
     public void pause() { }
     public void resume() { }
     public void hide() { }
+
+    public void addEntityView(EntityView entityView) {
+        entityViews.add(entityView);
+    }
 }
