@@ -6,7 +6,7 @@ public abstract class Unit extends Entity {
     boolean isPlayersEntity;
     Entity currentTarget;
 
-    Unit(boolean isPlayersEntity, double x, double y) {
+    Unit(boolean isPlayersEntity, float x, float y) {
         super(isPlayersEntity, x, y);
     }
 

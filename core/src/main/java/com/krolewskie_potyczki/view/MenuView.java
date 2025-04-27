@@ -24,13 +24,13 @@ public class MenuView implements Disposable {
     private Skin skin;
     private Label titleLabel;
     private Music menuMusic;
-
+    private MenuController controller;
 
     public MenuView(Main game) {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        MenuController controller = new MenuController(game);
+        controller = new MenuController(game);
 
         skin = new Skin(Gdx.files.internal("skins/craftacular-ui.json"));
 
