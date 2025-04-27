@@ -8,20 +8,27 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.krolewskie_potyczki.Main;
-import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.Arena;
+import com.krolewskie_potyczki.model.Entity;
 
-public class GameView implements Disposable {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ArenaView implements Disposable {
     private Texture background;
     private SpriteBatch batch;
     private Stage stage;
-    private ArenaView arenaView;
-    private GameController gameController;
+    private Arena arena;
+    private List<EntityView> entityViews;
 
-    public GameView(Main game) {
+    public ArenaView(Main game) {
         stage = new Stage(new ScreenViewport());
-        arenaView = new ArenaView(game);
-        gameController = new GameController();
+        batch = new SpriteBatch();
+        arena = new Arena();
+        entityViews = new ArrayList<>();
+        for (Entity e: arena.getActiveEntities()) {
+            entityViews.add(new EntityView(e));
+        }
         //background = new Texture(Gdx.files.internal("images/pexels-pixabay-104827.jpg"));
     }
 
