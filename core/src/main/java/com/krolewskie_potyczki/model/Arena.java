@@ -33,10 +33,13 @@ public class Arena {
                 throw new IllegalArgumentException("Wrong entity type: " + entityType);
         }
     }
+
     public void update(float delta) {
         updatePlayerElixir(delta);
-        for (Entity entity : activeEntities)
+        for (Entity entity : activeEntities) {
             entity.updateCurrentTarget(activeEntities);
+            entity.move(delta);
+        }
     }
 
     private void updatePlayerElixir(float delta) {
