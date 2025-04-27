@@ -3,14 +3,17 @@ package com.krolewskie_potyczki.model;
 import java.util.List;
 
 public abstract class Entity {
-    float HP, totalHP, x, y, speed, damage, attackRadius;
+    float HP, x, y, damage;
     boolean isPlayersEntity;
     Entity currentTarget;
-    Entity(boolean isPlayersEntity, float x, float y) {
+    EntityType type;
+
+    Entity(EntityType type, boolean isPlayersEntity, float x, float y) {
         currentTarget = null;
         this.isPlayersEntity = isPlayersEntity;
         this.x = x;
         this.y = y;
+        this.type = type;
     }
 
     float distance(Entity target) {
@@ -24,9 +27,9 @@ public abstract class Entity {
         float dx = currentTarget.x - this.x;
         float dy = currentTarget.y - this.y;
         float dist = distance(currentTarget);
-        if (dist < attackRadius) return;
-        x += dx / dist * delta * speed;
-        y += dy / dist * delta * speed;
+        if (dist < type.getAttackRadius()) return;
+        x += dx / dist * delta * type.getMoveSpeed();
+        y += dy / dist * delta * type.getMoveSpeed();
     }
 
     public boolean getIsPlayersEntity() {
@@ -34,7 +37,7 @@ public abstract class Entity {
     }
 
     void update(float change) {
-        HP = Math.min(totalHP, Math.max(0F, HP + change));
+        HP = Math.min(type.getTotalHP(), Math.max(0F, HP + change));
     }
 
     boolean isDead() {
