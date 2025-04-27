@@ -7,24 +7,28 @@ public class Arena {
     List<Entity> activeEntities;
     public Arena() {
         activeEntities = new ArrayList<>();
-        createEntity(EntityType.TOWER, true, 100, 400);
-        createEntity(EntityType.TOWER, false, 700, 400);
+        addEntity(createEntity(EntityType.TOWER, true, 100, 600));
+        addEntity(createEntity(EntityType.TOWER, false, 2300, 600));
     }
-    void createEntity(EntityType entityType, boolean isPlayersEntity, float x, float y) {
-        Entity entity;
+    public Entity createEntity(EntityType entityType, boolean isPlayersEntity, float x, float y) {
         switch (entityType) {
             case TOWER:
-                entity = new Tower(isPlayersEntity, x, y);
-                break;
+                return new Tower(isPlayersEntity, x, y);
             case SQUARE:
-                entity = new SquareUnit(isPlayersEntity, x, y);
-                break;
+                return new SquareUnit(isPlayersEntity, x, y);
             default:
                 throw new IllegalArgumentException("Wrong entity type: " + entityType);
         }
-        activeEntities.add(entity);
+    }
+    public void update() {
+        for (Entity entity : activeEntities)
+            entity.updateCurrentTarget(activeEntities);
     }
     public List<Entity> getActiveEntities() {
         return activeEntities;
+    }
+
+    public void addEntity(Entity entity) {
+        activeEntities.add(entity);
     }
 }
