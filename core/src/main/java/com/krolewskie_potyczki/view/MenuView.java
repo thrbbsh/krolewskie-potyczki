@@ -36,7 +36,7 @@ public class MenuView implements Disposable {
 
         menuMusic = Gdx.audio.newMusic(Gdx.files.internal("Soundtrack1.mp3"));
         menuMusic.setLooping(true);
-        menuMusic.setVolume(1f);
+        menuMusic.setVolume(0.1f);
         menuMusic.play();
 
 
@@ -105,6 +105,7 @@ public class MenuView implements Disposable {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+        menuMusic.dispose();
     }
 
     public void pause() {
@@ -114,5 +115,6 @@ public class MenuView implements Disposable {
     }
 
     public void hide() {
+        if (menuMusic != null && menuMusic.isPlaying()) menuMusic.stop();
     }
 }
