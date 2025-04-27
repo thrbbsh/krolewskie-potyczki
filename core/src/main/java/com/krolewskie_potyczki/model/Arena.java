@@ -8,9 +8,19 @@ public class Arena {
     private float playerElixir = 0;
     private final float maxElixir = 10;
     private float elixirSpeed = 0.1F;
+    private final float matchDuration = 10;
+    private float timeLeft;
+
+    public float getTimeLeft() {
+        return timeLeft;
+    }
+
+    public String getFormattedTimeLeft() {
+        return String.format("%01d:%02d", (int) Math.floor(timeLeft / 60), (int) Math.floor(timeLeft % 60));
+    }
 
     public float getPlayerElixir() {
-        return (float) Math.floor(playerElixir * 10) / 10F;
+        return (float) Math.floor(playerElixir * 10) / 10;
     }
 
     public float getMaxElixir() {
@@ -18,6 +28,7 @@ public class Arena {
     }
 
     public Arena() {
+        timeLeft = matchDuration;
         activeEntities = new ArrayList<>();
         addEntity(createEntity(EntityType.TOWER, true, 100, 600));
         addEntity(createEntity(EntityType.TOWER, false, 2300, 600));
@@ -35,6 +46,7 @@ public class Arena {
     }
 
     public void update(float delta) {
+        timeLeft -= delta;
         updatePlayerElixir(delta);
         for (Entity entity : activeEntities) {
             entity.updateCurrentTarget(activeEntities);
@@ -43,6 +55,7 @@ public class Arena {
     }
 
     private void updatePlayerElixir(float delta) {
+        System.out.println("Player elixir: " + playerElixir);
         playerElixir = Math.min(maxElixir, playerElixir + delta * elixirSpeed);
     }
 
@@ -57,4 +70,5 @@ public class Arena {
     public void subtractElixir(float elixirCost) {
         playerElixir -= elixirCost;
     }
+
 }
