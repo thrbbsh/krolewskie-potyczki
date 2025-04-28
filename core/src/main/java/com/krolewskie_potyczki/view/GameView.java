@@ -60,7 +60,7 @@ public class GameView implements Disposable {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 if (arena.getPlayerElixir() >= EntityType.TRIANGLE.getElixirCost()) {
                     Entity e = controller.createEntity(EntityType.TRIANGLE, true, 100, 900);
-                    arenaView.addEntityView(new EntityView(e, stage));
+                    arenaView.addEntity(e, stage);
                     arena.subtractElixir(EntityType.TRIANGLE.getElixirCost());
                 }
             }
@@ -142,7 +142,7 @@ public class GameView implements Disposable {
 
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); 
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (controller.isEnded()) {
             if (!endProcessed) {
