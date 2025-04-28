@@ -11,11 +11,17 @@ import com.krolewskie_potyczki.model.TriangleUnit;
 
 public class EntityView implements Disposable {
     private Texture texture;
+    private Texture yellowPixelTexture;
+    private Texture whitePixelTexture;
+    private Texture redPixelTexture;
     private SpriteBatch batch;
     private Entity entity;
     private Stage stage;
 
     public EntityView(Entity entity, Stage stage) {
+        yellowPixelTexture = new Texture("images/yellowPixel.png");
+        whitePixelTexture = new Texture("images/whitePixel.png");
+        redPixelTexture = new Texture("images/redPixel.png");
         this.stage = stage;
         this.entity = entity;
         if (entity instanceof Tower) {
@@ -34,9 +40,13 @@ public class EntityView implements Disposable {
     }
 
     public void render(float delta) {
+        float x = entity.getX(), y = entity.getY(), height = texture.getHeight(), width = texture.getWidth();
         batch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         batch.begin();
-        batch.draw(texture, entity.getX(), entity.getY());
+        batch.draw(texture, x, y);
+        batch.draw(yellowPixelTexture, x - (100 - width) / 2, y + height + 10, 100, 25);
+        batch.draw(whitePixelTexture, x - (100 - width) / 2 + 5, y + height + 15, 90, 15);
+        batch.draw(redPixelTexture, x - (100 - width) / 2 + 5, y + height + 15, 90 * entity.getHP() / entity.getType().getTotalHP(), 15);
         batch.end();
     }
 
