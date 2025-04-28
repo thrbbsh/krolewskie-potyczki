@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.SquareUnit;
 import com.krolewskie_potyczki.model.Tower;
+import com.krolewskie_potyczki.model.TriangleUnit;
 
 public class EntityView implements Disposable {
     private Texture texture;
@@ -24,6 +25,10 @@ public class EntityView implements Disposable {
         else if (entity instanceof SquareUnit) {
             if (entity.getIsPlayersEntity()) texture = new Texture("images/playerSquareUnit.png");
             else texture = new Texture("images/botSquareUnit.png");
+        }
+        else if (entity instanceof TriangleUnit) {
+            if (entity.getIsPlayersEntity()) texture = new Texture("images/playerTriangleUnit.png");
+            else texture = new Texture("images/botTriangleUnit.png");
         }
         batch = new SpriteBatch();
     }

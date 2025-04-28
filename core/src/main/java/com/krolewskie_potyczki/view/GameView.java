@@ -38,10 +38,11 @@ public class GameView implements Disposable {
         pauseStage = new Stage(new FitViewport(1920, 1080));
         endStage = new Stage(new FitViewport(1920, 1080));
 
-        TextButton spawnBtn = new TextButton("Spawn square", skin);
-        spawnBtn.setPosition(10, 10);
-        spawnBtn.addListener(new ChangeListener() {
-            @Override public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+        TextButton spawnSquareButton = new TextButton("Spawn SquareUnit", skin);
+        spawnSquareButton.setPosition(10, 10);
+        spawnSquareButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
                 if (arena.getPlayerElixir() >= EntityType.SQUARE.getElixirCost()) {
                     Entity e = controller.createEntity(EntityType.SQUARE, true, 100, 100);
                     arenaView.addEntityView(new EntityView(e, stage));
@@ -50,10 +51,24 @@ public class GameView implements Disposable {
             }
         });
 
-        TextButton pauseBtn = new TextButton("Pause", skin);
-        pauseBtn.setPosition(10, 1000);
-        pauseBtn.addListener(new ChangeListener() {
-            @Override public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+        TextButton spawnTriangleButton = new TextButton("Spawn TriangleUnit", skin);
+        spawnTriangleButton.setPosition(500, 10);
+        spawnTriangleButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (arena.getPlayerElixir() >= EntityType.TRIANGLE.getElixirCost()) {
+                    Entity e = controller.createEntity(EntityType.TRIANGLE, true, 100, 900);
+                    arenaView.addEntityView(new EntityView(e, stage));
+                    arena.subtractElixir(EntityType.TRIANGLE.getElixirCost());
+                }
+            }
+        });
+
+        TextButton pauseButton = new TextButton("Pause", skin);
+        pauseButton.setPosition(10, 1000);
+        pauseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
                 Gdx.input.setInputProcessor(pauseStage);
                 controller.onPauseClicked();
             }
@@ -73,16 +88,16 @@ public class GameView implements Disposable {
 
         stage.addActor(currentElixirLabel);
         stage.addActor(timerLabel);
-        stage.addActor(spawnBtn);
-        stage.addActor(pauseBtn);
+        feature/artur
+        stage.addActor(spawnSquareButton);
+        stage.addActor(spawnTriangleButton);
+        stage.addActor(pauseButton);
 
-        TextButton resumeBtn = new TextButton("Resume", skin);
-        resumeBtn.setPosition(
-            (1920 - resumeBtn.getWidth()) / 2,
-            (1080 - resumeBtn.getHeight()) / 2 + 35
-        );
-        resumeBtn.addListener(new ChangeListener() {
-            @Override public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+        TextButton resumeButton = new TextButton("Resume", skin);
+        resumeButton.setPosition((1920 - resumeButton.getWidth()) / 2, (1080 - resumeButton.getHeight()) / 2 + 35);
+        resumeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
                 Gdx.input.setInputProcessor(stage);
                 controller.onResumeClicked();
             }
