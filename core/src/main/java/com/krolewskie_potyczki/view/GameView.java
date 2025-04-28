@@ -9,12 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.EntityType;
-
-import javax.swing.event.ChangeEvent;
 
 public class GameView implements Disposable {
     private ArenaView arenaView;
@@ -29,10 +28,10 @@ public class GameView implements Disposable {
     public GameView(Arena arena, GameController gc) {
         this.controller = gc;
         this.arena = arena;
-        arenaView = new ArenaView(arena);
-        stage = new Stage();
-        pauseStage = new Stage();
-        skin = new Skin(Gdx.files.internal("assets/skins/craftacular-ui.json"));
+        stage = new Stage(new FitViewport(1920, 1080));
+        arenaView = new ArenaView(arena, stage);
+        pauseStage = new Stage(new FitViewport(1920, 1080));
+        skin = new Skin(Gdx.files.internal("skins/craftacular-ui.json"));
 
         TextButton spawnButton = new TextButton("Spawn square", skin);
         spawnButton.setPosition(10, 10);
@@ -41,14 +40,14 @@ public class GameView implements Disposable {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 if (arena.getPlayerElixir() >= EntityType.SQUARE.getElixirCost()) {
                     Entity e = controller.createEntity(EntityType.SQUARE, true, 100, 100);
-                    arenaView.addEntityView(new EntityView(e));
+                    arenaView.addEntityView(new EntityView(e, stage));
                     arena.subtractElixir(EntityType.SQUARE.getElixirCost());
                 }
             }
         });
 
         TextButton pauseButton = new TextButton("Pause", skin);
-        pauseButton.setPosition(10, 1300);
+        pauseButton.setPosition(10, 1000);
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -58,12 +57,10 @@ public class GameView implements Disposable {
         });
 
         currentElixirLabel = new Label("Current elixir: " + arena.getPlayerElixir() + "/" + arena.getMaxElixir(), skin);
-        currentElixirLabel.setPosition(1900, 10);
-        currentElixirLabel.setFontScale(1.5F);
+        currentElixirLabel.setPosition(1500, 10);
 
         timerLabel = new Label("Time left: " + arena.getFormattedTimeLeft(), skin);
-        timerLabel.setPosition(1900, 1300);
-        timerLabel.setFontScale(1.5F);
+        timerLabel.setPosition(1600, 1000);
 
         stage.addActor(currentElixirLabel);
         stage.addActor(timerLabel);
@@ -71,7 +68,7 @@ public class GameView implements Disposable {
         stage.addActor(pauseButton);
 
         TextButton resumeButton = new TextButton("Resume", skin);
-        resumeButton.setPosition(1120, 780);
+        resumeButton.setPosition((1920 - resumeButton.getWidth()) / 2, (1080 - resumeButton.getHeight()) / 2 + 35);
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -81,7 +78,7 @@ public class GameView implements Disposable {
         });
 
         TextButton menuButton = new TextButton("Menu", skin);
-        menuButton.setPosition(1120, 700);
+        menuButton.setPosition((1920 - resumeButton.getWidth()) / 2, (1080 - resumeButton.getHeight()) / 2 - 35);
         menuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
