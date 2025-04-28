@@ -14,6 +14,7 @@ public abstract class Entity {
         this.x = x;
         this.y = y;
         this.type = type;
+        this.HP = type.getTotalHP();
     }
 
     float distance(Entity target) {
@@ -62,5 +63,8 @@ public abstract class Entity {
             if (currentTarget == null) currentTarget = e;
             else if (distance(currentTarget) < distance(e)) currentTarget = e;
         }
+    }
+    public float getCurrentHP() {
+        return HP;
     }
 }
