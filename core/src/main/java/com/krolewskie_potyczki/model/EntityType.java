@@ -3,7 +3,7 @@ package com.krolewskie_potyczki.model;
 public enum EntityType {
     TOWER(0, 0, 1000, 5, false),
     SQUARE(3, 300, 300, 1, false),
-    TRIANGLE(5, 200, 300, 2, true);
+    TRIANGLE(5, 100, 700, 1, true);
 
     private final float elixirCost;
     private final float moveSpeed;
