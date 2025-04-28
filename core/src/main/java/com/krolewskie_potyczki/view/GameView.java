@@ -15,6 +15,8 @@ import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.EntityType;
 
+import java.util.ArrayList;
+
 public class GameView implements Disposable {
     private ArenaView arenaView;
     private Skin skin;
@@ -40,7 +42,7 @@ public class GameView implements Disposable {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 if (arena.getPlayerElixir() >= EntityType.SQUARE.getElixirCost()) {
                     Entity e = controller.createEntity(EntityType.SQUARE, true, 100, 100);
-                    arenaView.addEntityView(new EntityView(e, stage));
+                    arenaView.addEntity(e, stage);
                     arena.subtractElixir(EntityType.SQUARE.getElixirCost());
                 }
             }
@@ -95,7 +97,11 @@ public class GameView implements Disposable {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (!controller.isEnded()) {
             if (!controller.isPaused()) {
-                arena.update(delta);
+                ArrayList<Entity> toRemove = arena.update(delta);
+                for (Entity e : toRemove) {
+                    arena.removeEntity(e);
+                    arenaView.removeEntity(e);
+                }
                 if (arena.getTimeLeft() < 0) {
                     controller.endOfMatch();
                 } else {
