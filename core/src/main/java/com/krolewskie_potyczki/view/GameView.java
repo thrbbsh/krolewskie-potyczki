@@ -33,15 +33,28 @@ public class GameView implements Disposable {
         pauseStage = new Stage(new FitViewport(1920, 1080));
         skin = new Skin(Gdx.files.internal("skins/craftacular-ui.json"));
 
-        TextButton spawnButton = new TextButton("Spawn square", skin);
-        spawnButton.setPosition(10, 10);
-        spawnButton.addListener(new ChangeListener() {
+        TextButton spawnSquareButton = new TextButton("Spawn SquareUnit", skin);
+        spawnSquareButton.setPosition(10, 10);
+        spawnSquareButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 if (arena.getPlayerElixir() >= EntityType.SQUARE.getElixirCost()) {
                     Entity e = controller.createEntity(EntityType.SQUARE, true, 100, 100);
                     arenaView.addEntityView(new EntityView(e, stage));
                     arena.subtractElixir(EntityType.SQUARE.getElixirCost());
+                }
+            }
+        });
+
+        TextButton spawnTriangleButton = new TextButton("Spawn TriangleUnit", skin);
+        spawnTriangleButton.setPosition(500, 10);
+        spawnTriangleButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (arena.getPlayerElixir() >= EntityType.TRIANGLE.getElixirCost()) {
+                    Entity e = controller.createEntity(EntityType.TRIANGLE, true, 100, 900);
+                    arenaView.addEntityView(new EntityView(e, stage));
+                    arena.subtractElixir(EntityType.TRIANGLE.getElixirCost());
                 }
             }
         });
@@ -64,7 +77,8 @@ public class GameView implements Disposable {
 
         stage.addActor(currentElixirLabel);
         stage.addActor(timerLabel);
-        stage.addActor(spawnButton);
+        stage.addActor(spawnSquareButton);
+        stage.addActor(spawnTriangleButton);
         stage.addActor(pauseButton);
 
         TextButton resumeButton = new TextButton("Resume", skin);
