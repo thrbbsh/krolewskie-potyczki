@@ -7,9 +7,11 @@ public class Arena {
     List<Entity> activeEntities;
     private float playerElixir = 0;
     private final float maxElixir = 10;
-    private float elixirSpeed = 0.1F;
-    private final float matchDuration = 60;
+    private float elixirSpeed = 0.1F; 
+    private final float matchDuration = 180; 
     private float timeLeft;
+    private Tower playerTower;
+    private Tower enemyTower;
 
     public float getTimeLeft() {
         return timeLeft;
@@ -30,8 +32,10 @@ public class Arena {
     public Arena() {
         timeLeft = matchDuration;
         activeEntities = new ArrayList<>();
-        addEntity(createEntity(EntityType.TOWER, true, 100, 500));
-        addEntity(createEntity(EntityType.TOWER, false, 1720, 500));
+        playerTower = (Tower) createEntity(EntityType.TOWER, true, 100, 500);
+        enemyTower  = (Tower) createEntity(EntityType.TOWER, false, 1720, 500);
+        addEntity(playerTower);
+        addEntity(enemyTower);
         playerElixir = 5;
     }
     public Entity createEntity(EntityType entityType, boolean isPlayersEntity, float x, float y) {
@@ -40,6 +44,8 @@ public class Arena {
                 return new Tower(isPlayersEntity, x, y);
             case SQUARE:
                 return new SquareUnit(isPlayersEntity, x, y);
+            case TRIANGLE:
+                return new TriangleUnit(isPlayersEntity, x, y);
             default:
                 throw new IllegalArgumentException("Wrong entity type: " + entityType);
         }
@@ -59,6 +65,22 @@ public class Arena {
 
     private void updatePlayerElixir(float delta) {
         playerElixir = Math.min(maxElixir, playerElixir + delta * elixirSpeed);
+    }
+
+    public boolean isPlayerTowerDestroyed() {
+        return playerTower.isDead();
+    }
+
+    public boolean isEnemyTowerDestroyed() {
+        return enemyTower.isDead();
+    }
+
+    public float getPlayerTowerHP() {
+        return playerTower.getCurrentHP();
+    }
+
+    public float getEnemyTowerHP() {
+        return enemyTower.getCurrentHP();
     }
 
     public List<Entity> getActiveEntities() {
