@@ -156,7 +156,11 @@ public class GameView implements Disposable {
                 } else {
                     float pHP = arena.getPlayerTowerHP();
                     float eHP = arena.getEnemyTowerHP();
-                    text = (eHP > pHP) ? "You Lose..." : "You Win!";
+                    if (eHP == pHP) {
+                        text = "Draw!";
+                    } else {
+                        text = (eHP > pHP) ? "You Lose..." : "You Win!";
+                    }
                 }
                 endLabel.setText(text);
                 endProcessed = true;
