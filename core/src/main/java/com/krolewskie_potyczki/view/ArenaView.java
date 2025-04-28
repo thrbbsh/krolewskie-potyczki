@@ -1,13 +1,7 @@
 package com.krolewskie_potyczki.view;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Entity;
 
@@ -17,10 +11,10 @@ import java.util.List;
 public class ArenaView implements Disposable {
     private List<EntityView> entityViews;
 
-    public ArenaView(Arena arena) {
+    public ArenaView(Arena arena, Stage stage) {
         entityViews = new ArrayList<>();
         for (Entity entity: arena.getActiveEntities()) {
-            entityViews.add(new EntityView(entity));
+            entityViews.add(new EntityView(entity, stage));
         }
     }
 

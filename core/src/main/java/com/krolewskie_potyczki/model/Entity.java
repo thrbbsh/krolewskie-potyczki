@@ -41,7 +41,7 @@ public abstract class Entity {
     }
 
     boolean isDead() {
-        return (HP >= 0F);
+        return (HP <= 0F);
     }
 
     void attack() {
