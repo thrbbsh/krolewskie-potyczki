@@ -7,8 +7,8 @@ public class Arena {
     List<Entity> activeEntities;
     private float playerElixir = 0;
     private final float maxElixir = 10;
-    private float elixirSpeed = 0.1F;
-    private final float matchDuration = 180;
+    private float elixirSpeed = 0.1F; 
+    private final float matchDuration = 180; 
     private float timeLeft;
     private Tower playerTower;
     private Tower enemyTower;
@@ -51,13 +51,16 @@ public class Arena {
         }
     }
 
-    public void update(float delta) {
+    public ArrayList<Entity> update(float delta) {
         timeLeft -= delta;
         updatePlayerElixir(delta);
-        for (Entity entity : activeEntities) {
-            entity.updateCurrentTarget(activeEntities);
-            entity.move(delta);
-        }
+        for (Entity e : activeEntities)
+            e.update(delta, activeEntities);
+        ArrayList<Entity> entitiesToRemove = new ArrayList<>();
+        for (Entity e : activeEntities)
+            if (e.isDead())
+                entitiesToRemove.add(e);
+        return entitiesToRemove;
     }
 
     private void updatePlayerElixir(float delta) {
@@ -86,6 +89,10 @@ public class Arena {
 
     public void addEntity(Entity entity) {
         activeEntities.add(entity);
+    }
+
+    public void removeEntity(Entity entity) {
+        activeEntities.remove(entity);
     }
 
     public void subtractElixir(float elixirCost) {

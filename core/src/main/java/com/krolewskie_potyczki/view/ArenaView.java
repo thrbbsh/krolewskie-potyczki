@@ -6,36 +6,38 @@ import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ArenaView implements Disposable {
-    private List<EntityView> entityViews;
+    private final Map<Entity, EntityView> entityViews;
 
     public ArenaView(Arena arena, Stage stage) {
-        entityViews = new ArrayList<>();
+        entityViews = new HashMap<>();
         for (Entity entity: arena.getActiveEntities()) {
-            entityViews.add(new EntityView(entity, stage));
+            addEntity(entity, stage);
         }
     }
 
     public void render(float delta) {
-        for (EntityView entityView: entityViews)
+        for (EntityView entityView: entityViews.values())
             entityView.render(delta);
     }
 
     public void show() {
-        for (EntityView entityView: entityViews)
+        for (EntityView entityView: entityViews.values())
             entityView.show();
     }
 
     public void resize(int width, int height) {
-        for (EntityView entityView: entityViews)
+        for (EntityView entityView: entityViews.values())
             entityView.resize(width, height);
     }
 
     @Override
     public void dispose() {
-        for (EntityView entityView: entityViews)
+        for (EntityView entityView: entityViews.values())
             entityView.dispose();
     }
 
@@ -43,7 +45,15 @@ public class ArenaView implements Disposable {
     public void resume() { }
     public void hide() { }
 
-    public void addEntityView(EntityView entityView) {
-        entityViews.add(entityView);
+    public void addEntity(Entity entity, Stage stage) {
+        EntityView view = new EntityView(entity, stage);
+        entityViews.put(entity, view);
+    }
+
+    public void removeEntity(Entity entity) {
+        EntityView view = entityViews.remove(entity);
+        if (view != null) {
+            view.dispose();
+        }
     }
 }
