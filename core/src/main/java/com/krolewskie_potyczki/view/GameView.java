@@ -3,6 +3,7 @@ package com.krolewskie_potyczki.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -12,7 +13,6 @@ import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.EntityType;
-import com.krolewskie_potyczki.model.Tower;
 
 public class GameView implements Disposable {
     private final ArenaView arenaView;
@@ -88,7 +88,7 @@ public class GameView implements Disposable {
 
         stage.addActor(currentElixirLabel);
         stage.addActor(timerLabel);
-        feature/artur
+
         stage.addActor(spawnSquareButton);
         stage.addActor(spawnTriangleButton);
         stage.addActor(pauseButton);
@@ -114,7 +114,7 @@ public class GameView implements Disposable {
             }
         });
 
-        pauseStage.addActor(resumeBtn);
+        pauseStage.addActor(resumeButton);
         pauseStage.addActor(menuBtn);
 
         Table endTable = new Table();
