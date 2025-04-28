@@ -7,17 +7,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.controller.MenuController;
-import com.krolewskie_potyczki.screens.GameScreen;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
-import javax.swing.event.ChangeEvent;
 
 public class MenuView implements Disposable {
     private Stage stage;
@@ -27,7 +23,7 @@ public class MenuView implements Disposable {
     private MenuController controller;
 
     public MenuView(Main game) {
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new FitViewport(1920, 1080));
         Gdx.input.setInputProcessor(stage);
 
         controller = new MenuController(game);
@@ -62,10 +58,10 @@ public class MenuView implements Disposable {
         titleLabel.setFontScale(3f);
 
         ImageTextButton startButton = new ImageTextButton("Start", skin, "default");
-        startButton.getLabel().setFontScale(4f);
+        startButton.getLabel().setFontScale(2f);
 
         ImageTextButton exitButton = new ImageTextButton("Exit", skin, "default");
-        exitButton.getLabel().setFontScale(4f);
+        exitButton.getLabel().setFontScale(2f);
 
         startButton.addListener(new ChangeListener() {
             @Override
@@ -82,8 +78,8 @@ public class MenuView implements Disposable {
         });
 
         table.add(titleLabel).center().padTop(-300).row();
-        table.add(startButton).size(400, 150).padTop(-30).padBottom(40).row();
-        table.add(exitButton).size(400, 150);
+        table.add(startButton).size(300, 112).padTop(-30).padBottom(40).row();
+        table.add(exitButton).size(300, 112);
     }
 
     public void show() {

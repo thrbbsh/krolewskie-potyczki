@@ -30,8 +30,8 @@ public class Arena {
     public Arena() {
         timeLeft = matchDuration;
         activeEntities = new ArrayList<>();
-        addEntity(createEntity(EntityType.TOWER, true, 100, 600));
-        addEntity(createEntity(EntityType.TOWER, false, 2300, 600));
+        addEntity(createEntity(EntityType.TOWER, true, 100, 500));
+        addEntity(createEntity(EntityType.TOWER, false, 1720, 500));
         playerElixir = 5;
     }
     public Entity createEntity(EntityType entityType, boolean isPlayersEntity, float x, float y) {
@@ -55,7 +55,6 @@ public class Arena {
     }
 
     private void updatePlayerElixir(float delta) {
-        System.out.println("Player elixir: " + playerElixir);
         playerElixir = Math.min(maxElixir, playerElixir + delta * elixirSpeed);
     }
 
