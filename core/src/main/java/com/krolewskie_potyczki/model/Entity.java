@@ -15,8 +15,8 @@ public abstract class Entity {
         this.isPlayersEntity = isPlayersEntity;
         this.x = x;
         this.y = y;
-        this.type = type;
-        HP = type.getTotalHP();
+        this.type = type; 
+        this.HP = type.getTotalHP(); 
     }
 
     float distance(Entity target) {
@@ -91,9 +91,12 @@ public abstract class Entity {
     public void updateCurrentTarget(List<Entity> activeEntities) {
         currentTarget = null;
         for (Entity e : activeEntities) {
-            if (e.isPlayersEntity == this.isPlayersEntity) continue;
+            if (e.isPlayersEntity == this.isPlayersEntity || (this.type.doesIgnoreUnits() && e.type != EntityType.TOWER)) continue;
             if (currentTarget == null) currentTarget = e;
             else if (distance(currentTarget) > distance(e)) currentTarget = e;
         }
+    }
+    public float getCurrentHP() {
+        return HP;
     }
 }
