@@ -8,7 +8,7 @@ public class Arena {
     private float playerElixir = 0;
     private final float maxElixir = 10;
     private float elixirSpeed = 0.1F;
-    private final float matchDuration = 10;
+    private final float matchDuration = 180;
     private float timeLeft;
 
     public float getTimeLeft() {
@@ -40,6 +40,8 @@ public class Arena {
                 return new Tower(isPlayersEntity, x, y);
             case SQUARE:
                 return new SquareUnit(isPlayersEntity, x, y);
+            case TRIANGLE:
+                return new TriangleUnit(isPlayersEntity, x, y);
             default:
                 throw new IllegalArgumentException("Wrong entity type: " + entityType);
         }
