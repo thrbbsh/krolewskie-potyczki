@@ -10,13 +10,17 @@ public abstract class Entity {
 
     private float timeSinceLastAttack = 0f;
 
+    public EntityType getType() {
+        return type;
+    }
+
     Entity(EntityType type, boolean isPlayersEntity, float x, float y) {
         currentTarget = null;
         this.isPlayersEntity = isPlayersEntity;
         this.x = x;
         this.y = y;
-        this.type = type; 
-        this.HP = type.getTotalHP(); 
+        this.type = type;
+        this.HP = type.getTotalHP();
     }
 
     float distance(Entity target) {
