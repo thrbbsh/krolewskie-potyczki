@@ -41,7 +41,6 @@ public class GameView implements Disposable {
         endStage = new Stage(new FitViewport(1920, 1080));
 
         TextButton spawnSquareButton = new TextButton("Spawn SquareUnit", skin);
-        spawnSquareButton.setPosition(10, 10);
         spawnSquareButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -54,7 +53,6 @@ public class GameView implements Disposable {
         });
 
         TextButton spawnTriangleButton = new TextButton("Spawn TriangleUnit", skin);
-        spawnTriangleButton.setPosition(500, 10);
         spawnTriangleButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -67,7 +65,6 @@ public class GameView implements Disposable {
         });
 
         TextButton pauseButton = new TextButton("Pause", skin);
-        pauseButton.setPosition(10, 1000);
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -80,23 +77,32 @@ public class GameView implements Disposable {
             "Current elixir: " + arena.getPlayerElixir() + "/" + arena.getMaxElixir(),
             skin
         );
-        currentElixirLabel.setPosition(1500, 10);
 
         timerLabel = new Label(
             "Time left: " + arena.getFormattedTimeLeft(),
             skin
         );
-        timerLabel.setPosition(1600, 1000);
 
-        stage.addActor(currentElixirLabel);
-        stage.addActor(timerLabel);
+        Table topTable = new Table();
+        topTable.setFillParent(true);
+        topTable.top().left();
+        stage.addActor(topTable);
 
-        stage.addActor(spawnSquareButton);
-        stage.addActor(spawnTriangleButton);
-        stage.addActor(pauseButton);
+        topTable.add(pauseButton).pad(10);
+        topTable.add().expandX();
+        topTable.add(timerLabel).pad(10).right();
+
+        Table bottomTable = new Table();
+        bottomTable.setFillParent(true);
+        bottomTable.bottom().left();
+        stage.addActor(bottomTable);
+
+        bottomTable.add(spawnSquareButton).pad(10);
+        bottomTable.add(spawnTriangleButton).pad(10);
+        bottomTable.add().expandX();
+        bottomTable.add(currentElixirLabel).pad(10).right();
 
         TextButton resumeButton = new TextButton("Resume", skin);
-        resumeButton.setPosition((1920 - resumeButton.getWidth()) / 2, (1080 - resumeButton.getHeight()) / 2 + 35);
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -106,18 +112,28 @@ public class GameView implements Disposable {
         });
 
         TextButton menuBtn = new TextButton("Menu", skin);
-        menuBtn.setPosition(
-            (1920 - menuBtn.getWidth()) / 2,
-            (1080 - menuBtn.getHeight()) / 2 - 35
-        );
         menuBtn.addListener(new ChangeListener() {
-            @Override public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
                 controller.onMenuClicked();
             }
         });
 
         pauseStage.addActor(resumeButton);
         pauseStage.addActor(menuBtn);
+
+        Table pauseTable = new Table();
+        pauseTable.setFillParent(true);
+        pauseTable.center();
+        pauseStage.addActor(pauseTable);
+
+        pauseTable.add(resumeButton)
+            .size(350, 80)
+            .padBottom(20)
+            .row();
+
+        pauseTable.add(menuBtn)
+            .size(350, 80);
 
         Table endTable = new Table();
         endTable.setFillParent(true);
@@ -127,15 +143,17 @@ public class GameView implements Disposable {
         endLabel.setFontScale(3f);
 
         TextButton endMenuBtn = new TextButton("Menu", skin);
+        endMenuBtn.getLabel().setFontScale(2f);
         endMenuBtn.addListener(new ChangeListener() {
-            @Override public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
                 controller.onMenuClicked();
             }
         });
 
         endTable.center();
         endTable.add(endLabel).padBottom(50).row();
-        endTable.add(endMenuBtn).size(300, 112);
+        endTable.add(endMenuBtn).size(525, 120);
 
         endStage.addActor(endTable);
     }

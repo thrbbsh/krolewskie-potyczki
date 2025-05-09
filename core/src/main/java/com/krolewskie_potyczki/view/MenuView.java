@@ -2,6 +2,7 @@ package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,8 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class MenuView implements Disposable {
     private Stage stage;
-    private Skin skin;
-    private Label titleLabel;
+    private Skin skin; ;
     private Music menuMusic;
     private MenuController controller;
 
@@ -36,50 +36,55 @@ public class MenuView implements Disposable {
         menuMusic.play();
 
 
+        // TODO: add crown image directly to background
         Texture crownTexture = new Texture(Gdx.files.internal("crown.png"));
         Image crownImage = new Image(crownTexture);
-        float desiredHeight = 250f;
-        float desiredWidth = 360f;
-        crownImage.setSize(desiredWidth, desiredHeight);
-        crownImage.setScaling(Scaling.stretch);
-        stage.addActor(crownImage);
-        Viewport vp = stage.getViewport();
-        crownImage.setPosition((vp.getWorldWidth()  - desiredWidth ) / 2f, (vp.getWorldHeight() - desiredHeight));
 
+        Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("font"), Color.WHITE);
 
-        Table table = new Table();
-        table.setFillParent(true);
-        table.top().center().padTop(crownImage.getHeight() + 10);
-        stage.addActor(table);
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = skin.getFont("font");
         Label titleLabel = new Label("KROLEWSKIE POTYCZKI", labelStyle);
         titleLabel.setFontScale(3f);
 
-        ImageTextButton startButton = new ImageTextButton("Start", skin, "default");
+        TextButton startButton = new TextButton("Start", skin);
         startButton.getLabel().setFontScale(2f);
-
-        ImageTextButton exitButton = new ImageTextButton("Exit", skin, "default");
-        exitButton.getLabel().setFontScale(2f);
-
         startButton.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
                 controller.onPlayClicked();
             }
         });
 
-        exitButton.addListener(event -> {
-            if (exitButton.isPressed()) {
+        TextButton exitButton = new TextButton("Exit", skin);
+        exitButton.getLabel().setFontScale(2f);
+        exitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
                 controller.onExitClicked();
             }
-            return true;
         });
 
-        table.add(titleLabel).center().padTop(-300).row();
-        table.add(startButton).size(300, 112).padTop(-30).padBottom(40).row();
-        table.add(exitButton).size(300, 112);
+        Table menu = new Table();
+        menu.setFillParent(true);
+        stage.addActor(menu);
+
+        menu.top();
+        menu.add(crownImage)
+            .size(360, 250)
+            .padTop(20)
+            .row();
+
+        menu.add(titleLabel)
+            .padTop(30)
+            .row();
+
+        menu.add(startButton)
+            .size(525, 120)
+            .padTop(50)
+            .row();
+
+        menu.add(exitButton)
+            .padTop(20)
+            .size(525, 120);
     }
 
     public void show() {
