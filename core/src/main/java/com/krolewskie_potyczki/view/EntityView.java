@@ -11,12 +11,12 @@ import com.krolewskie_potyczki.model.TriangleUnit;
 
 public class EntityView implements Disposable {
     private Texture texture;
-    private Texture yellowPixelTexture;
-    private Texture whitePixelTexture;
-    private Texture redPixelTexture;
-    private SpriteBatch batch;
-    private Entity entity;
-    private Stage stage;
+    private final Texture yellowPixelTexture;
+    private final Texture whitePixelTexture;
+    private final Texture redPixelTexture;
+    private final SpriteBatch batch;
+    private final Entity entity;
+    private final Stage stage;
 
     public EntityView(Entity entity, Stage stage) {
         yellowPixelTexture = new Texture("images/entities/yellowPixel.png");
@@ -39,7 +39,7 @@ public class EntityView implements Disposable {
         batch = new SpriteBatch();
     }
 
-    public void render(float delta) {
+    public void render(float ignoredDelta) {
         float x = entity.getX(), y = entity.getY(), height = texture.getHeight(), width = texture.getWidth();
         batch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         batch.begin();
@@ -59,6 +59,7 @@ public class EntityView implements Disposable {
     public void show() {
     }
 
-    public void resize(int width, int height) {
+    public void resize(int ignoredWidth, int ignoredHeight) {
+
     }
 }

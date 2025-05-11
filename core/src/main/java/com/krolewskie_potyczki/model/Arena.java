@@ -7,11 +7,9 @@ public class Arena {
     List<Entity> activeEntities;
     private float playerElixir = 0;
     private final float maxElixir = 10;
-    private float elixirSpeed = 0.3F;
-    private final float matchDuration = 180;
     private float timeLeft;
-    private Tower playerTower;
-    private Tower enemyTower;
+    private final Tower playerTower;
+    private final Tower enemyTower;
 
     public float getTimeLeft() {
         return timeLeft;
@@ -30,7 +28,7 @@ public class Arena {
     }
 
     public Arena() {
-        timeLeft = matchDuration;
+        timeLeft = (float) 180;
         activeEntities = new ArrayList<>();
         playerTower = (Tower) createEntity(EntityType.TOWER, true, 335, 595);
         enemyTower  = (Tower) createEntity(EntityType.TOWER, false, 1765, 595);
@@ -64,6 +62,7 @@ public class Arena {
     }
 
     private void updatePlayerElixir(float delta) {
+        float elixirSpeed = 0.3F;
         playerElixir = Math.min(maxElixir, playerElixir + delta * elixirSpeed);
     }
 

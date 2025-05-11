@@ -15,11 +15,9 @@ import java.util.Map;
 
 public class    ArenaView implements Disposable {
     private final Map<Entity, EntityView> entityViews;
-    private final CardView cardView[];
-    private final Arena arena;
+    private final CardView[] cardView;
 
     public ArenaView(Arena arena, Stage stage, GameController controller) {
-        this.arena = arena;
         Texture bgTexture = new Texture(Gdx.files.internal("images/background/game/background.png"));
         Image bgImage = new Image(bgTexture);
         bgImage.setFillParent(true);
@@ -64,10 +62,6 @@ public class    ArenaView implements Disposable {
             entityView.dispose();
     }
 
-    public void pause() { }
-    public void resume() { }
-    public void hide() { }
-
     public void addEntity(Entity entity, Stage stage) {
         EntityView view = new EntityView(entity, stage);
         entityViews.put(entity, view);
@@ -78,9 +72,5 @@ public class    ArenaView implements Disposable {
         if (view != null) {
             view.dispose();
         }
-    }
-
-    public Arena getArena() {
-        return arena;
     }
 }

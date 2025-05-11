@@ -7,15 +7,11 @@ import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.view.GameView;
 
 public class GameScreen implements Screen {
-    private Main game;
-    private Arena arena;
     public GameView view;
-    private GameController controller;
 
     public GameScreen(Main game) {
-        this.game = game;
-        arena = new Arena();
-        controller = new GameController(game, arena);
+        Arena arena = new Arena();
+        GameController controller = new GameController(game, arena);
         view = new GameView(arena, controller);
     }
 
