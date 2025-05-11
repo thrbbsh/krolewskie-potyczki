@@ -88,19 +88,33 @@ public class GameView implements Disposable {
         topTable.top().left();
         stage.addActor(topTable);
 
-        topTable.add(pauseButton).pad(10);
-        topTable.add().expandX();
-        topTable.add(timerLabel).pad(10).right().width(200);
+        topTable.add(pauseButton)
+            .size(250, 60)
+            .padTop(6)
+            .row();
+
+        topTable.add(timerLabel)
+            .padTop(7)
+            .left()
+            .width(300);
+
 
         Table bottomTable = new Table();
         bottomTable.setFillParent(true);
         bottomTable.bottom().left();
         stage.addActor(bottomTable);
 
+        bottomTable.columnDefaults(0).padLeft(3);
+
         bottomTable.add(spawnSquareButton).pad(10);
         bottomTable.add(spawnTriangleButton).pad(10);
+
         bottomTable.add().expandX();
-        bottomTable.add(currentElixirLabel).pad(10).right().width(300);
+
+        bottomTable.add(currentElixirLabel)
+            .right()
+            .width(300)
+            .pad(10);
 
         TextButton resumeButton = new TextButton("Resume", skin);
         resumeButton.addListener(new ChangeListener() {
