@@ -11,7 +11,7 @@ import com.krolewskie_potyczki.model.Entity;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ArenaView implements Disposable {
+public class    ArenaView implements Disposable {
     private final Map<Entity, EntityView> entityViews;
 
     public ArenaView(Arena arena, Stage stage) {
