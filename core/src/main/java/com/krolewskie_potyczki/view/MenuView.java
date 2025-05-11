@@ -28,16 +28,16 @@ public class MenuView implements Disposable {
 
         controller = new MenuController(game);
 
-        skin = new Skin(Gdx.files.internal("skins/craftacular-ui.json"));
+        skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
-        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("Soundtrack1.mp3"));
+        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/Soundtrack1.mp3"));
         menuMusic.setLooping(true);
         menuMusic.setVolume(0.1f);
         menuMusic.play();
 
 
         // TODO: add crown image directly to background
-        Texture crownTexture = new Texture(Gdx.files.internal("crown.png"));
+        Texture crownTexture = new Texture(Gdx.files.internal("images/background/menu/crown.png"));
         Image crownImage = new Image(crownTexture);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("font"), Color.WHITE);

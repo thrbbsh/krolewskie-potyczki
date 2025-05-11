@@ -19,22 +19,22 @@ public class EntityView implements Disposable {
     private Stage stage;
 
     public EntityView(Entity entity, Stage stage) {
-        yellowPixelTexture = new Texture("images/yellowPixel.png");
-        whitePixelTexture = new Texture("images/whitePixel.png");
-        redPixelTexture = new Texture("images/redPixel.png");
+        yellowPixelTexture = new Texture("images/entities/yellowPixel.png");
+        whitePixelTexture = new Texture("images/entities/whitePixel.png");
+        redPixelTexture = new Texture("images/entities/redPixel.png");
         this.stage = stage;
         this.entity = entity;
         if (entity instanceof Tower) {
-            if (entity.getIsPlayersEntity()) texture = new Texture("images/playerTower.png");
-            else texture = new Texture("images/botTower.png");
+            if (entity.getIsPlayersEntity()) texture = new Texture("skins/player/playerTower.png");
+            else texture = new Texture("skins/bot/botTower.png");
         }
         else if (entity instanceof SquareUnit) {
-            if (entity.getIsPlayersEntity()) texture = new Texture("images/playerSquareUnit.png");
-            else texture = new Texture("images/botSquareUnit.png");
+            if (entity.getIsPlayersEntity()) texture = new Texture("skins/player/playerSquareUnit.png");
+            else texture = new Texture("skins/bot/botSquareUnit.png");
         }
         else if (entity instanceof TriangleUnit) {
-            if (entity.getIsPlayersEntity()) texture = new Texture("images/playerTriangleUnit.png");
-            else texture = new Texture("images/botTriangleUnit.png");
+            if (entity.getIsPlayersEntity()) texture = new Texture("skins/player/playerTriangleUnit.png");
+            else texture = new Texture("skins/bot/botTriangleUnit.png");
         }
         batch = new SpriteBatch();
     }

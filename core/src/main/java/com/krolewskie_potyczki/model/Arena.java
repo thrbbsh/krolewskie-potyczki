@@ -32,8 +32,8 @@ public class Arena {
     public Arena() {
         timeLeft = matchDuration;
         activeEntities = new ArrayList<>();
-        playerTower = (Tower) createEntity(EntityType.TOWER, true, 100, 500);
-        enemyTower  = (Tower) createEntity(EntityType.TOWER, false, 1720, 500);
+        playerTower = (Tower) createEntity(EntityType.TOWER, true, 335, 595);
+        enemyTower  = (Tower) createEntity(EntityType.TOWER, false, 1765, 595);
         addEntity(playerTower);
         addEntity(enemyTower);
         playerElixir = 5;

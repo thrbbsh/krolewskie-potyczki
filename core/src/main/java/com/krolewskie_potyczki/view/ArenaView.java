@@ -1,19 +1,25 @@
 package com.krolewskie_potyczki.view;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Disposable;
 import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Entity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ArenaView implements Disposable {
     private final Map<Entity, EntityView> entityViews;
 
     public ArenaView(Arena arena, Stage stage) {
+        Texture bgTexture = new Texture(Gdx.files.internal("images/background/game/background.png"));
+        Image bgImage = new Image(bgTexture);
+        bgImage.setFillParent(true);
+        stage.addActor(bgImage);
+
         entityViews = new HashMap<>();
         for (Entity entity: arena.getActiveEntities()) {
             addEntity(entity, stage);
