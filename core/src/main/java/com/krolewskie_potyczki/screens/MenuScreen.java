@@ -16,9 +16,7 @@ public class MenuScreen implements Screen {
     }
 
     @Override
-    public void show() {
-
-    }
+    public void show() {view.show();}
 
     @Override
     public void render(float delta) {
