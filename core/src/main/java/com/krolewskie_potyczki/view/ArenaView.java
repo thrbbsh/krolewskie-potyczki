@@ -13,7 +13,7 @@ import com.krolewskie_potyczki.model.EntityType;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ArenaView implements Disposable {
+public class    ArenaView implements Disposable {
     private final Map<Entity, EntityView> entityViews;
     private final CardView cardView[];
     private final Arena arena;

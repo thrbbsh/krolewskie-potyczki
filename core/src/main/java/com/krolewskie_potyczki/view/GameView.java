@@ -17,6 +17,7 @@ import com.krolewskie_potyczki.model.Entity;
 import java.util.ArrayList;
 
 public class GameView implements Disposable {
+
     private final ArenaView arenaView;
     private final Skin skin;
     private final Stage stage;
@@ -26,6 +27,10 @@ public class GameView implements Disposable {
     private final Label timerLabel;
     private final Label endLabel;
     private boolean endProcessed = false;
+
+    private float EnemySpawn = 7f + (float) (Math.random() * 3f);
+    private float EnemySpawnTimer = 0f;
+
 
     private final GameController controller;
     private final Arena arena;
@@ -68,9 +73,16 @@ public class GameView implements Disposable {
         topTable.top().left();
         stage.addActor(topTable);
 
-        topTable.add(pauseButton).pad(10);
-        topTable.add().expandX();
-        topTable.add(timerLabel).pad(10).right().width(200);
+        topTable.add(pauseButton)
+            .size(250, 60)
+            .padTop(6)
+            .row();
+
+        topTable.add(timerLabel)
+            .padTop(7)
+            .left()
+            .width(300);
+
 
         Table bottomTable = new Table();
         bottomTable.setFillParent(true);
@@ -174,6 +186,22 @@ public class GameView implements Disposable {
                 arenaView.removeEntity(e);
             }
 
+            EnemySpawnTimer += delta;
+            if (EnemySpawnTimer >= EnemySpawn) {
+                EntityType type;
+                if (Math.random() < 0.7) {
+                    type = EntityType.SQUARE;
+                } else {
+                    type = EntityType.TRIANGLE;
+                }
+                float spawnX = 1200f + (float) (Math.random() * 550f);
+                float spawnY = 250f + (float) (Math.random() * 750f);
+                Entity enemy = controller.createEntity(type, false, spawnX, spawnY);
+                arenaView.addEntity(enemy, stage);
+                EnemySpawn = 7f + (float) (Math.random() * 3f);
+                EnemySpawnTimer  = 0f;
+            }
+
             boolean pAlive = !arena.isPlayerTowerDestroyed();
             boolean eAlive = !arena.isEnemyTowerDestroyed();
             if (!pAlive || !eAlive || arena.getTimeLeft() <= 0f) {
@@ -197,6 +225,8 @@ public class GameView implements Disposable {
             pauseStage.draw();
         }
     }
+
+
 
     public void show() {
         arenaView.show();

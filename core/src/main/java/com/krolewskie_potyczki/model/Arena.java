@@ -7,7 +7,7 @@ public class Arena {
     List<Entity> activeEntities;
     private float playerElixir = 0;
     private final float maxElixir = 10;
-    private float elixirSpeed = 0.1F;
+    private float elixirSpeed = 0.3F;
     private final float matchDuration = 180;
     private float timeLeft;
     private Tower playerTower;
