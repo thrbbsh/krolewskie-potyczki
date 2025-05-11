@@ -7,6 +7,7 @@ public abstract class Entity {
     boolean isPlayersEntity;
     Entity currentTarget;
     EntityType type;
+    boolean attack_state;
 
     private float timeSinceLastAttack = 0f;
 
@@ -45,14 +46,18 @@ public abstract class Entity {
 
     public void update(float delta, List<Entity> activeEntities) {
         updateCurrentTarget(activeEntities);
-        move(delta);
 
-        timeSinceLastAttack += delta;
-
-        if (currentTarget != null && distance(currentTarget) <= type.getAttackRadius() &&
-            timeSinceLastAttack >= type.getAttackInterval()) {
-            attack();
+        if (!attack_state && distance(currentTarget) > type.getAttackRadius()) {
+            move(delta);
             timeSinceLastAttack = 0f;
+        } else {
+            attack_state = true;
+            timeSinceLastAttack += delta;
+            if (timeSinceLastAttack >= type.getAttackInterval()) {
+                attack();
+                timeSinceLastAttack -= type.getAttackInterval();
+                attack_state = false;
+            }
         }
     }
 
