@@ -36,7 +36,7 @@ public class ArenaView implements Disposable {
             EntityType type = null;
             if (i == 0) type = EntityType.SQUARE;
             if (i == 1) type = EntityType.TRIANGLE;
-            cardViews[i] = new CardView(type, 650 + i * 170, 22.5f, listener);
+            cardViews[i] = new CardView(type, 650 + i * 160, 22.5f, listener);
             cardViews[i].addToStage(stage);
         }
     }
