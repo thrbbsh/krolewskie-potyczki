@@ -45,15 +45,14 @@ public class GameController {
             }
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
-            makeNewEntity(type, false, spawnX, spawnY);
+            makeNewEntity(type, spawnX, spawnY);
             EnemySpawn = 7f + (float) (Math.random() * 3f);
             EnemySpawnTimer  = 0f;
         }
     }
 
-    private Entity makeNewEntity(EntityType type, boolean b, float spawnX, float spawnY) {
-        Entity e = arenaController.spawnEntity(type, false, spawnX, spawnY);
-        return e;
+    private void makeNewEntity(EntityType type, float spawnX, float spawnY) {
+        arenaController.spawnEntity(type, false, spawnX, spawnY);
     }
 
     public String getMatchResult() {

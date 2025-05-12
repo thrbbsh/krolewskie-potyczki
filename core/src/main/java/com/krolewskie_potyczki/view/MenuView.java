@@ -18,13 +18,10 @@ public class MenuView implements Disposable {
     private final Stage stage;
     private final Skin skin;
     private final Music menuMusic;
-    private final MenuController controller;
 
     public MenuView(MenuController controller) {
         stage = new Stage(new FitViewport(1920, 1080));
         Gdx.input.setInputProcessor(stage);
-
-        this.controller = controller;
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 

@@ -23,10 +23,10 @@ public class ArenaView implements Disposable {
     private final CardView[] cardViews;
     private final SpriteBatch bgBatch;
     private final Texture bgTexture;
-    private final Arena arena;
+    private final Arena arena; 
     private CardClickListener listener;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private boolean drawSpawnArea = false;
+    private boolean drawSpawnArea = false; 
 
     public ArenaView(Arena arena, Stage stage) {
         this.arena = arena;
@@ -42,7 +42,7 @@ public class ArenaView implements Disposable {
             EntityType type = null;
             if (i == 0) type = EntityType.SQUARE;
             if (i == 1) type = EntityType.TRIANGLE;
-            cardViews[i] = new CardView(type, 650 + i * 170, 22.5f, listener);
+            cardViews[i] = new CardView(type, 650 + i * 160, 22.5f, listener);
             cardViews[i].addToStage(stage);
         }
     }
@@ -67,8 +67,8 @@ public class ArenaView implements Disposable {
         bgBatch.begin();
         bgBatch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         bgBatch.draw(bgTexture, 0, 0, stage.getWidth(), stage.getHeight());
-        bgBatch.end();
-
+        bgBatch.end(); 
+      
         if (drawSpawnArea) {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -84,26 +84,13 @@ public class ArenaView implements Disposable {
         }
 
         for (int i = 0; i < 4; i++)
-            cardViews[i].render(delta);
+            cardViews[i].render(delta); 
         for (EntityView entityView: entityViews.values())
             entityView.render(delta);
         stage.act(delta);
         stage.draw();
-    }
-
-    public void show() {
         for (int i = 0; i < 4; i++)
-            cardViews[i].show();
-        for (EntityView entityView: entityViews.values())
-            entityView.show();
-    }
-
-    public void resize(int width, int height) {
-        for (int i = 0; i < 4; i++)
-            cardViews[i].resize(width, height);
-        for (EntityView entityView: entityViews.values())
-            entityView.resize(width, height);
-        stage.getViewport().update(width, height, true);
+            cardViews[i].render(delta);
     }
 
     @Override
@@ -118,7 +105,7 @@ public class ArenaView implements Disposable {
     public void addEntityView(Entity entity) {
         entityViews.put(entity, new EntityView(entity, stage));
     }
-
+ 
     public void removeEntity(EntityView entityView) {
         entityViews.remove(entityView);
     }
@@ -132,5 +119,5 @@ public class ArenaView implements Disposable {
 
     public void setSpawnArea(boolean state) {
         drawSpawnArea = state;
-    }
+    } 
 }
