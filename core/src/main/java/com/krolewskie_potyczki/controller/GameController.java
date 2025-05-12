@@ -139,6 +139,7 @@ public class GameController {
             !(287 <= x && x <= 1027 && 227 <= y && y <= 1062))
             return false;
 
+        arenaController.spawnEntity(selectedCard.getCard().getEntityType(), true, x, y);
         selectedCard.setSelected(false);
         spendElixir(selectedCard.getCard().getElixirCost());
         selectedCard = null;
