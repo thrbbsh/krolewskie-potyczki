@@ -5,9 +5,8 @@ import java.util.List;
 public abstract class Entity {
     float HP, x, y;
     boolean isPlayersEntity;
-    Entity currentTarget;
+    Entity currentTarget, attackTarget;
     EntityType type;
-    boolean attack_state;
 
     private float timeSinceLastAttack = 0f;
 
@@ -43,16 +42,21 @@ public abstract class Entity {
     public void update(float delta, List<Entity> activeEntities) {
         updateCurrentTarget(activeEntities);
 
-        if (!attack_state && distance(currentTarget) > type.getAttackRadius()) {
+        if (attackTarget == null && distance(currentTarget) > type.getAttackRadius()) {
             move(delta);
             timeSinceLastAttack = 0f;
         } else {
-            attack_state = true;
-            timeSinceLastAttack += delta;
-            if (timeSinceLastAttack >= type.getAttackInterval()) {
-                attack();
-                timeSinceLastAttack -= type.getAttackInterval();
-                attack_state = false;
+            if (attackTarget != null && attackTarget != currentTarget) {
+                attackTarget = null;
+                timeSinceLastAttack = 0f;
+            } else {
+                attackTarget = currentTarget;
+                timeSinceLastAttack += delta;
+                if (timeSinceLastAttack >= type.getAttackInterval()) {
+                    attack();
+                    timeSinceLastAttack -= type.getAttackInterval();
+                    attackTarget = null;
+                }
             }
         }
     }
