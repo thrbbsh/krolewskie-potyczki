@@ -2,8 +2,6 @@ package com.krolewskie_potyczki.controller;
 
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.Arena;
-import com.krolewskie_potyczki.model.Card;
-import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.EntityType;
 import com.krolewskie_potyczki.screens.MenuScreen;
 import com.krolewskie_potyczki.view.CardView;
@@ -128,10 +126,6 @@ public class GameController {
         return (float) Math.floor(arena.getPlayerElixir() * 10) / 10;
     }
 
-    public Entity spawnEntity(EntityType entityType, boolean b, float x, float y) {
-        return arenaController.spawnEntity(entityType, b, x, y);
-    }
-
     public void spendElixir(int elixirCost) {
         arenaController.spendElixir(elixirCost);
     }
@@ -140,20 +134,11 @@ public class GameController {
         return selectedCard;
     }
 
-    public Card getSelectedCard() {
-        return selectedCard.getCard();
-    }
-
-    public void setSelectedCard(CardView card) {
-        selectedCard = card;
-    }
-
     public boolean onMapTouched(float x, float y) {
         if (selectedCard == null || getPlayerElixir() < selectedCard.getCard().getElixirCost() ||
             !(287 <= x && x <= 1027 && 227 <= y && y <= 1062))
             return false;
 
-        Entity e = spawnEntity(selectedCard.getCard().getEntityType(), true, x, y);
         selectedCard.setSelected(false);
         spendElixir(selectedCard.getCard().getElixirCost());
         selectedCard = null;

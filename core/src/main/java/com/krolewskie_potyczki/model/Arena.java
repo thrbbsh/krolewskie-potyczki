@@ -65,11 +65,11 @@ public class Arena {
     }
 
     public float getPlayerTowerHP() {
-        return playerTower.getCurrentHP();
+        return playerTower.getHP();
     }
 
     public float getEnemyTowerHP() {
-        return enemyTower.getCurrentHP();
+        return enemyTower.getHP();
     }
 
     public void spendElixir(float elixirCost) {

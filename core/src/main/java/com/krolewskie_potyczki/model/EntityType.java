@@ -3,7 +3,7 @@ package com.krolewskie_potyczki.model;
 public enum EntityType {
     TOWER( 0, 3000, 100, 50, 0.5f, false),
     SQUARE(300, 300, 50, 100, 0.5f, false),
-    TRIANGLE( 100, 700, 20, 200, 1.5f, true);
+    TRIANGLE( 140, 700, 50, 400, 1.5f, true);
     private final float moveSpeed;
     private final float totalHP;
     private final float attackRadius;

@@ -24,22 +24,28 @@ public class EntityView implements Disposable {
         shapeRenderer = new ShapeRenderer();
         this.stage = stage;
         this.entity = entity;
+
         String internalWay = "skins/";
         if (entity.getIsPlayersEntity()) internalWay += "player/player";
-            else internalWay += "bot/bot";
+        else internalWay += "bot/bot";
         internalWay += capitalize(entity.getType().toString().toLowerCase());
         if (entity instanceof Unit) internalWay += "Unit";
         internalWay += ".png";
         texture = new Texture(internalWay);
+
         batch = new SpriteBatch();
     }
 
     public void render(float ignoredDelta) {
-        float x = entity.getX(), y = entity.getY(), height = texture.getHeight(), width = texture.getWidth();
         batch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         batch.begin();
-        batch.draw(texture, x, y);
+        batch.draw(texture, entity.getX(), entity.getY());
         batch.end();
+        drawLifeBar();
+    }
+
+    private void drawLifeBar() {
+        float x = entity.getX(), y = entity.getY(), height = texture.getHeight(), width = texture.getWidth();
         shapeRenderer.setProjectionMatrix(stage.getViewport().getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.YELLOW);

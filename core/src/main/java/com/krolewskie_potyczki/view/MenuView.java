@@ -25,7 +25,7 @@ public class MenuView implements Disposable {
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
-        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/Soundtrack1.mp3"));
+        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/MenuSoundtrack.mp3"));
         menuMusic.setLooping(true);
         menuMusic.setVolume(0.1f);
         menuMusic.play();
