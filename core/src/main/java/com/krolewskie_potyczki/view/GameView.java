@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,6 +26,7 @@ public class GameView implements Disposable {
     private final Label timerLabel;
     private final Label endLabel;
     private final ArenaView arenaView;
+    private final Music gameMusic;
 
     private final GameController controller;
 
@@ -43,6 +45,11 @@ public class GameView implements Disposable {
                 controller.spendElixir(card.getElixirCost());
             }
         };
+
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/Soundtrack2.mp3"));
+        gameMusic.setLooping(true);
+        gameMusic.setVolume(0.1f);
+        gameMusic.play();
 
         arenaView.setListener(listener);
 
