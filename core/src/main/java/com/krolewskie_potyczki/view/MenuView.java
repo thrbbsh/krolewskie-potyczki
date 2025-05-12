@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.controller.MenuController;
 
 public class MenuView implements Disposable {
@@ -21,11 +20,11 @@ public class MenuView implements Disposable {
     private final Music menuMusic;
     private final MenuController controller;
 
-    public MenuView(Main game) {
+    public MenuView(MenuController controller) {
         stage = new Stage(new FitViewport(1920, 1080));
         Gdx.input.setInputProcessor(stage);
 
-        controller = new MenuController(game);
+        this.controller = controller;
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 

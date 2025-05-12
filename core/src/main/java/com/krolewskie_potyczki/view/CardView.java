@@ -15,25 +15,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class CardView implements Disposable {
     private final Card card;
+    private ImageButton imageButton;
 
-    public CardView(EntityType type, float x, float y, Stage stage, Arena arena, GameController controller, ArenaView arenaView) {
+    public CardView(EntityType type, float x, float y, CardClickListener listener) {
         this.card = new Card(type);
         Texture texture;
         if (card.getEntityType() == EntityType.TRIANGLE) texture = new Texture("images/cards/triangleCard.png");
         else if (card.getEntityType() == EntityType.SQUARE) texture = new Texture("images/cards/squareCard.png");
         else texture = new Texture("images/cards/defaultCard.png");
-        ImageButton imageButton = new ImageButton(new TextureRegionDrawable(texture));
+        imageButton = new ImageButton(new TextureRegionDrawable(texture));
         imageButton.setPosition(x, y);
         imageButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                if (arena.getPlayerElixir() >= card.getElixirCost()) {
-                    Entity e = controller.createEntity(type, true, 400, 900);
-                    arenaView.addEntity(e, stage);
-                    arena.subtractElixir(card.getElixirCost());
-                }
+                listener.onCardClicked(card);
             }
         });
+    }
+    public void addToStage(Stage stage) {
         stage.addActor(imageButton);
     }
     public void render(float ignoredDelta) {}

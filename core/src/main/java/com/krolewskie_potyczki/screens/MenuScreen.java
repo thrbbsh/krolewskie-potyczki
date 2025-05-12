@@ -2,13 +2,16 @@ package com.krolewskie_potyczki.screens;
 
 import com.badlogic.gdx.Screen;
 import com.krolewskie_potyczki.Main;
+import com.krolewskie_potyczki.controller.MenuController;
 import com.krolewskie_potyczki.view.MenuView;
 
 public class MenuScreen implements Screen {
     private final MenuView view;
+    private final MenuController controller;
 
     public MenuScreen(Main game) {
-        this.view = new MenuView(game);
+        controller = new MenuController(game);
+        this.view = new MenuView(controller);
     }
 
     @Override

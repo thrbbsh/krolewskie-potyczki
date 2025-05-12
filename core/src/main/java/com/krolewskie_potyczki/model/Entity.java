@@ -66,7 +66,7 @@ public abstract class Entity {
         HP = Math.min(type.getTotalHP(), Math.max(0F, HP + change));
     }
 
-    boolean isDead() {
+    public boolean isDead() {
         return (HP <= 0F);
     }
 
