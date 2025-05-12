@@ -1,13 +1,10 @@
 package com.krolewskie_potyczki.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.krolewskie_potyczki.model.*;
 
@@ -17,7 +14,6 @@ public class EntityView implements Disposable {
     private final Entity entity;
     private final Stage stage;
     private final ShapeRenderer shapeRenderer;
-    private final Skin skin;
 
     public static String capitalize(String s) {
         if (s == null || s.isEmpty()) return s;
@@ -37,7 +33,6 @@ public class EntityView implements Disposable {
         internalWay += ".png";
         texture = new Texture(internalWay);
 
-        skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
         batch = new SpriteBatch();
     }
 
