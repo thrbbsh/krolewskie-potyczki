@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -25,6 +26,7 @@ public class GameView implements Disposable {
     private final Label currentElixirLabel;
     private final Label timerLabel;
     private final Label endLabel;
+    private final ShapeRenderer shapeRenderer;
     private final ArenaView arenaView;
     private final Music gameMusic;
 
@@ -32,6 +34,7 @@ public class GameView implements Disposable {
 
     public GameView(Arena arena, GameController gc) {
         this.controller = gc;
+        shapeRenderer = new ShapeRenderer();
 
         gameStage = new Stage(new FitViewport(1920, 1080));
         pauseStage = new Stage(new FitViewport(1920, 1080));
@@ -100,7 +103,7 @@ public class GameView implements Disposable {
         gameStage.addActor(bottomTable);
 
         bottomTable.add().expandX();
-        bottomTable.add(currentElixirLabel).pad(10).right().width(300).padLeft(500);
+        bottomTable.add(currentElixirLabel).padRight(350).padBottom(100).right().width(300).padLeft(500);
 
         TextButton resumeButton = new TextButton("Resume", skin);
         resumeButton.addListener(new ChangeListener() {
@@ -177,9 +180,22 @@ public class GameView implements Disposable {
             timerLabel.setText(
                 "Time left: " + controller.getFormattedTimeLeft()
             );
+
             gameStage.act(delta);
             gameStage.draw();
             arenaView.render(delta);
+            shapeRenderer.setProjectionMatrix(gameStage.getViewport().getCamera().combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(Color.BLACK);
+            shapeRenderer.rect(1300, 30, 240, 50);
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(1305, 35, 230, 40);
+            shapeRenderer.setColor(Color.PURPLE);
+            shapeRenderer.rect(1305, 35, 230 * (controller.getFormattedPlayerElixir() / controller.getMaxElixir()), 40);
+            shapeRenderer.setColor(Color.BLACK);
+            for (int i = 1; i <= 9; i++)
+                shapeRenderer.rect(1305 + i * 23 - 2.5f, 35, 5, 40);
+            shapeRenderer.end();
         }
 
         if (controller.isPaused()) {

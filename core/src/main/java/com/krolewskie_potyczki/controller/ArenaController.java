@@ -42,11 +42,4 @@ public class ArenaController {
         arena.spendElixir(elixirCost);
     }
 
-    public float getPlayerElixir() {
-        return arena.getPlayerElixir();
-    }
-
-    public List<Entity> getEntities() {
-        return arena.getActiveEntities();
-    }
 }
