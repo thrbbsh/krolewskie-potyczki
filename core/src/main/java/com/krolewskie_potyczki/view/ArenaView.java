@@ -24,7 +24,6 @@ public class ArenaView implements Disposable {
     private final SpriteBatch bgBatch;
     private final Texture bgTexture;
     private final Arena arena;
-    private CardClickListener listener;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private boolean drawSpawnArea = false;
 
@@ -102,18 +101,10 @@ public class ArenaView implements Disposable {
         stage.dispose();
     }
 
-    public void addEntityView(Entity entity) {
-        entityViews.put(entity, new EntityView(entity, stage));
-    }
-
-    public void removeEntity(EntityView entityView) {
-        entityViews.remove(entityView);
-    }
-
     public CardView getCardView(Card fCard) {
-        for (int i = 0; i < cardViews.length; i++)
-            if (cardViews[i].getCard().equals(fCard))
-                return cardViews[i];
+        for (CardView cardView : cardViews)
+            if (cardView.getCard().equals(fCard))
+                return cardView;
         return null;
     }
 
