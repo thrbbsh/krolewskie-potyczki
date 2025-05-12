@@ -23,10 +23,10 @@ public class ArenaView implements Disposable {
     private final CardView[] cardViews;
     private final SpriteBatch bgBatch;
     private final Texture bgTexture;
-    private final Arena arena; 
+    private final Arena arena;
     private CardClickListener listener;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private boolean drawSpawnArea = false; 
+    private boolean drawSpawnArea = false;
 
     public ArenaView(Arena arena, Stage stage) {
         this.arena = arena;
@@ -67,8 +67,8 @@ public class ArenaView implements Disposable {
         bgBatch.begin();
         bgBatch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         bgBatch.draw(bgTexture, 0, 0, stage.getWidth(), stage.getHeight());
-        bgBatch.end(); 
-      
+        bgBatch.end();
+
         if (drawSpawnArea) {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -84,7 +84,7 @@ public class ArenaView implements Disposable {
         }
 
         for (int i = 0; i < 4; i++)
-            cardViews[i].render(delta); 
+            cardViews[i].render(delta);
         for (EntityView entityView: entityViews.values())
             entityView.render(delta);
         stage.act(delta);
@@ -105,19 +105,19 @@ public class ArenaView implements Disposable {
     public void addEntityView(Entity entity) {
         entityViews.put(entity, new EntityView(entity, stage));
     }
- 
+
     public void removeEntity(EntityView entityView) {
         entityViews.remove(entityView);
     }
 
     public CardView getCardView(Card fCard) {
         for (int i = 0; i < cardViews.length; i++)
-            if (cardViews[i].card.equals(fCard))
+            if (cardViews[i].getCard().equals(fCard))
                 return cardViews[i];
         return null;
     }
 
     public void setSpawnArea(boolean state) {
         drawSpawnArea = state;
-    } 
+    }
 }

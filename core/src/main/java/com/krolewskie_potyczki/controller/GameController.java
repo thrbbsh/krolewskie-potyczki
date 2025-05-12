@@ -96,17 +96,19 @@ public class GameController {
         game.setScreen(new MenuScreen(game));
     }
 
-    public void onSpawnEntityClicked(CardView cv) {
-        if (getPlayerElixir() < cv.card.getElixirCost()) return;
+    public void onSpawnEntityClicked(CardView cardView) {
+        if (getPlayerElixir() < cardView.getCard().getElixirCost())
+            return;
 
-        // toggle selection by reference
-        if (cv == selectedCard) {
-            cv.setSelected(false);
+        if (cardView == selectedCard) {
+            cardView.setSelected(false);
             selectedCard = null;
         } else {
-            if (selectedCard != null) selectedCard.setSelected(false);
-            selectedCard = cv;
-            cv.setSelected(true);
+            if (selectedCard != null) {
+                selectedCard.setSelected(false);
+            }
+            selectedCard = cardView;
+            cardView.setSelected(true);
         }
     }
 
@@ -139,7 +141,7 @@ public class GameController {
     }
 
     public Card getSelectedCard() {
-        return selectedCard.card;
+        return selectedCard.getCard();
     }
 
     public void setSelectedCard(CardView card) {
@@ -147,13 +149,13 @@ public class GameController {
     }
 
     public boolean onMapTouched(float x, float y) {
-        if (selectedCard == null || getPlayerElixir() < selectedCard.card.getElixirCost() ||
+        if (selectedCard == null || getPlayerElixir() < selectedCard.getCard().getElixirCost() ||
             !(287 <= x && x <= 1027 && 227 <= y && y <= 1062))
             return false;
 
-        Entity e = spawnEntity(selectedCard.card.getEntityType(), true, x, y);
+        Entity e = spawnEntity(selectedCard.getCard().getEntityType(), true, x, y);
         selectedCard.setSelected(false);
-        spendElixir(selectedCard.card.getElixirCost());
+        spendElixir(selectedCard.getCard().getElixirCost());
         selectedCard = null;
 
         return true;
