@@ -36,8 +36,8 @@ public class Arena {
 
     public Arena() {
         activeEntities = new ArrayList<>();
-        playerTower = (Tower) createEntity(EntityType.TOWER, true, 335, 595);
-        enemyTower = (Tower) createEntity(EntityType.TOWER, false, 1765, 595);
+        playerTower = (Tower) createEntity(EntityType.TOWER, true, 380, 655);
+        enemyTower = (Tower) createEntity(EntityType.TOWER, false, 1815, 655);
         activeEntities.add(playerTower);
         activeEntities.add(enemyTower);
         playerElixir = 5;

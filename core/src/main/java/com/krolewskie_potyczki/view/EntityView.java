@@ -39,7 +39,7 @@ public class EntityView implements Disposable {
     public void render(float ignoredDelta) {
         batch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         batch.begin();
-        batch.draw(texture, entity.getX(), entity.getY());
+        batch.draw(texture, entity.getX() - texture.getWidth() / 2f, entity.getY() - texture.getHeight() / 2f);
         batch.end();
         drawLifeBar();
     }
@@ -49,11 +49,11 @@ public class EntityView implements Disposable {
         shapeRenderer.setProjectionMatrix(stage.getViewport().getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.YELLOW);
-        shapeRenderer.rect(x - (100 - width) / 2, y + height + 10, 100, 25);
+        shapeRenderer.rect(x - (100 - width) / 2 - texture.getWidth() / 2f, y + height + 10 - texture.getHeight() / 2f, 100, 25);
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(x - (100 - width) / 2 + 5, y + height + 15, 90, 15);
+        shapeRenderer.rect(x - (100 - width) / 2 + 5 - texture.getWidth() / 2f, y + height + 15 - texture.getHeight() / 2f, 90, 15);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(x - (100 - width) / 2 + 5, y + height + 15, 90 * entity.getHP() / entity.getType().getTotalHP(), 15);
+        shapeRenderer.rect(x - (100 - width) / 2 + 5 - texture.getWidth() / 2f, y + height + 15 - texture.getHeight() / 2f, 90 * entity.getHP() / entity.getType().getTotalHP(), 15);
         shapeRenderer.end();
     }
 
