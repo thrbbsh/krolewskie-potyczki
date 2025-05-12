@@ -6,23 +6,19 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
-import com.krolewskie_potyczki.controller.GameController;
-import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Card;
-import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.EntityType;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class CardView implements Disposable {
     private final Card card;
-    private ImageButton imageButton;
+    private final ImageButton imageButton;
 
     public CardView(EntityType type, float x, float y, CardClickListener listener) {
         this.card = new Card(type);
         Texture texture;
-        if (card.getEntityType() == EntityType.TRIANGLE) texture = new Texture("images/cards/triangleCard.png");
-        else if (card.getEntityType() == EntityType.SQUARE) texture = new Texture("images/cards/squareCard.png");
-        else texture = new Texture("images/cards/defaultCard.png");
+        if (card.getEntityType() == null) texture = new Texture("images/cards/defaultCard.png");
+            else texture = new Texture("images/cards/" + card.getEntityType().toString().toLowerCase() + "Card.png");
         imageButton = new ImageButton(new TextureRegionDrawable(texture));
         imageButton.setPosition(x, y);
         imageButton.addListener(new ChangeListener() {
@@ -38,6 +34,4 @@ public class CardView implements Disposable {
     public void render(float ignoredDelta) {}
     @Override
     public void dispose() {}
-    public void show() {}
-    public void resize(int ignoredW, int ignoredH) { }
 }

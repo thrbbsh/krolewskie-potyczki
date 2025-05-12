@@ -8,12 +8,10 @@ import com.krolewskie_potyczki.view.GameView;
 
 public class GameScreen implements Screen {
     private final GameView view;
-    private final GameController controller;
-    private Arena arena;
 
     public GameScreen(Main game) {
-        arena = new Arena();
-        controller = new GameController(arena, game);
+        Arena arena = new Arena();
+        GameController controller = new GameController(arena, game);
         view = new GameView(arena, controller);
     }
 
