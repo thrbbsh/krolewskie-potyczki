@@ -7,10 +7,9 @@ import com.krolewskie_potyczki.view.MenuView;
 
 public class MenuScreen implements Screen {
     private final MenuView view;
-    private final MenuController controller;
 
     public MenuScreen(Main game) {
-        controller = new MenuController(game);
+        MenuController controller = new MenuController(game);
         this.view = new MenuView(controller);
     }
 

@@ -6,11 +6,9 @@ import java.util.List;
 public class Arena {
     List<Entity> activeEntities;
     private float playerElixir = 0;
-    private final float maxElixir = 10;
     private float timeLeft = 180;
     private final Tower playerTower;
     private final Tower enemyTower;
-    private final float elixirSpeed = 0.3F;
 
     public float getTimeLeft() {
         return timeLeft;
@@ -21,7 +19,7 @@ public class Arena {
     }
 
     public float getElixirSpeed() {
-        return elixirSpeed;
+        return 0.3F;
     }
 
     public String getFormattedTimeLeft() {
@@ -33,7 +31,7 @@ public class Arena {
     }
 
     public float getMaxElixir() {
-        return maxElixir;
+        return 10;
     }
 
     public Arena() {
