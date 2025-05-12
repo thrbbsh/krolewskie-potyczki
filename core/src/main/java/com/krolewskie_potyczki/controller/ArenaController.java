@@ -12,12 +12,13 @@ public class ArenaController {
         this.arena = arena;
     }
 
-    public void spawnEntity(EntityType type, boolean isPlayersEntity, float x, float y) {
+    public Entity spawnEntity(EntityType type, boolean isPlayersEntity, float x, float y) {
         Entity entity = null;
         if (type == EntityType.TOWER) entity = new Tower(isPlayersEntity, x, y);
         else if (type == EntityType.TRIANGLE) entity = new TriangleUnit(isPlayersEntity, x, y);
         else if (type == EntityType.SQUARE) entity = new SquareUnit(isPlayersEntity, x, y);
         arena.addEntity(entity);
+        return entity;
     }
 
     public void update(float delta) {
