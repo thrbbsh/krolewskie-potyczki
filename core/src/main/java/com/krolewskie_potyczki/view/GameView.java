@@ -1,8 +1,8 @@
 package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -10,40 +10,43 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
 import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Entity;
 
-import java.util.ArrayList;
-
 public class GameView implements Disposable {
 
-    private final ArenaView arenaView;
     private final Skin skin;
-    private final Stage stage;
+    private final Stage gameStage;
     private final Stage pauseStage;
     private final Stage endStage;
     private final Label currentElixirLabel;
     private final Label timerLabel;
     private final Label endLabel;
-    private boolean endProcessed = false;
-
-    private float EnemySpawn = 7f + (float) (Math.random() * 3f);
-    private float EnemySpawnTimer = 0f;
-
+    private final ArenaView arenaView;
 
     private final GameController controller;
-    private final Arena arena;
 
     public GameView(Arena arena, GameController gc) {
-        this.arena = arena;
         this.controller = gc;
 
-        stage = new Stage(new FitViewport(1920, 1080));
-        skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
-        arenaView = new ArenaView(arena, stage, gc);
+        gameStage = new Stage(new FitViewport(1920, 1080));
         pauseStage = new Stage(new FitViewport(1920, 1080));
         endStage = new Stage(new FitViewport(1920, 1080));
+        arenaView = new ArenaView(arena, gameStage);
+
+        CardClickListener listener = (card) -> {
+            if (controller.getPlayerElixir() >= card.getElixirCost()) {
+                Entity e = controller.spawnEntity(card.getEntityType(), true, 400, 900);
+                arenaView.addEntityView(e);
+                controller.spendElixir(card.getElixirCost());
+            }
+        };
+
+        arenaView.setListener(listener);
+
+        skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
         TextButton pauseButton = new TextButton("Pause", skin);
         pauseButton.addListener(new ChangeListener() {
@@ -55,14 +58,14 @@ public class GameView implements Disposable {
         });
 
         currentElixirLabel = new Label(
-            "Current elixir:\n" + arena.getPlayerElixir() + "/" + arena.getMaxElixir(),
+            "Current elixir:\n" + controller.getFormattedPlayerElixir() + "/" + controller.getMaxElixir(),
             skin
         );
         currentElixirLabel.setWrap(true);
         currentElixirLabel.setAlignment(Align.center);
 
         timerLabel = new Label(
-            "Time left:\n" + arena.getFormattedTimeLeft(),
+            "Time left:\n" + controller.getFormattedTimeLeft(),
             skin
         );
         timerLabel.setWrap(true);
@@ -71,7 +74,7 @@ public class GameView implements Disposable {
         Table topTable = new Table();
         topTable.setFillParent(true);
         topTable.top().left();
-        stage.addActor(topTable);
+        gameStage.addActor(topTable);
 
         topTable.add(pauseButton)
             .size(250, 60)
@@ -87,7 +90,7 @@ public class GameView implements Disposable {
         Table bottomTable = new Table();
         bottomTable.setFillParent(true);
         bottomTable.bottom().left();
-        stage.addActor(bottomTable);
+        gameStage.addActor(bottomTable);
 
         bottomTable.add().expandX();
         bottomTable.add(currentElixirLabel).pad(10).right().width(300).padLeft(500);
@@ -96,7 +99,7 @@ public class GameView implements Disposable {
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                Gdx.input.setInputProcessor(stage);
+                Gdx.input.setInputProcessor(gameStage);
                 controller.onResumeClicked();
             }
         });
@@ -151,74 +154,26 @@ public class GameView implements Disposable {
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         if (controller.isEnded()) {
-            if (!endProcessed) {
-                boolean pDead = arena.isPlayerTowerDestroyed();
-                boolean eDead = arena.isEnemyTowerDestroyed();
-                String text;
-                if (eDead && !pDead) {
-                    text = "You Win!";
-                } else if (pDead && !eDead) {
-                    text = "You Lose...";
-                } else {
-                    float pHP = arena.getPlayerTowerHP();
-                    float eHP = arena.getEnemyTowerHP();
-                    if (eHP == pHP) {
-                        text = "Draw!";
-                    } else {
-                        text = (eHP > pHP) ? "You Lose..." : "You Win!";
-                    }
-                }
-                endLabel.setText(text);
-                endProcessed = true;
-                Gdx.input.setInputProcessor(endStage);
-            }
+            endLabel.setText(controller.getMatchResult());
             endStage.act(delta);
             endStage.draw();
+            Gdx.input.setInputProcessor(endStage);
             return;
         }
 
         if (!controller.isPaused()) {
-            ArrayList<Entity> toRemove = arena.update(delta);
-            for (Entity e : toRemove) {
-                arena.removeEntity(e);
-                arenaView.removeEntity(e);
-            }
-
-            EnemySpawnTimer += delta;
-            if (EnemySpawnTimer >= EnemySpawn) {
-                EntityType type;
-                if (Math.random() < 0.7) {
-                    type = EntityType.SQUARE;
-                } else {
-                    type = EntityType.TRIANGLE;
-                }
-                float spawnX = 1200f + (float) (Math.random() * 550f);
-                float spawnY = 250f + (float) (Math.random() * 750f);
-                Entity enemy = controller.createEntity(type, false, spawnX, spawnY);
-                arenaView.addEntity(enemy, stage);
-                EnemySpawn = 7f + (float) (Math.random() * 3f);
-                EnemySpawnTimer  = 0f;
-            }
-
-            boolean pAlive = !arena.isPlayerTowerDestroyed();
-            boolean eAlive = !arena.isEnemyTowerDestroyed();
-            if (!pAlive || !eAlive || arena.getTimeLeft() <= 0f) {
-                controller.endOfMatch();
-            } else {
-                currentElixirLabel.setText(
-                    "Current elixir: " + arena.getPlayerElixir() + "/" + arena.getMaxElixir()
-                );
-                timerLabel.setText(
-                    "Time left: " + arena.getFormattedTimeLeft()
-                );
-            }
+            controller.update(delta);
+            currentElixirLabel.setText(
+                "Current elixir: " + controller.getFormattedPlayerElixir() + "/" + controller.getMaxElixir()
+            );
+            timerLabel.setText(
+                "Time left: " + controller.getFormattedTimeLeft()
+            );
+            gameStage.act(delta);
+            gameStage.draw();
+            arenaView.render(delta);
         }
-
-        stage.act(delta);
-        stage.draw();
-        arenaView.render(delta);
 
         if (controller.isPaused()) {
             pauseStage.act(delta);
@@ -226,24 +181,19 @@ public class GameView implements Disposable {
         }
     }
 
-
-
     public void show() {
-        arenaView.show();
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(gameStage);
     }
 
     public void resize(int w, int h) {
-        arenaView.resize(w, h);
-        stage.getViewport().update(w, h, true);
+        gameStage.getViewport().update(w, h, true);
         pauseStage.getViewport().update(w, h, true);
         endStage.getViewport().update(w, h, true);
     }
 
     @Override
     public void dispose() {
-        arenaView.dispose();
-        stage.dispose();
+        gameStage.dispose();
         pauseStage.dispose();
         endStage.dispose();
         skin.dispose();

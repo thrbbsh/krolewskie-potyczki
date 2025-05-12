@@ -1,7 +1,5 @@
 package com.krolewskie_potyczki.controller;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.screens.GameScreen;
 
@@ -17,6 +15,6 @@ public class MenuController {
     }
 
     public void onExitClicked() {
-        Gdx.app.exit();
+        game.exitGame();
     }
 }

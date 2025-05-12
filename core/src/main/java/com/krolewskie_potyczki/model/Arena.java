@@ -7,14 +7,21 @@ public class Arena {
     List<Entity> activeEntities;
     private float playerElixir = 0;
     private final float maxElixir = 10;
-    private float elixirSpeed = 0.3F;
-    private final float matchDuration = 180;
-    private float timeLeft;
-    private Tower playerTower;
-    private Tower enemyTower;
+    private float timeLeft = 180;
+    private final Tower playerTower;
+    private final Tower enemyTower;
+    private final float elixirSpeed = 0.3F;
 
     public float getTimeLeft() {
         return timeLeft;
+    }
+
+    public void setTimeLeft(float timeLeft) {
+        this.timeLeft = timeLeft;
+    }
+
+    public float getElixirSpeed() {
+        return elixirSpeed;
     }
 
     public String getFormattedTimeLeft() {
@@ -22,7 +29,7 @@ public class Arena {
     }
 
     public float getPlayerElixir() {
-        return (float) Math.floor(playerElixir * 10) / 10;
+        return playerElixir;
     }
 
     public float getMaxElixir() {
@@ -30,14 +37,14 @@ public class Arena {
     }
 
     public Arena() {
-        timeLeft = matchDuration;
         activeEntities = new ArrayList<>();
         playerTower = (Tower) createEntity(EntityType.TOWER, true, 335, 595);
-        enemyTower  = (Tower) createEntity(EntityType.TOWER, false, 1765, 595);
-        addEntity(playerTower);
-        addEntity(enemyTower);
+        enemyTower = (Tower) createEntity(EntityType.TOWER, false, 1765, 595);
+        activeEntities.add(playerTower);
+        activeEntities.add(enemyTower);
         playerElixir = 5;
     }
+
     public Entity createEntity(EntityType entityType, boolean isPlayersEntity, float x, float y) {
         switch (entityType) {
             case TOWER:
@@ -49,22 +56,6 @@ public class Arena {
             default:
                 throw new IllegalArgumentException("Wrong entity type: " + entityType);
         }
-    }
-
-    public ArrayList<Entity> update(float delta) {
-        timeLeft -= delta;
-        updatePlayerElixir(delta);
-        for (Entity e : activeEntities)
-            e.update(delta, activeEntities);
-        ArrayList<Entity> entitiesToRemove = new ArrayList<>();
-        for (Entity e : activeEntities)
-            if (e.isDead())
-                entitiesToRemove.add(e);
-        return entitiesToRemove;
-    }
-
-    private void updatePlayerElixir(float delta) {
-        playerElixir = Math.min(maxElixir, playerElixir + delta * elixirSpeed);
     }
 
     public boolean isPlayerTowerDestroyed() {
@@ -83,8 +74,12 @@ public class Arena {
         return enemyTower.getCurrentHP();
     }
 
-    public List<Entity> getActiveEntities() {
-        return activeEntities;
+    public void spendElixir(float elixirCost) {
+        playerElixir -= elixirCost;
+    }
+
+    public void setPlayerElixir(float playerElixir) {
+        this.playerElixir = playerElixir;
     }
 
     public void addEntity(Entity entity) {
@@ -95,8 +90,7 @@ public class Arena {
         activeEntities.remove(entity);
     }
 
-    public void subtractElixir(float elixirCost) {
-        playerElixir -= elixirCost;
+    public List<Entity> getActiveEntities() {
+        return activeEntities;
     }
-
 }

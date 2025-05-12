@@ -14,19 +14,12 @@ import com.krolewskie_potyczki.model.EntityType;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class CardView implements Disposable {
-    private float x, y;
-    private Card card;
-    private Texture texture;
-    private Stage stage;
+    private final Card card;
     private ImageButton imageButton;
-    private Arena arena;
 
-    public CardView(EntityType type, float x, float y, Stage stage, Arena arena, GameController controller, ArenaView arenaView) {
-        this.stage = stage;
-        this.arena = arena;
+    public CardView(EntityType type, float x, float y, CardClickListener listener) {
         this.card = new Card(type);
-        this.x = x;
-        this.y = y;
+        Texture texture;
         if (card.getEntityType() == EntityType.TRIANGLE) texture = new Texture("images/cards/triangleCard.png");
         else if (card.getEntityType() == EntityType.SQUARE) texture = new Texture("images/cards/squareCard.png");
         else texture = new Texture("images/cards/defaultCard.png");
@@ -35,24 +28,16 @@ public class CardView implements Disposable {
         imageButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                if (arena.getPlayerElixir() >= card.getElixirCost()) {
-                    Entity e = controller.createEntity(type, true, 400, 900);
-                    arenaView.addEntity(e, stage);
-                    arena.subtractElixir(card.getElixirCost());
-                }
+                listener.onCardClicked(card);
             }
         });
+    }
+    public void addToStage(Stage stage) {
         stage.addActor(imageButton);
     }
-    public Card getCard() {
-        return card;
-    }
-    public void render(float delta) {}
+    public void render(float ignoredDelta) {}
     @Override
     public void dispose() {}
     public void show() {}
-    public void resize(int w, int h) { }
-    public void pause()  { }
-    public void resume() { }
-    public void hide()   { }
+    public void resize(int ignoredW, int ignoredH) { }
 }

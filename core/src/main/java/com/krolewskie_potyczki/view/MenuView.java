@@ -9,24 +9,22 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.krolewskie_potyczki.Main;
-import com.krolewskie_potyczki.controller.MenuController;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-public class MenuView implements Disposable {
-    private Stage stage;
-    private Skin skin; ;
-    private Music menuMusic;
-    private MenuController controller;
+import com.krolewskie_potyczki.controller.MenuController;
 
-    public MenuView(Main game) {
+public class MenuView implements Disposable {
+    private final Stage stage;
+    private final Skin skin;
+    private final Music menuMusic;
+    private final MenuController controller;
+
+    public MenuView(MenuController controller) {
         stage = new Stage(new FitViewport(1920, 1080));
         Gdx.input.setInputProcessor(stage);
 
-        controller = new MenuController(game);
+        this.controller = controller;
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 

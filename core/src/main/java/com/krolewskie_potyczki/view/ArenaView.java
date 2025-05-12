@@ -2,85 +2,104 @@ package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Disposable;
-import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.EntityType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class    ArenaView implements Disposable {
+public class ArenaView implements Disposable {
+    private final Stage stage;
     private final Map<Entity, EntityView> entityViews;
-    private final CardView cardView[];
+    private final CardView[] cardViews;
+    private final SpriteBatch bgBatch;
+    private final Texture bgTexture;
     private final Arena arena;
+    private CardClickListener listener;
 
-    public ArenaView(Arena arena, Stage stage, GameController controller) {
+    public ArenaView(Arena arena, Stage stage) {
         this.arena = arena;
-        Texture bgTexture = new Texture(Gdx.files.internal("images/background/game/background.png"));
-        Image bgImage = new Image(bgTexture);
-        bgImage.setFillParent(true);
-        stage.addActor(bgImage);
-        cardView = new CardView[4];
-        cardView[0] = new CardView(EntityType.SQUARE, 650, 22.5f, stage, arena, controller, this);
-        cardView[1] = new CardView(EntityType.TRIANGLE, 820, 22.5f, stage, arena, controller, this);
-        cardView[2] = new CardView(null, 990, 22.5f, stage, arena, controller, this);
-        cardView[3] = new CardView(null, 1160, 22.5f, stage, arena, controller, this);
+        this.stage = stage;
         entityViews = new HashMap<>();
-        for (Entity entity: arena.getActiveEntities()) {
-            addEntity(entity, stage);
+        bgBatch = new SpriteBatch();
+        bgTexture = new Texture(Gdx.files.internal("images/background/game/background.png"));
+        cardViews = new CardView[4];
+    }
+
+    public void setListener(CardClickListener listener) {
+        for (int i = 0; i < cardViews.length; i++) {
+            EntityType type = null;
+            if (i == 0) type = EntityType.SQUARE;
+            if (i == 1) type = EntityType.TRIANGLE;
+            cardViews[i] = new CardView(type, 650 + i * 170, 22.5f, listener);
+            cardViews[i].addToStage(stage);
+        }
+    }
+
+    private void sync() {
+        for (Entity e : arena.getActiveEntities()) {
+            if (!entityViews.containsKey(e)) {
+                EntityView ev = new EntityView(e, stage);
+                entityViews.put(e, ev);
+            }
+        }
+        List<Map.Entry<Entity, EntityView>> list = new ArrayList<>();
+        for (Map.Entry<Entity, EntityView> e : entityViews.entrySet())
+            if (!arena.getActiveEntities().contains(e.getKey())) list.add(e);
+        for (Map.Entry<Entity, EntityView> e : list) {
+            entityViews.remove(e.getKey());
         }
     }
 
     public void render(float delta) {
+        sync();
+        bgBatch.begin();
+        bgBatch.setProjectionMatrix(stage.getViewport().getCamera().combined);
+        bgBatch.draw(bgTexture, 0, 0, stage.getWidth(), stage.getHeight());
+        bgBatch.end();
         for (int i = 0; i < 4; i++)
-            cardView[i].render(delta);
+            cardViews[i].render(delta);
         for (EntityView entityView: entityViews.values())
             entityView.render(delta);
+        stage.act(delta);
+        stage.draw();
     }
 
     public void show() {
         for (int i = 0; i < 4; i++)
-            cardView[i].show();
+            cardViews[i].show();
         for (EntityView entityView: entityViews.values())
             entityView.show();
     }
 
     public void resize(int width, int height) {
         for (int i = 0; i < 4; i++)
-            cardView[i].resize(width, height);
+            cardViews[i].resize(width, height);
         for (EntityView entityView: entityViews.values())
             entityView.resize(width, height);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
     public void dispose() {
         for (int i = 0; i < 4; i++)
-            cardView[i].dispose();
+            cardViews[i].dispose();
         for (EntityView entityView: entityViews.values())
             entityView.dispose();
+        stage.dispose();
     }
 
-    public void pause() { }
-    public void resume() { }
-    public void hide() { }
-
-    public void addEntity(Entity entity, Stage stage) {
-        EntityView view = new EntityView(entity, stage);
-        entityViews.put(entity, view);
+    public void addEntityView(Entity entity) {
+        entityViews.put(entity, new EntityView(entity, stage));
     }
 
-    public void removeEntity(Entity entity) {
-        EntityView view = entityViews.remove(entity);
-        if (view != null) {
-            view.dispose();
-        }
-    }
-
-    public Arena getArena() {
-        return arena;
+    public void removeEntity(EntityView entityView) {
+        entityViews.remove(entityView);
     }
 }
