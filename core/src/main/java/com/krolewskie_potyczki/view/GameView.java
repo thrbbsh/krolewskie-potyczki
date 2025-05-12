@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -13,7 +15,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.Arena;
+import com.krolewskie_potyczki.model.Card;
 import com.krolewskie_potyczki.model.Entity;
+import com.krolewskie_potyczki.model.EntityType;
 
 public class GameView implements Disposable {
 
@@ -37,14 +41,25 @@ public class GameView implements Disposable {
         arenaView = new ArenaView(arena, gameStage);
 
         CardClickListener listener = (card) -> {
-            if (controller.getPlayerElixir() >= card.getElixirCost()) {
-                Entity e = controller.spawnEntity(card.getEntityType(), true, 400, 900);
-                arenaView.addEntityView(e);
-                controller.spendElixir(card.getElixirCost());
-            }
+            if (card.getEntityType() == null)
+                return;
+            controller.onSpawnEntityClicked(arenaView.getCardView(card));
+            arenaView.setSpawnArea(controller.getSelectedCardView() != null);
         };
 
         arenaView.setListener(listener);
+
+        gameStage.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                if (controller.onMapTouched(x, y)) {
+                    arenaView.setSpawnArea(false);
+                    return true;
+                }
+                return false;
+            }
+        });
+
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 

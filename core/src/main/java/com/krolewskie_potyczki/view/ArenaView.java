@@ -1,11 +1,14 @@
 package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.krolewskie_potyczki.model.Arena;
+import com.krolewskie_potyczki.model.Card;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.EntityType;
 
@@ -22,6 +25,8 @@ public class ArenaView implements Disposable {
     private final Texture bgTexture;
     private final Arena arena;
     private CardClickListener listener;
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private boolean drawSpawnArea = false;
 
     public ArenaView(Arena arena, Stage stage) {
         this.arena = arena;
@@ -63,6 +68,21 @@ public class ArenaView implements Disposable {
         bgBatch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         bgBatch.draw(bgTexture, 0, 0, stage.getWidth(), stage.getHeight());
         bgBatch.end();
+
+        if (drawSpawnArea) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0.8f, 0.8f, 0.8f, 0.5f);
+            shapeRenderer.rect(
+                1030, 227,
+                875, 835
+            );
+            shapeRenderer.end();
+        }
+
         for (int i = 0; i < 4; i++)
             cardViews[i].render(delta);
         for (EntityView entityView: entityViews.values())
@@ -101,5 +121,16 @@ public class ArenaView implements Disposable {
 
     public void removeEntity(EntityView entityView) {
         entityViews.remove(entityView);
+    }
+
+    public CardView getCardView(Card fCard) {
+        for (int i = 0; i < cardViews.length; i++)
+            if (cardViews[i].card.equals(fCard))
+                return cardViews[i];
+        return null;
+    }
+
+    public void setSpawnArea(boolean state) {
+        drawSpawnArea = state;
     }
 }

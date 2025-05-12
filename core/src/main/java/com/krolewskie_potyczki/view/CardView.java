@@ -1,5 +1,6 @@
 package com.krolewskie_potyczki.view;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,7 +15,7 @@ import com.krolewskie_potyczki.model.EntityType;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class CardView implements Disposable {
-    private final Card card;
+    public final Card card;
     private ImageButton imageButton;
 
     public CardView(EntityType type, float x, float y, CardClickListener listener) {
@@ -32,6 +33,14 @@ public class CardView implements Disposable {
             }
         });
     }
+
+    public void setSelected(boolean selected) {
+        if (selected)
+            imageButton.getImage().setColor(Color.GRAY);
+        else
+            imageButton.getImage().setColor(Color.WHITE);
+    }
+
     public void addToStage(Stage stage) {
         stage.addActor(imageButton);
     }
