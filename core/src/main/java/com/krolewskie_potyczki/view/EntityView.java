@@ -1,10 +1,13 @@
 package com.krolewskie_potyczki.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.krolewskie_potyczki.model.*;
 
@@ -14,6 +17,7 @@ public class EntityView implements Disposable {
     private final Entity entity;
     private final Stage stage;
     private final ShapeRenderer shapeRenderer;
+    private final Skin skin;
 
     public static String capitalize(String s) {
         if (s == null || s.isEmpty()) return s;
@@ -24,22 +28,29 @@ public class EntityView implements Disposable {
         shapeRenderer = new ShapeRenderer();
         this.stage = stage;
         this.entity = entity;
+
         String internalWay = "skins/";
         if (entity.getIsPlayersEntity()) internalWay += "player/player";
-            else internalWay += "bot/bot";
+        else internalWay += "bot/bot";
         internalWay += capitalize(entity.getType().toString().toLowerCase());
         if (entity instanceof Unit) internalWay += "Unit";
         internalWay += ".png";
         texture = new Texture(internalWay);
+
+        skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
         batch = new SpriteBatch();
     }
 
     public void render(float ignoredDelta) {
-        float x = entity.getX(), y = entity.getY(), height = texture.getHeight(), width = texture.getWidth();
         batch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         batch.begin();
-        batch.draw(texture, x, y);
+        batch.draw(texture, entity.getX(), entity.getY());
         batch.end();
+        drawLifeBar();
+    }
+
+    private void drawLifeBar() {
+        float x = entity.getX(), y = entity.getY(), height = texture.getHeight(), width = texture.getWidth();
         shapeRenderer.setProjectionMatrix(stage.getViewport().getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.YELLOW);

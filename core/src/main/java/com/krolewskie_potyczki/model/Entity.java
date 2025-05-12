@@ -11,10 +11,6 @@ public abstract class Entity {
 
     private float timeSinceLastAttack = 0f;
 
-    public EntityType getType() {
-        return type;
-    }
-
     Entity(EntityType type, boolean isPlayersEntity, float x, float y) {
         currentTarget = null;
         this.isPlayersEntity = isPlayersEntity;
@@ -105,7 +101,8 @@ public abstract class Entity {
             else if (distance(currentTarget) > distance(e)) currentTarget = e;
         }
     }
-    public float getCurrentHP() {
-        return HP;
+
+    public EntityType getType() {
+        return type;
     }
 }

@@ -17,9 +17,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.Arena;
-import com.krolewskie_potyczki.model.Card;
-import com.krolewskie_potyczki.model.Entity;
-import com.krolewskie_potyczki.model.EntityType;
 
 public class GameView implements Disposable {
 
@@ -52,12 +49,12 @@ public class GameView implements Disposable {
             arenaView.setSpawnArea(controller.getSelectedCardView() != null);
         };
 
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/Soundtrack2.mp3"));
+        arenaView.setListener(listener);
+
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/GameSoundtrack.mp3"));
         gameMusic.setLooping(true);
         gameMusic.setVolume(0.1f);
         gameMusic.play();
-
-        arenaView.setListener(listener);
 
         gameStage.addListener(new InputListener(){
             @Override
@@ -79,6 +76,7 @@ public class GameView implements Disposable {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 Gdx.input.setInputProcessor(pauseStage);
                 controller.onPauseClicked();
+                gameMusic.pause();
             }
         });
 
@@ -126,6 +124,7 @@ public class GameView implements Disposable {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 Gdx.input.setInputProcessor(gameStage);
                 controller.onResumeClicked();
+                gameMusic.play();
             }
         });
 
@@ -180,6 +179,7 @@ public class GameView implements Disposable {
         Gdx.gl.glClearColor(0f, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (controller.isEnded()) {
+            gameMusic.stop();
             endLabel.setText(controller.getMatchResult());
             endStage.act(delta);
             endStage.draw();
@@ -199,18 +199,7 @@ public class GameView implements Disposable {
             gameStage.act(delta);
             gameStage.draw();
             arenaView.render(delta);
-            shapeRenderer.setProjectionMatrix(gameStage.getViewport().getCamera().combined);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(Color.BLACK);
-            shapeRenderer.rect(1300, 30, 240, 50);
-            shapeRenderer.setColor(Color.WHITE);
-            shapeRenderer.rect(1305, 35, 230, 40);
-            shapeRenderer.setColor(Color.PURPLE);
-            shapeRenderer.rect(1305, 35, 230 * (controller.getFormattedPlayerElixir() / controller.getMaxElixir()), 40);
-            shapeRenderer.setColor(Color.BLACK);
-            for (int i = 1; i <= 9; i++)
-                shapeRenderer.rect(1305 + i * 23 - 2.5f, 35, 5, 40);
-            shapeRenderer.end();
+            renderElixirBar();
         }
 
         if (controller.isPaused()) {
@@ -218,6 +207,22 @@ public class GameView implements Disposable {
             pauseStage.draw();
         }
     }
+
+    private void renderElixirBar() {
+        shapeRenderer.setProjectionMatrix(gameStage.getViewport().getCamera().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rect(1300, 30, 240, 50);
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.rect(1305, 35, 230, 40);
+        shapeRenderer.setColor(Color.PURPLE);
+        shapeRenderer.rect(1305, 35, 230 * (controller.getFormattedPlayerElixir() / controller.getMaxElixir()), 40);
+        shapeRenderer.setColor(Color.BLACK);
+        for (int i = 1; i <= 9; i++)
+            shapeRenderer.rect(1305 + i * 23 - 2.5f, 35, 5, 40);
+        shapeRenderer.end();
+    }
+
 
     public void show() {
         Gdx.input.setInputProcessor(gameStage);
@@ -231,6 +236,7 @@ public class GameView implements Disposable {
 
     @Override
     public void dispose() {
+        gameMusic.dispose();
         gameStage.dispose();
         pauseStage.dispose();
         endStage.dispose();
