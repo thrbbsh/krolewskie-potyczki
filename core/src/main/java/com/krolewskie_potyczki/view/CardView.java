@@ -1,6 +1,8 @@
 package com.krolewskie_potyczki.view;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,11 +18,14 @@ public class CardView implements Disposable {
     private final ImageButton imageButton;
     private final Texture elixirDropTexture;
     private final SpriteBatch batch;
+    private final BitmapFont font;
     private final float x, y;
 
     public CardView(EntityType type, float x, float y, CardClickListener listener) {
         this.x = x;
         this.y = y;
+        font = new BitmapFont();
+        font.getData().setScale(2.5f);
         this.card = new Card(type);
         elixirDropTexture = new Texture("images/cards/elixirDrop.png");
         batch = new SpriteBatch();
@@ -38,10 +43,13 @@ public class CardView implements Disposable {
     }
     public void addToStage(Stage stage) {
         stage.addActor(imageButton);
+        batch.setProjectionMatrix(stage.getViewport().getCamera().combined);
     }
     public void render(float ignoredDelta) {
         batch.begin();
-        batch.draw(elixirDropTexture, x, y);
+        batch.draw(elixirDropTexture, x + (imageButton.getWidth() - elixirDropTexture.getWidth() * 1.2f) / 2, y - 10, elixirDropTexture.getWidth() * 1.2f, elixirDropTexture.getHeight() * 1.2f);
+        font.setColor(Color.WHITE);
+        font.draw(batch, String.valueOf(card.getElixirCost()), x + (imageButton.getWidth() - elixirDropTexture.getWidth() * 1.2f) / 2 + 7, y + 25);
         batch.end();
     }
     @Override

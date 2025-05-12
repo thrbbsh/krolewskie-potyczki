@@ -62,12 +62,12 @@ public class ArenaView implements Disposable {
         bgBatch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         bgBatch.draw(bgTexture, 0, 0, stage.getWidth(), stage.getHeight());
         bgBatch.end();
-        for (int i = 0; i < 4; i++)
-            cardViews[i].render(delta);
         for (EntityView entityView: entityViews.values())
             entityView.render(delta);
         stage.act(delta);
         stage.draw();
+        for (int i = 0; i < 4; i++)
+            cardViews[i].render(delta);
     }
 
     @Override

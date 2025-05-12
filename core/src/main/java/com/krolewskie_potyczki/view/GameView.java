@@ -185,6 +185,9 @@ public class GameView implements Disposable {
             shapeRenderer.rect(1305, 35, 230, 40);
             shapeRenderer.setColor(Color.PURPLE);
             shapeRenderer.rect(1305, 35, 230 * (controller.getFormattedPlayerElixir() / controller.getMaxElixir()), 40);
+            shapeRenderer.setColor(Color.BLACK);
+            for (int i = 1; i <= 9; i++)
+                shapeRenderer.rect(1305 + i * 23 - 2.5f, 35, 5, 40);
             shapeRenderer.end();
         }
 
