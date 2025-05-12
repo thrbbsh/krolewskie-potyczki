@@ -2,9 +2,11 @@ package com.krolewskie_potyczki.controller;
 
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.Arena;
+import com.krolewskie_potyczki.model.Card;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.EntityType;
 import com.krolewskie_potyczki.screens.MenuScreen;
+import com.krolewskie_potyczki.view.CardView;
 
 public class GameController {
     private final Arena arena;
@@ -14,6 +16,7 @@ public class GameController {
     private boolean ended = false;
     private float EnemySpawn = 7f + (float) (Math.random() * 3f);
     private float EnemySpawnTimer = 0f;
+    private CardView selectedCard;
 
     public GameController(Arena arena, Main game) {
         this.arena = arena;
@@ -93,6 +96,20 @@ public class GameController {
         game.setScreen(new MenuScreen(game));
     }
 
+    public void onSpawnEntityClicked(CardView cv) {
+        if (getPlayerElixir() < cv.card.getElixirCost()) return;
+
+        // toggle selection by reference
+        if (cv == selectedCard) {
+            cv.setSelected(false);
+            selectedCard = null;
+        } else {
+            if (selectedCard != null) selectedCard.setSelected(false);
+            selectedCard = cv;
+            cv.setSelected(true);
+        }
+    }
+
     public float getPlayerElixir() {
         return arena.getPlayerElixir();
     }
@@ -109,11 +126,36 @@ public class GameController {
         return (float) Math.floor(arena.getPlayerElixir() * 10) / 10;
     }
 
-    public Entity spawnEntity(EntityType entityType, boolean b, int i, int i1) {
-        return arenaController.spawnEntity(entityType, b, i, i1);
+    public Entity spawnEntity(EntityType entityType, boolean b, float x, float y) {
+        return arenaController.spawnEntity(entityType, b, x, y);
     }
 
     public void spendElixir(int elixirCost) {
         arenaController.spendElixir(elixirCost);
+    }
+
+    public CardView getSelectedCardView() {
+        return selectedCard;
+    }
+
+    public Card getSelectedCard() {
+        return selectedCard.card;
+    }
+
+    public void setSelectedCard(CardView card) {
+        selectedCard = card;
+    }
+
+    public boolean onMapTouched(float x, float y) {
+        if (selectedCard == null || getPlayerElixir() < selectedCard.card.getElixirCost() ||
+            !(287 <= x && x <= 1027 && 227 <= y && y <= 1062))
+            return false;
+
+        Entity e = spawnEntity(selectedCard.card.getEntityType(), true, x, y);
+        selectedCard.setSelected(false);
+        spendElixir(selectedCard.card.getElixirCost());
+        selectedCard = null;
+
+        return true;
     }
 }

@@ -13,13 +13,13 @@ import com.krolewskie_potyczki.model.Card;
 import com.krolewskie_potyczki.model.EntityType;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-public class CardView implements Disposable {
+public class CardView implements Disposable { 
     private final Card card;
     private final ImageButton imageButton;
     private final Texture elixirDropTexture;
     private final SpriteBatch batch;
     private final BitmapFont font;
-    private final float x, y;
+    private final float x, y; 
 
     public CardView(EntityType type, float x, float y, CardClickListener listener) {
         this.x = x;
@@ -41,6 +41,14 @@ public class CardView implements Disposable {
             }
         });
     }
+
+    public void setSelected(boolean selected) {
+        if (selected)
+            imageButton.getImage().setColor(Color.GRAY);
+        else
+            imageButton.getImage().setColor(Color.WHITE);
+    }
+
     public void addToStage(Stage stage) {
         stage.addActor(imageButton);
         batch.setProjectionMatrix(stage.getViewport().getCamera().combined);
