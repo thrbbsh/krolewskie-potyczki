@@ -100,7 +100,7 @@ public abstract class Entity {
     public void updateCurrentTarget(List<Entity> activeEntities) {
         currentTarget = null;
         for (Entity e : activeEntities) {
-            if (e.isPlayersEntity == this.isPlayersEntity || (this.type.doesIgnoreUnits() && e.type != EntityType.TOWER)) continue;
+            if (e.isPlayersEntity == this.isPlayersEntity || (this.type.doesIgnoreUnits() && e.type != EntityType.MainTower && e.type != EntityType.SideTower)) continue;
             if (currentTarget == null) currentTarget = e;
             else if (distance(currentTarget) > distance(e)) currentTarget = e;
         }

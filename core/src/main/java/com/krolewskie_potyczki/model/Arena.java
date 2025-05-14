@@ -6,9 +6,7 @@ import java.util.List;
 public class Arena {
     List<Entity> activeEntities;
     private float playerElixir = 0;
-    private float timeLeft = 180;
-    private final Tower playerTower;
-    private final Tower enemyTower;
+    private float timeLeft = 10;
 
     public float getTimeLeft() {
         return timeLeft;
@@ -36,40 +34,66 @@ public class Arena {
 
     public Arena() {
         activeEntities = new ArrayList<>();
-        playerTower = (Tower) createEntity(EntityType.TOWER, true, 380, 655);
-        enemyTower = (Tower) createEntity(EntityType.TOWER, false, 1815, 655);
-        activeEntities.add(playerTower);
-        activeEntities.add(enemyTower);
+        activeEntities.add(createEntity(EntityType.MainTower, true, 380, 655));
+        activeEntities.add(createEntity(EntityType.SideTower, true, 470, 405));
+        activeEntities.add(createEntity(EntityType.SideTower, true, 470, 905));
+        activeEntities.add(createEntity(EntityType.MainTower, false, 1815, 655));
+        activeEntities.add(createEntity(EntityType.SideTower, false, 1725, 405));
+        activeEntities.add(createEntity(EntityType.SideTower, false, 1725, 905));
         playerElixir = 5;
     }
 
     public Entity createEntity(EntityType entityType, boolean isPlayersEntity, float x, float y) {
         switch (entityType) {
-            case TOWER:
-                return new Tower(isPlayersEntity, x, y);
-            case SQUARE:
+            case MainTower:
+                return new MainTower(isPlayersEntity, x, y);
+            case SideTower:
+                return new SideTower(isPlayersEntity, x, y);
+            case Square:
                 return new SquareUnit(isPlayersEntity, x, y);
-            case TRIANGLE:
+            case Triangle:
                 return new TriangleUnit(isPlayersEntity, x, y);
             default:
                 throw new IllegalArgumentException("Wrong entity type: " + entityType);
         }
     }
 
-    public boolean isPlayerTowerDestroyed() {
-        return playerTower.isDead();
+    public int PlayerCrownsCount() {
+        int crowns = 3;
+        for (Entity e : activeEntities) {
+            if ((e instanceof MainTower || e instanceof SideTower) && !e.getIsPlayersEntity()) crowns--;
+        }
+        return crowns;
     }
 
-    public boolean isEnemyTowerDestroyed() {
-        return enemyTower.isDead();
+    public int EnemyCrownsCount() {
+        int crowns = 3;
+        for (Entity e : activeEntities) {
+            if ((e instanceof MainTower || e instanceof SideTower) && e.getIsPlayersEntity()) crowns--;
+        }
+        return crowns;
     }
 
-    public float getPlayerTowerHP() {
-        return playerTower.getHP();
+    public float getMinPlayerTowerHP() {
+        float min = -1;
+        for (Entity e : activeEntities) {
+            if (!(e instanceof MainTower || e instanceof SideTower) || !e.getIsPlayersEntity()) continue;
+            if (min == -1) min = e.getHP();
+                else min = (int) Math.min(min, e.getHP());
+        }
+        if (min == -1) return 0;
+            else return min;
     }
 
-    public float getEnemyTowerHP() {
-        return enemyTower.getHP();
+    public float getMinEnemyTowerHP() {
+        float min = -1;
+        for (Entity e : activeEntities) {
+            if (!(e instanceof MainTower || e instanceof SideTower) || e.getIsPlayersEntity()) continue;
+            if (min == -1) min = e.getHP();
+            else min = (int) Math.min(min, e.getHP());
+        }
+        if (min == -1) return 0;
+        else return min;
     }
 
     public void spendElixir(float elixirCost) {

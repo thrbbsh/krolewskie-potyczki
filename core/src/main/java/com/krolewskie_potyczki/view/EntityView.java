@@ -15,11 +15,6 @@ public class EntityView implements Disposable {
     private final Stage stage;
     private final ShapeRenderer shapeRenderer;
 
-    public static String capitalize(String s) {
-        if (s == null || s.isEmpty()) return s;
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
-    }
-
     public EntityView(Entity entity, Stage stage) {
         shapeRenderer = new ShapeRenderer();
         this.stage = stage;
@@ -28,11 +23,11 @@ public class EntityView implements Disposable {
         String internalWay = "skins/";
         if (entity.getIsPlayersEntity()) internalWay += "player/player";
         else internalWay += "bot/bot";
-        internalWay += capitalize(entity.getType().toString().toLowerCase());
+        internalWay += entity.getType().toString();
         if (entity instanceof Unit) internalWay += "Unit";
         internalWay += ".png";
+        System.out.println(internalWay);
         texture = new Texture(internalWay);
-
         batch = new SpriteBatch();
     }
 

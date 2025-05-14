@@ -5,8 +5,8 @@ public class Card {
     private int elixirCost;
     public Card(EntityType type) {
         this.entityType = type;
-        if (type == EntityType.SQUARE) elixirCost = 3;
-        else if (type == EntityType.TRIANGLE) elixirCost = 5;
+        if (type == EntityType.Square) elixirCost = 3;
+        else if (type == EntityType.Triangle) elixirCost = 5;
     }
     public EntityType getEntityType() {
         return entityType;
