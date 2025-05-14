@@ -27,9 +27,9 @@ public class GameController {
         arenaController.update(delta);
         updateTimer(delta);
         enemyMove(delta);
-        boolean pAlive = !arena.isPlayerTowerDestroyed();
-        boolean eAlive = !arena.isEnemyTowerDestroyed();
-        if (!pAlive || !eAlive || arena.getTimeLeft() <= 0f) ended = true;
+        int pCount = arena.PlayerCrownsCount();
+        int eCount = arena.EnemyCrownsCount();
+        if (pCount == 3 || eCount == 3 || arena.getTimeLeft() <= 0f) ended = true;
     }
 
     private void enemyMove(float delta) {
@@ -37,9 +37,9 @@ public class GameController {
         if (EnemySpawnTimer >= EnemySpawn) {
             EntityType type;
             if (Math.random() < 0.7) {
-                type = EntityType.SQUARE;
+                type = EntityType.Square;
             } else {
-                type = EntityType.TRIANGLE;
+                type = EntityType.Triangle;
             }
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
@@ -54,19 +54,22 @@ public class GameController {
     }
 
     public String getMatchResult() {
-        boolean pDead = arena.isPlayerTowerDestroyed();
-        boolean eDead = arena.isEnemyTowerDestroyed();
-        if (eDead && !pDead) {
-            return "You Win!";
-        } else if (pDead && !eDead) {
-            return "You Lose...";
+        int pCount = arena.PlayerCrownsCount();
+        int eCount = arena.EnemyCrownsCount();
+        if (pCount > eCount) {
+            return "You Win!\n" + pCount + ":" + eCount;
+        } else if (pCount < eCount) {
+            return "You Lose.\n" + pCount + ":" + eCount;
         } else {
-            float pHP = arena.getPlayerTowerHP();
-            float eHP = arena.getEnemyTowerHP();
-            if (eHP == pHP) {
-                return "Draw!";
+            float pHP = arena.getMinPlayerTowerHP();
+            float eHP = arena.getMinEnemyTowerHP();
+            if (pHP > eHP) {
+                return "You Win!\n" + pCount + ":" + eCount + "\nPlayer's tower min HP: " + pHP + ".\nEnemy's tower min HP: " + eHP + ".";
+            }
+            else if (pHP < eHP) {
+                return "You Lose.\n" + pCount + ":" + eCount + "\nPlayer's tower min HP: " + pHP + ".\nEnemy's tower min HP: " + eHP + ".";
             } else {
-                return (eHP > pHP) ? "You Lose..." : "You Win!";
+                return "Draw.\n" + pCount + ":" + eCount + "\nPlayer's tower min HP: " + pHP + ".\nEnemy's tower min HP: " + eHP + ".";
             }
         }
     }

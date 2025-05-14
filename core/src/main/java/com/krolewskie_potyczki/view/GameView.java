@@ -158,6 +158,7 @@ public class GameView implements Disposable {
 
         endLabel = new Label("", ls);
         endLabel.setFontScale(3f);
+        endLabel.setAlignment(Align.center);
 
         TextButton endMenuBtn = new TextButton("Menu", skin);
         endMenuBtn.getLabel().setFontScale(2f);
