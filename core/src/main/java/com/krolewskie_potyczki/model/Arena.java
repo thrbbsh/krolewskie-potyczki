@@ -6,7 +6,7 @@ import java.util.List;
 public class Arena {
     List<Entity> activeEntities;
     private float playerElixir = 0;
-    private float timeLeft = 10;
+    private float timeLeft = 180;
 
     public float getTimeLeft() {
         return timeLeft;
