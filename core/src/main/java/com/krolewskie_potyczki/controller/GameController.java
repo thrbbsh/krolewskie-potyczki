@@ -34,17 +34,13 @@ public class GameController {
     }
 
     private void enemyMove(float delta) {
-        System.out.println(EnemySpawnTimer + " " + EnemySpawn);
         EnemySpawnTimer += delta;
         if (EnemySpawnTimer >= EnemySpawn) {
             EntityType type;
-            if (Math.random() < 0.4) {
-                type = EntityType.Square;
-            } else if (Math.random() < 0.7) {
-                type = EntityType.Tombstone;
-            } else {
-                type = EntityType.Triangle;
-            }
+            if (Math.random() < 0.25) type = EntityType.Square;
+            else if (Math.random() < 0.5) type = EntityType.Triangle;
+            else if (Math.random() < 0.75) type = EntityType.SkeletonArmy;
+            else type = EntityType.Tombstone;
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
             makeNewEntity(type, spawnX, spawnY);
@@ -145,7 +141,6 @@ public class GameController {
         if (selectedCard == null || getPlayerElixir() < selectedCard.getCard().getElixirCost() ||
             !(287 <= x && x <= 1027 && 227 <= y && y <= 1062))
             return false;
-
         arenaController.spawnEntity(selectedCard.getCard().getEntityType(), true, x, y);
         selectedCard.setSelected(false);
         spendElixir(selectedCard.getCard().getElixirCost());

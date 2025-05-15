@@ -5,20 +5,13 @@ public class Spawner extends Building {
     private final float spawnInterval;
     private boolean readyToSpawn;
     private final EntityType spawnType;
-    private final float spawnerBreakSpeed;
     Spawner(EntityType type, boolean isPlayersEntity, float x, float y) {
         super(type, isPlayersEntity, x, y);
         curInterval = 0;
         spawnInterval = type.getSpawnInterval();
         readyToSpawn = false;
-        if (this instanceof TombstoneUnit) {
-            spawnType = EntityType.Skeleton;
-            spawnerBreakSpeed = 30;
-        }
-        else {
-            spawnType = null;
-            spawnerBreakSpeed = 0;
-        }
+        if (this instanceof TombstoneUnit) spawnType = EntityType.Skeleton;
+            else spawnType = null;
     }
     public void updateSpawnUnit(float delta) {
         curInterval += delta;
@@ -35,9 +28,5 @@ public class Spawner extends Building {
     }
     public void setReadyToSpawn(boolean readyToSpawn) {
         this.readyToSpawn = readyToSpawn;
-    }
-
-    public float getSpawnerBreakSpeed() {
-        return spawnerBreakSpeed;
     }
 }

@@ -63,7 +63,7 @@ public class Entity {
 
         if (this instanceof Spawner) {
             ((Spawner) this).updateSpawnUnit(delta);
-            this.receiveDamage(delta * ((Spawner) this).getSpawnerBreakSpeed());
+            this.receiveDamage(delta * this.getType().getTotalHP() / 30f);
         }
     }
 

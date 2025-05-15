@@ -42,6 +42,7 @@ public class ArenaView implements Disposable {
             if (i == 0) type = EntityType.Square;
             if (i == 1) type = EntityType.Triangle;
             if (i == 2) type = EntityType.Tombstone;
+            if (i == 3) type = EntityType.SkeletonArmy;
             cardViews[i] = new CardView(type, 650 + i * 160, 22.5f, listener);
             cardViews[i].addToStage(stage);
         }

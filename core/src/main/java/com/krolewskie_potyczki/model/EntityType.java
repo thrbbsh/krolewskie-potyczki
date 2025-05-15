@@ -1,12 +1,13 @@
 package com.krolewskie_potyczki.model;
 
 public enum EntityType {
-    SideTower( 0, 2000, 200, 70, 0.4f, 0, false),
-    MainTower( 0, 3000, 200, 50, 0.5f, 0, false),
-    Square(250, 300, 80, 100, 0.5f, 0, false),
-    Triangle( 140, 700, 80, 400, 1.5f, 0,true),
-    Tombstone( 0, 800, 0, 0, 0, 5, false),
-    Skeleton( 200, 200, 80, 40, 0.5f, 0, false);
+    SideTower( 0, 1400, 500, 50, 0.8f, 0, false),
+    MainTower( 0, 2400, 300, 50, 1, 0, false),
+    Square(60, 690, 80, 79, 1.2f, 0, false),
+    Triangle( 45, 1933, 80, 119, 1.5f, 0,true),
+    Tombstone( 0, 250, 0, 0, 0, 4, false),
+    Skeleton( 100, 32, 80, 32, 1, 0, false),
+    SkeletonArmy(-1, -1, -1, -1, -1, -1, false);
     private final float moveSpeed;
     private final float totalHP;
     private final float attackRadius;
@@ -14,7 +15,6 @@ public enum EntityType {
     private final float attackInterval;
     private final float spawnInterval;
     private final boolean ignoresMovingUnits;
-
     EntityType(float moveSpeed, float hp, float attackRadius, float damage, float attackInterval, float spawnInterval, boolean ignoresUnits) {
         this.moveSpeed = moveSpeed;
         this.totalHP = hp;

@@ -17,7 +17,7 @@ public class Arena {
     }
 
     public float getElixirSpeed() {
-        return 0.3F;
+        return 1 / 2.8f;
     }
 
     public String getFormattedTimeLeft() {

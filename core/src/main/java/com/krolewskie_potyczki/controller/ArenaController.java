@@ -20,7 +20,16 @@ public class ArenaController {
         else if (type == EntityType.Square) entity = new SquareUnit(isPlayersEntity, x, y);
         else if (type == EntityType.Tombstone) entity = new TombstoneUnit(isPlayersEntity, x, y);
         else if (type == EntityType.Skeleton) entity = new SkeletonUnit(isPlayersEntity, x, y);
-        arena.addEntity(entity);
+        else if (type == EntityType.SkeletonArmy) {
+            int count = 15, squareSize = 4;
+            for (int i = 0; i < squareSize; i++)
+                for (int j = 0; j < squareSize; j++) {
+                    count--;
+                    if (count < 0) continue;
+                    spawnEntity(EntityType.Skeleton, isPlayersEntity, x + (i - squareSize / 2f) * 50, y + (j - squareSize / 2f) * 50);
+                }
+        }
+        if (type != EntityType.SkeletonArmy) arena.addEntity(entity);
     }
 
     public void update(float delta) {

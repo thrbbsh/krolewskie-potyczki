@@ -8,6 +8,7 @@ public class Card {
         if (type == EntityType.Square) elixirCost = 3;
         else if (type == EntityType.Triangle) elixirCost = 5;
         else if (type == EntityType.Tombstone) elixirCost = 7;
+        else if (type == EntityType.SkeletonArmy) elixirCost = 5;
     }
     public EntityType getEntityType() {
         return entityType;
