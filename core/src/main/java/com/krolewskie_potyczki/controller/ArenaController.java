@@ -26,13 +26,21 @@ public class ArenaController {
     public void update(float delta) {
         updatePlayerElixir(delta);
         List<Entity> toRemove = new ArrayList<>();
-        for (Entity e: arena.getActiveEntities())
-            if (e.isDead()) toRemove.add(e);
+        List<Entity> curActiveEntities = new ArrayList<>(arena.getActiveEntities());
+        for (Entity e: curActiveEntities)
+            if (e.isDead()) {
+                if (e instanceof Spawner) {
+                    spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX(), e.getY() + 40);
+                    spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX() - 20, e.getY() + 40);
+                    spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX() + 20, e.getY() + 40);
+                }
+                toRemove.add(e);
+            }
         for (Entity e: toRemove)
             arena.removeEntity(e);
         for (Entity e: arena.getActiveEntities())
             e.update(delta, arena.getActiveEntities());
-        List<Entity> curActiveEntities = new ArrayList<>(arena.getActiveEntities());
+        curActiveEntities = new ArrayList<>(arena.getActiveEntities());
         for (Entity e: curActiveEntities)
             if (e instanceof Spawner && ((Spawner) e).isReadyToSpawn()) {
                 spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX(), e.getY());
