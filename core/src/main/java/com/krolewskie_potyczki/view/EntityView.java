@@ -26,7 +26,6 @@ public class EntityView implements Disposable {
         internalWay += entity.getType().toString();
         if (entity instanceof Unit) internalWay += "Unit";
         internalWay += ".png";
-        System.out.println(internalWay);
         texture = new Texture(internalWay);
         batch = new SpriteBatch();
     }

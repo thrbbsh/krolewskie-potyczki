@@ -12,14 +12,15 @@ public class GameController {
     private final ArenaController arenaController;
     private boolean paused = false;
     private boolean ended = false;
-    private float EnemySpawn = 7f + (float) (Math.random() * 3f);
-    private float EnemySpawnTimer = 0f;
+    private float EnemySpawn;
+    private float EnemySpawnTimer = 0;
     private CardView selectedCard;
 
     public GameController(Arena arena, Main game) {
         this.arena = arena;
         this.game = game;
         arenaController = new ArenaController(arena);
+        EnemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
     }
 
     public void update(float delta) {
@@ -33,12 +34,13 @@ public class GameController {
     }
 
     private void enemyMove(float delta) {
+        System.out.println(EnemySpawnTimer + " " + EnemySpawn);
         EnemySpawnTimer += delta;
         if (EnemySpawnTimer >= EnemySpawn) {
             EntityType type;
             if (Math.random() < 0.4) {
                 type = EntityType.Square;
-            } else if (Math.random() < 0.8) {
+            } else if (Math.random() < 0.7) {
                 type = EntityType.Tombstone;
             } else {
                 type = EntityType.Triangle;
@@ -46,7 +48,7 @@ public class GameController {
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
             makeNewEntity(type, spawnX, spawnY);
-            EnemySpawn = 7f + (float) (Math.random() * 3f);
+            EnemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
             EnemySpawnTimer  = 0f;
         }
     }
