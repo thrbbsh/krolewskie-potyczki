@@ -60,6 +60,7 @@ public class Arena {
 
     public int PlayerCrownsCount() {
         int crowns = 3;
+        if (EnemyMainTowerDestroyed()) return 3;
         for (Entity e : activeEntities) {
             if ((e instanceof MainTower || e instanceof SideTower) && !e.getIsPlayersEntity()) crowns--;
         }
@@ -68,10 +69,25 @@ public class Arena {
 
     public int EnemyCrownsCount() {
         int crowns = 3;
+        if (PlayerMainTowerDestroyed()) return 3;
         for (Entity e : activeEntities) {
             if ((e instanceof MainTower || e instanceof SideTower) && e.getIsPlayersEntity()) crowns--;
         }
         return crowns;
+    }
+
+    public boolean EnemyMainTowerDestroyed() {
+        for (Entity e : activeEntities) {
+            if (e instanceof MainTower && !e.getIsPlayersEntity()) return false;
+        }
+        return true;
+    }
+
+    public boolean PlayerMainTowerDestroyed() {
+        for (Entity e : activeEntities) {
+            if (e instanceof MainTower && e.getIsPlayersEntity()) return false;
+        }
+        return true;
     }
 
     public float getMinPlayerTowerHP() {

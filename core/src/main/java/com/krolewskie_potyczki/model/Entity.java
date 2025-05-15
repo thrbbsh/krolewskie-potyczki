@@ -2,7 +2,7 @@ package com.krolewskie_potyczki.model;
 
 import java.util.List;
 
-public abstract class Entity {
+public class Entity {
     float HP, x, y;
     boolean isPlayersEntity;
     Entity currentTarget, attackTarget;
@@ -59,6 +59,11 @@ public abstract class Entity {
                 }
             }
         }
+
+        if (this instanceof Spawner) {
+            ((Spawner) this).updateSpawnUnit(delta);
+            this.receiveDamage(delta * ((Spawner) this).getSpawnerBreakSpeed());
+        }
     }
 
 
@@ -100,7 +105,7 @@ public abstract class Entity {
     public void updateCurrentTarget(List<Entity> activeEntities) {
         currentTarget = null;
         for (Entity e : activeEntities) {
-            if (e.isPlayersEntity == this.isPlayersEntity || (this.type.doesIgnoreUnits() && e.type != EntityType.MainTower && e.type != EntityType.SideTower)) continue;
+            if (e.isPlayersEntity == this.isPlayersEntity || (this.type.doesIgnoreMovingUnits() && e instanceof MovingUnit)) continue;
             if (currentTarget == null) currentTarget = e;
             else if (distance(currentTarget) > distance(e)) currentTarget = e;
         }

@@ -29,15 +29,17 @@ public class GameController {
         enemyMove(delta);
         int pCount = arena.PlayerCrownsCount();
         int eCount = arena.EnemyCrownsCount();
-        if (pCount == 3 || eCount == 3 || arena.getTimeLeft() <= 0f) ended = true;
+        if (pCount == 3 || eCount == 3 || arena.PlayerMainTowerDestroyed() || arena.EnemyMainTowerDestroyed() || arena.getTimeLeft() <= 0f) ended = true;
     }
 
     private void enemyMove(float delta) {
         EnemySpawnTimer += delta;
         if (EnemySpawnTimer >= EnemySpawn) {
             EntityType type;
-            if (Math.random() < 0.7) {
+            if (Math.random() < 0.4) {
                 type = EntityType.Square;
+            } else if (Math.random() < 0.8) {
+                type = EntityType.Tombstone;
             } else {
                 type = EntityType.Triangle;
             }

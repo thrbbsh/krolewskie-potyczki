@@ -18,6 +18,8 @@ public class ArenaController {
         else if (type == EntityType.SideTower) entity = new SideTower(isPlayersEntity, x, y);
         else if (type == EntityType.Triangle) entity = new TriangleUnit(isPlayersEntity, x, y);
         else if (type == EntityType.Square) entity = new SquareUnit(isPlayersEntity, x, y);
+        else if (type == EntityType.Tombstone) entity = new TombstoneUnit(isPlayersEntity, x, y);
+        else if (type == EntityType.Skeleton) entity = new SkeletonUnit(isPlayersEntity, x, y);
         arena.addEntity(entity);
     }
 
@@ -30,6 +32,12 @@ public class ArenaController {
             arena.removeEntity(e);
         for (Entity e: arena.getActiveEntities())
             e.update(delta, arena.getActiveEntities());
+        List<Entity> curActiveEntities = new ArrayList<>(arena.getActiveEntities());
+        for (Entity e: curActiveEntities)
+            if (e instanceof Spawner && ((Spawner) e).isReadyToSpawn()) {
+                spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX(), e.getY());
+                ((Spawner) e).setReadyToSpawn(false);
+            }
     }
 
     private void updatePlayerElixir(float delta) {
