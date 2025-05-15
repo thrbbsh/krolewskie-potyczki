@@ -2,7 +2,7 @@ package com.krolewskie_potyczki.model;
 
 import java.util.List;
 
-public abstract class Entity {
+public class Entity {
     float HP, x, y;
     boolean isPlayersEntity;
     Entity currentTarget, attackTarget;
@@ -20,6 +20,7 @@ public abstract class Entity {
     }
 
     float distance(Entity target) {
+        if (target == null) return 0;
         float dx = this.x - target.x;
         float dy = this.y - target.y;
         return (float) Math.sqrt(dx * dx + dy * dy);
@@ -59,6 +60,11 @@ public abstract class Entity {
                 }
             }
         }
+
+        if (this instanceof Spawner) {
+            ((Spawner) this).updateSpawnUnit(delta);
+            this.receiveDamage(delta * ((Spawner) this).getSpawnerBreakSpeed());
+        }
     }
 
 
@@ -82,7 +88,6 @@ public abstract class Entity {
     }
 
     void onDeath() {
-        System.out.println("I am dead.");
         // TODO (animation, case when tower is "dead")
     }
 
@@ -100,7 +105,7 @@ public abstract class Entity {
     public void updateCurrentTarget(List<Entity> activeEntities) {
         currentTarget = null;
         for (Entity e : activeEntities) {
-            if (e.isPlayersEntity == this.isPlayersEntity || (this.type.doesIgnoreUnits() && e.type != EntityType.MainTower && e.type != EntityType.SideTower)) continue;
+            if (e.isPlayersEntity == this.isPlayersEntity || (this.type.doesIgnoreMovingUnits() && e instanceof MovingUnit)) continue;
             if (currentTarget == null) currentTarget = e;
             else if (distance(currentTarget) > distance(e)) currentTarget = e;
         }

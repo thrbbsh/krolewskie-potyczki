@@ -18,18 +18,34 @@ public class ArenaController {
         else if (type == EntityType.SideTower) entity = new SideTower(isPlayersEntity, x, y);
         else if (type == EntityType.Triangle) entity = new TriangleUnit(isPlayersEntity, x, y);
         else if (type == EntityType.Square) entity = new SquareUnit(isPlayersEntity, x, y);
+        else if (type == EntityType.Tombstone) entity = new TombstoneUnit(isPlayersEntity, x, y);
+        else if (type == EntityType.Skeleton) entity = new SkeletonUnit(isPlayersEntity, x, y);
         arena.addEntity(entity);
     }
 
     public void update(float delta) {
         updatePlayerElixir(delta);
         List<Entity> toRemove = new ArrayList<>();
-        for (Entity e: arena.getActiveEntities())
-            if (e.isDead()) toRemove.add(e);
+        List<Entity> curActiveEntities = new ArrayList<>(arena.getActiveEntities());
+        for (Entity e: curActiveEntities)
+            if (e.isDead()) {
+                if (e instanceof Spawner) {
+                    spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX(), e.getY() + 40);
+                    spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX() - 20, e.getY() + 40);
+                    spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX() + 20, e.getY() + 40);
+                }
+                toRemove.add(e);
+            }
         for (Entity e: toRemove)
             arena.removeEntity(e);
         for (Entity e: arena.getActiveEntities())
             e.update(delta, arena.getActiveEntities());
+        curActiveEntities = new ArrayList<>(arena.getActiveEntities());
+        for (Entity e: curActiveEntities)
+            if (e instanceof Spawner && ((Spawner) e).isReadyToSpawn()) {
+                spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX(), e.getY());
+                ((Spawner) e).setReadyToSpawn(false);
+            }
     }
 
     private void updatePlayerElixir(float delta) {
