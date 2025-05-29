@@ -23,7 +23,7 @@ public class EntityView implements Disposable {
         String internalWay = "skins/";
         if (entity.getIsPlayersEntity()) internalWay += "player/player";
         else internalWay += "bot/bot";
-        internalWay += entity.getType().toString();
+        internalWay += entity.getConfig().type;
         if (entity instanceof Unit) internalWay += "Unit";
         internalWay += ".png";
         texture = new Texture(internalWay);
@@ -47,7 +47,7 @@ public class EntityView implements Disposable {
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.rect(x - (100 - width) / 2 + 5 - texture.getWidth() / 2f, y + height + 15 - texture.getHeight() / 2f, 90, 15);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(x - (100 - width) / 2 + 5 - texture.getWidth() / 2f, y + height + 15 - texture.getHeight() / 2f, 90 * entity.getHP() / entity.getType().getTotalHP(), 15);
+        shapeRenderer.rect(x - (100 - width) / 2 + 5 - texture.getWidth() / 2f, y + height + 15 - texture.getHeight() / 2f, 90 * entity.getHP() / entity.getConfig().totalHP, 15);
         shapeRenderer.end();
     }
 

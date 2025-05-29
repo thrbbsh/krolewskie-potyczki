@@ -1,22 +1,24 @@
 package com.krolewskie_potyczki.model;
 
+import com.krolewskie_potyczki.model.config.EntityConfig;
+
 import java.util.List;
 
 public class Entity {
     float HP, x, y;
     boolean isPlayersEntity;
     Entity currentTarget, attackTarget;
-    EntityType type;
+    EntityConfig config;
 
     private float timeSinceLastAttack = 0f;
 
-    Entity(EntityType type, boolean isPlayersEntity, float x, float y) {
+    Entity(EntityConfig config, boolean isPlayersEntity, float x, float y) {
         currentTarget = null;
         this.isPlayersEntity = isPlayersEntity;
         this.x = x;
         this.y = y;
-        this.type = type;
-        this.HP = type.getTotalHP();
+        this.config = config;
+        this.HP = config.totalHP;
     }
 
     float distance(Entity target) {
@@ -31,9 +33,9 @@ public class Entity {
         float dx = currentTarget.x - this.x;
         float dy = currentTarget.y - this.y;
         float dist = distance(currentTarget);
-        if (dist <= type.getAttackRadius()) return;
-        x += dx / dist * delta * type.getMoveSpeed();
-        y += dy / dist * delta * type.getMoveSpeed();
+        if (dist <= config.attackRadius) return;
+        x += dx / dist * delta * config.moveSpeed;
+        y += dy / dist * delta * config.moveSpeed;
     }
 
     public boolean getIsPlayersEntity() {
@@ -43,7 +45,7 @@ public class Entity {
     public void update(float delta, List<Entity> activeEntities) {
         updateCurrentTarget(activeEntities);
 
-        if (attackTarget == null && distance(currentTarget) > type.getAttackRadius()) {
+        if (attackTarget == null && distance(currentTarget) > config.attackRadius) {
             move(delta);
             timeSinceLastAttack = 0f;
         } else {
@@ -53,9 +55,9 @@ public class Entity {
             } else {
                 attackTarget = currentTarget;
                 timeSinceLastAttack += delta;
-                if (timeSinceLastAttack >= type.getAttackInterval()) {
+                if (timeSinceLastAttack >= config.attackInterval) {
                     attack();
-                    timeSinceLastAttack -= type.getAttackInterval();
+                    timeSinceLastAttack -= config.attackInterval;
                     attackTarget = null;
                 }
             }
@@ -63,13 +65,13 @@ public class Entity {
 
         if (this instanceof Spawner) {
             ((Spawner) this).updateSpawnUnit(delta);
-            this.receiveDamage(delta * this.getType().getTotalHP() / 30f);
+            this.receiveDamage(delta * HP / 30f);
         }
     }
 
 
     void updateHP(float change) {
-        HP = Math.min(type.getTotalHP(), Math.max(0F, HP + change));
+        HP = Math.min(config.totalHP, Math.max(0F, HP + change));
     }
 
     public boolean isDead() {
@@ -77,7 +79,7 @@ public class Entity {
     }
 
     void attack() {
-        currentTarget.receiveDamage(type.getDamage());
+        currentTarget.receiveDamage(config.damage);
     }
 
     void receiveDamage(float amount) {
@@ -105,13 +107,11 @@ public class Entity {
     public void updateCurrentTarget(List<Entity> activeEntities) {
         currentTarget = null;
         for (Entity e : activeEntities) {
-            if (e.isPlayersEntity == this.isPlayersEntity || (this.type.doesIgnoreMovingUnits() && e instanceof MovingUnit)) continue;
+            if (e.isPlayersEntity == this.isPlayersEntity || (this.config.ignoresMovingUnits && e instanceof MovingUnit)) continue;
             if (currentTarget == null) currentTarget = e;
             else if (distance(currentTarget) > distance(e)) currentTarget = e;
         }
     }
 
-    public EntityType getType() {
-        return type;
-    }
+    public EntityConfig getConfig() { return config; }
 }

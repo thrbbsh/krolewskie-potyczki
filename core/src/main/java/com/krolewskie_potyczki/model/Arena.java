@@ -2,6 +2,7 @@ package com.krolewskie_potyczki.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.krolewskie_potyczki.model.EntityFactory;
 
 public class Arena {
     List<Entity> activeEntities;
@@ -34,28 +35,19 @@ public class Arena {
 
     public Arena() {
         activeEntities = new ArrayList<>();
-        activeEntities.add(createEntity(EntityType.MainTower, true, 380, 655));
-        activeEntities.add(createEntity(EntityType.SideTower, true, 470, 405));
-        activeEntities.add(createEntity(EntityType.SideTower, true, 470, 905));
-        activeEntities.add(createEntity(EntityType.MainTower, false, 1815, 655));
-        activeEntities.add(createEntity(EntityType.SideTower, false, 1725, 405));
-        activeEntities.add(createEntity(EntityType.SideTower, false, 1725, 905));
+        EntityFactory factory = new EntityFactory();
+        activeEntities.add(factory.spawnEntity("MainTower", true, 380, 655));
+        activeEntities.add(factory.spawnEntity("SideTower", true, 470, 405));
+        activeEntities.add(factory.spawnEntity("SideTower", true, 470, 905));
+        activeEntities.add(factory.spawnEntity("MainTower", false, 1815, 655));
+        activeEntities.add(factory.spawnEntity("SideTower", false, 1725, 405));
+        activeEntities.add(factory.spawnEntity("SideTower", false, 1725, 905));
         playerElixir = 5;
     }
 
-    public Entity createEntity(EntityType entityType, boolean isPlayersEntity, float x, float y) {
-        switch (entityType) {
-            case MainTower:
-                return new MainTower(isPlayersEntity, x, y);
-            case SideTower:
-                return new SideTower(isPlayersEntity, x, y);
-            case Square:
-                return new SquareUnit(isPlayersEntity, x, y);
-            case Triangle:
-                return new TriangleUnit(isPlayersEntity, x, y);
-            default:
-                throw new IllegalArgumentException("Wrong entity type: " + entityType);
-        }
+    public Entity createEntity(String type, boolean isPlayersEntity, float x, float y) {
+        EntityFactory entityFactory = new EntityFactory();
+        return entityFactory.spawnEntity(type, isPlayersEntity, x, y);
     }
 
     public int PlayerCrownsCount() {

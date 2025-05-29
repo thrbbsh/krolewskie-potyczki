@@ -1,7 +1,9 @@
 package com.krolewskie_potyczki.model;
 
+import com.krolewskie_potyczki.model.config.EntityConfig;
+
 public class Building extends Unit {
-    Building(EntityType type, boolean isPlayersEntity, float x, float y) {
-        super(type, isPlayersEntity, x, y);
+    Building(EntityConfig config, boolean isPlayersEntity, float x, float y) {
+        super(config, isPlayersEntity, x, y);
     }
 }

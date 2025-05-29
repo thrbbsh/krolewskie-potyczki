@@ -12,24 +12,23 @@ public class ArenaController {
         this.arena = arena;
     }
 
-    public void spawnEntity(EntityType type, boolean isPlayersEntity, float x, float y) {
-        Entity entity = null;
-        if (type == EntityType.MainTower) entity = new MainTower(isPlayersEntity, x, y);
-        else if (type == EntityType.SideTower) entity = new SideTower(isPlayersEntity, x, y);
-        else if (type == EntityType.Triangle) entity = new TriangleUnit(isPlayersEntity, x, y);
-        else if (type == EntityType.Square) entity = new SquareUnit(isPlayersEntity, x, y);
-        else if (type == EntityType.Tombstone) entity = new TombstoneUnit(isPlayersEntity, x, y);
-        else if (type == EntityType.Skeleton) entity = new SkeletonUnit(isPlayersEntity, x, y);
-        else if (type == EntityType.SkeletonArmy) {
+    public void spawnEntity(String type, boolean isPlayersEntity, float x, float y) {
+        EntityFactory entityFactory = new EntityFactory();
+        if (type.equals("SkeletonArmy")) {
             int count = 15, squareSize = 4;
-            for (int i = 0; i < squareSize; i++)
+            for (int i = 0; i < squareSize; i++) {
                 for (int j = 0; j < squareSize; j++) {
                     count--;
-                    if (count < 0) continue;
-                    spawnEntity(EntityType.Skeleton, isPlayersEntity, x + (i - squareSize / 2f) * 50, y + (j - squareSize / 2f) * 50);
+                    if (count < 0)
+                        continue;
+                    arena.addEntity(entityFactory.spawnEntity("Skeleton", isPlayersEntity, x + (i - squareSize / 2f) * 50, y + (j - squareSize / 2f) * 50));
                 }
+            }
+            return;
         }
-        if (type != EntityType.SkeletonArmy) arena.addEntity(entity);
+
+        Entity entity = entityFactory.spawnEntity(type, isPlayersEntity, x, y);
+        arena.addEntity(entity);
     }
 
     public void update(float delta) {
@@ -39,12 +38,13 @@ public class ArenaController {
         for (Entity e: curActiveEntities)
             if (e.isDead()) {
                 if (e instanceof Spawner) {
-                    spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX(), e.getY() + 40);
-                    spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX() - 20, e.getY() + 40);
-                    spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX() + 20, e.getY() + 40);
+                    spawnEntity("Skeleton", e.getIsPlayersEntity(), e.getX(), e.getY() + 40);
+                    spawnEntity("Skeleton", e.getIsPlayersEntity(), e.getX() - 20, e.getY() + 40);
+                    spawnEntity("Skeleton", e.getIsPlayersEntity(), e.getX() + 20, e.getY() + 40);
                 }
                 toRemove.add(e);
             }
+
         for (Entity e: toRemove)
             arena.removeEntity(e);
         for (Entity e: arena.getActiveEntities())
@@ -52,7 +52,7 @@ public class ArenaController {
         curActiveEntities = new ArrayList<>(arena.getActiveEntities());
         for (Entity e: curActiveEntities)
             if (e instanceof Spawner && ((Spawner) e).isReadyToSpawn()) {
-                spawnEntity(((Spawner) e).getSpawnType(), e.getIsPlayersEntity(), e.getX(), e.getY());
+                spawnEntity("Skeleton", e.getIsPlayersEntity(), e.getX(), e.getY());
                 ((Spawner) e).setReadyToSpawn(false);
             }
     }

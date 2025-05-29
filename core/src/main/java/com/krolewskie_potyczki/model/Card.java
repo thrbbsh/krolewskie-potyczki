@@ -1,17 +1,19 @@
 package com.krolewskie_potyczki.model;
 
+import com.krolewskie_potyczki.model.config.EntityConfig;
+
 public class Card {
-    private final EntityType entityType;
+    private final EntityConfig entityConfig;
     private int elixirCost;
-    public Card(EntityType type) {
-        this.entityType = type;
-        if (type == EntityType.Square) elixirCost = 3;
-        else if (type == EntityType.Triangle) elixirCost = 5;
-        else if (type == EntityType.Tombstone) elixirCost = 3;
-        else if (type == EntityType.SkeletonArmy) elixirCost = 7;
+    public Card(EntityConfig entityConfig) {
+        this.entityConfig = entityConfig;
+        if (entityConfig.type.equals("Square")) elixirCost = 3;
+        else if (entityConfig.type.equals("Triangle")) elixirCost = 5;
+        else if (entityConfig.type.equals("Tombstone")) elixirCost = 3;
+        else if (entityConfig.type.equals("SkeletonArmy")) elixirCost = 7;
     }
-    public EntityType getEntityType() {
-        return entityType;
+    public EntityConfig getEntityType() {
+        return entityConfig;
     }
     public int getElixirCost() {
         return elixirCost;

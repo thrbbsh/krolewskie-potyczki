@@ -1,0 +1,67 @@
+{
+  "entities": {
+    "SideTower": {
+      "moveSpeed": 0,
+      "totalHP": 1400,
+      "attackRadius": 500,
+      "damage": 50,
+      "attackInterval": 0.8,
+      "spawnInterval": 0,
+      "ignoresMovingUnits": false
+    },
+    "MainTower": {
+      "moveSpeed": 0,
+      "totalHP": 2400,
+      "attackRadius": 300,
+      "damage": 50,
+      "attackInterval": 1.0,
+      "spawnInterval": 0,
+      "ignoresMovingUnits": false
+    },
+    "Square": {
+      "moveSpeed": 60,
+      "totalHP": 690,
+      "attackRadius": 80,
+      "damage": 79,
+      "attackInterval": 1.2,
+      "spawnInterval": 0,
+      "ignoresMovingUnits": false
+    },
+    "Triangle": {
+      "moveSpeed": 45,
+      "totalHP": 1933,
+      "attackRadius": 80,
+      "damage": 119,
+      "attackInterval": 1.5,
+      "spawnInterval": 0,
+      "ignoresMovingUnits": true
+    },
+    "Tombstone": {
+      "moveSpeed": 0,
+      "totalHP": 250,
+      "attackRadius": 0,
+      "damage": 0,
+      "attackInterval": 0,
+      "spawnInterval": 4,
+      "ignoresMovingUnits": false
+    },
+    "Skeleton": {
+      "moveSpeed": 100,
+      "totalHP": 32,
+      "attackRadius": 80,
+      "damage": 32,
+      "attackInterval": 1.0,
+      "spawnInterval": 0,
+      "ignoresMovingUnits": false
+    },
+    "SkeletonArmy": {
+      "moveSpeed": -1,
+      "totalHP": -1,
+      "attackRadius": -1,
+      "damage": -1,
+      "attackInterval": -1,
+      "spawnInterval": -1,
+      "ignoresMovingUnits": false
+    }
+  }
+}
