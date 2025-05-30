@@ -23,10 +23,8 @@ public class GameView implements Disposable {
     private final Skin skin;
     private final Stage gameStage;
     private final Stage pauseStage;
-    private final Stage endStage;
     private final Label currentElixirLabel;
     private final Label timerLabel;
-    private final Label endLabel;
     private final ShapeRenderer shapeRenderer;
     private final ArenaView arenaView;
     private final Music gameMusic;
@@ -39,7 +37,6 @@ public class GameView implements Disposable {
 
         gameStage = new Stage(new FitViewport(1920, 1080));
         pauseStage = new Stage(new FitViewport(1920, 1080));
-        endStage = new Stage(new FitViewport(1920, 1080));
         arenaView = new ArenaView(arena, gameStage);
 
         CardClickListener listener = (card) -> {
@@ -151,42 +148,11 @@ public class GameView implements Disposable {
 
         pauseTable.add(menuBtn)
             .size(350, 80);
-
-        Table endTable = new Table();
-        endTable.setFillParent(true);
-        Label.LabelStyle ls = new Label.LabelStyle(skin.getFont("font"), Color.WHITE);
-
-        endLabel = new Label("", ls);
-        endLabel.setFontScale(3f);
-        endLabel.setAlignment(Align.center);
-
-        TextButton endMenuBtn = new TextButton("Menu", skin);
-        endMenuBtn.getLabel().setFontScale(2f);
-        endMenuBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                controller.onMenuClicked();
-            }
-        });
-
-        endTable.center();
-        endTable.add(endLabel).padBottom(50).row();
-        endTable.add(endMenuBtn).size(525, 120);
-
-        endStage.addActor(endTable);
     }
 
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if (controller.isEnded()) {
-            gameMusic.stop();
-            endLabel.setText(controller.getMatchResult());
-            endStage.act(delta);
-            endStage.draw();
-            Gdx.input.setInputProcessor(endStage);
-            return;
-        }
 
         if (!controller.isPaused()) {
             controller.update(delta);
@@ -232,7 +198,6 @@ public class GameView implements Disposable {
     public void resize(int w, int h) {
         gameStage.getViewport().update(w, h, true);
         pauseStage.getViewport().update(w, h, true);
-        endStage.getViewport().update(w, h, true);
     }
 
     @Override
@@ -240,7 +205,6 @@ public class GameView implements Disposable {
         gameMusic.dispose();
         gameStage.dispose();
         pauseStage.dispose();
-        endStage.dispose();
         skin.dispose();
     }
 
