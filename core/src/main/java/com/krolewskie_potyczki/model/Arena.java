@@ -2,7 +2,6 @@ package com.krolewskie_potyczki.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.EntityFactory;
 import com.krolewskie_potyczki.model.config.EntityType;
@@ -48,18 +47,21 @@ public class Arena {
         playerElixir = 5;
     }
 
-    public int CrownsCount(boolean isPlayer) {
-        if (MainTowerDestroyed(isPlayer)) return 3;
+    public int crownsCount(boolean isPlayer) {
+        if (mainTowerDestroyed(isPlayer))
+            return 3;
         int crowns = 3;
         for (Entity e : activeEntities) {
-            if ((e instanceof MainTower || e instanceof SideTower) && e.getIsPlayersEntity() == !isPlayer) crowns--;
+            if ((e instanceof MainTower || e instanceof SideTower) && e.getIsPlayersEntity() == !isPlayer)
+                crowns--;
         }
         return crowns;
     }
 
-    public boolean MainTowerDestroyed(boolean isPlayer) {
+    public boolean mainTowerDestroyed(boolean isPlayer) {
         for (Entity e : activeEntities) {
-            if (e instanceof MainTower && e.getIsPlayersEntity() == isPlayer) return false;
+            if (e instanceof MainTower && e.getIsPlayersEntity() == isPlayer)
+                return false;
         }
         return true;
     }
@@ -69,10 +71,10 @@ public class Arena {
         for (Entity e : activeEntities) {
             if (!(e instanceof MainTower || e instanceof SideTower) || e.getIsPlayersEntity() == !isPlayer) continue;
             if (min == -1) min = e.getHP();
-                else min = (int) Math.min(min, e.getHP());
+            else min = (int) Math.min(min, e.getHP());
         }
         if (min == -1) return 0;
-            else return min;
+        else return min;
     }
 
     public void spendElixir(float elixirCost) {

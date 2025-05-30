@@ -3,9 +3,12 @@ package com.krolewskie_potyczki.controller;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.Arena;
+import com.krolewskie_potyczki.model.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.config.EntityType;
+import com.krolewskie_potyczki.screens.EndGameScreen;
 import com.krolewskie_potyczki.screens.MenuScreen;
 import com.krolewskie_potyczki.view.CardView;
+import com.krolewskie_potyczki.model.MatchResult;
 
 public class GameController {
     private final Arena arena;
@@ -16,12 +19,14 @@ public class GameController {
     private float EnemySpawn;
     private float EnemySpawnTimer = 0;
     private CardView selectedCard;
+    private final DefaultGameEndCondition endCondition;
 
     public GameController(Arena arena, Main game) {
         this.arena = arena;
         this.game = game;
         arenaController = new ArenaController(arena);
         EnemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
+        endCondition = new DefaultGameEndCondition();
     }
 
     public void update(float delta) {
@@ -29,9 +34,14 @@ public class GameController {
         arenaController.update(delta);
         updateTimer(delta);
         enemyMove(delta);
-        int pCount = arena.CrownsCount(true);
-        int eCount = arena.CrownsCount(false);
-        if (pCount == 3 || eCount == 3 || arena.MainTowerDestroyed(true) || arena.MainTowerDestroyed(false) || arena.getTimeLeft() <= 0f) ended = true;
+        if (endCondition.isGameOver(arena)) {
+            ended = true;
+            onGameEnded(endCondition.calculateResult(arena));
+        }
+    }
+
+    private void onGameEnded(MatchResult result) {
+        game.setScreen(new EndGameScreen(this, result));
     }
 
     private void enemyMove(float delta) {
@@ -50,28 +60,6 @@ public class GameController {
             EnemySpawnTimer  = 0f;
         }
     }
-
-    public String getMatchResult() {
-        int pCount = arena.CrownsCount(true);
-        int eCount = arena.CrownsCount(false);
-        if (pCount > eCount) {
-            return "You Win!\n" + pCount + ":" + eCount;
-        } else if (pCount < eCount) {
-            return "You Lose.\n" + pCount + ":" + eCount;
-        } else {
-            float pHP = arena.getMinTowerHP(true);
-            float eHP = arena.getMinTowerHP(false);
-            if (pHP > eHP) {
-                return "You Win!\n" + pCount + ":" + eCount + "\nPlayer's tower min HP: " + pHP + ".\nEnemy's tower min HP: " + eHP + ".";
-            }
-            else if (pHP < eHP) {
-                return "You Lose.\n" + pCount + ":" + eCount + "\nPlayer's tower min HP: " + pHP + ".\nEnemy's tower min HP: " + eHP + ".";
-            } else {
-                return "Draw.\n" + pCount + ":" + eCount + "\nPlayer's tower min HP: " + pHP + ".\nEnemy's tower min HP: " + eHP + ".";
-            }
-        }
-    }
-
     private void updateTimer(float delta) {
         float timeLeft = arena.getTimeLeft();
         arena.setTimeLeft(timeLeft - delta);
