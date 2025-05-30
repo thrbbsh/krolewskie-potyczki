@@ -5,6 +5,8 @@ import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
+import java.util.List;
+
 public class Spawner extends Building {
     private float curInterval;
     private final float spawnInterval;
@@ -15,7 +17,7 @@ public class Spawner extends Building {
         curInterval = 0;
         spawnInterval = config.spawnInterval;
         readyToSpawn = false;
-        if (this instanceof TombstoneUnit) spawnType = GameConfig.getInstance().getEntityConfig(EntityType.SKELETON);
+        if (config.type == EntityType.TOMBSTONE) spawnType = GameConfig.getInstance().getEntityConfig(EntityType.SKELETON);
             else spawnType = null;
     }
     public void updateSpawnUnit(float delta) {
@@ -25,6 +27,13 @@ public class Spawner extends Building {
             readyToSpawn = true;
         }
     }
+    @Override
+    public void update(float delta, List<Entity> activeEntities) {
+        super.update(delta, activeEntities);
+        updateSpawnUnit(delta);
+        receiveDamage(delta * config.totalHP / 30f);
+    }
+    @Override
     public boolean isReadyToSpawn() {
         return readyToSpawn;
     }

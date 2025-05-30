@@ -9,7 +9,7 @@ import com.krolewskie_potyczki.model.config.EntityType;
 public class Arena {
     List<Entity> activeEntities;
     private float playerElixir = 0;
-    private float timeLeft = 180;
+    private float timeLeft = 30;
 
     public float getTimeLeft() {
         return timeLeft;
@@ -48,33 +48,24 @@ public class Arena {
     }
 
     public int crownsCount(boolean isPlayer) {
-        if (mainTowerDestroyed(isPlayer))
+        if (mainTowerDestroyed(!isPlayer))
             return 3;
         int crowns = 3;
-        for (Entity e : activeEntities) {
-            if ((e instanceof MainTower || e instanceof SideTower) && e.getIsPlayersEntity() == !isPlayer)
+        for (Entity e : activeEntities)
+            if (e.isTowerForPlayer(!isPlayer))
                 crowns--;
-        }
         return crowns;
     }
 
     public boolean mainTowerDestroyed(boolean isPlayer) {
-        for (Entity e : activeEntities) {
-            if (e instanceof MainTower && e.getIsPlayersEntity() == isPlayer)
+        for (Entity e : activeEntities)
+            if (e.config.type == EntityType.MAIN_TOWER && e.getIsPlayersEntity() == isPlayer)
                 return false;
-        }
         return true;
     }
 
     public float getMinTowerHP(boolean isPlayer) {
-        float min = -1;
-        for (Entity e : activeEntities) {
-            if (!(e instanceof MainTower || e instanceof SideTower) || e.getIsPlayersEntity() == !isPlayer) continue;
-            if (min == -1) min = e.getHP();
-            else min = (int) Math.min(min, e.getHP());
-        }
-        if (min == -1) return 0;
-        else return min;
+        return activeEntities.stream().filter(e -> e.isTowerForPlayer(isPlayer)).map(Entity::getHP).min(Float::compare).orElse(0f);
     }
 
     public void spendElixir(float elixirCost) {
