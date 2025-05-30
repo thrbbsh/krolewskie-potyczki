@@ -9,13 +9,14 @@ import java.util.List;
 
 public class ArenaController {
     private final Arena arena;
+    private final EntityFactory entityFactory;
 
     public ArenaController(Arena arena) {
         this.arena = arena;
+        entityFactory = new EntityFactory();
     }
 
     public void spawnEntity(EntityType type, boolean isPlayersEntity, Vector2 pos) {
-        EntityFactory entityFactory = new EntityFactory();
         if (type == EntityType.SKELETON_ARMY) {
             int count = 15, squareSize = 4;
             for (int i = 0; i < squareSize; i++) {
@@ -40,7 +41,7 @@ public class ArenaController {
         List<Entity> curActiveEntities = new ArrayList<>(arena.getActiveEntities());
         for (Entity e: curActiveEntities)
             if (e.isDead()) {
-                if (e instanceof Spawner) {
+                if (e.getConfig().type == EntityType.SKELETON_ARMY) {
                     spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getPos().add(0, 20));
                     spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getPos().add(-20, 40));
                     spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getPos().add(20, 40));
@@ -54,7 +55,7 @@ public class ArenaController {
             e.update(delta, arena.getActiveEntities());
         curActiveEntities = new ArrayList<>(arena.getActiveEntities());
         for (Entity e: curActiveEntities)
-            if (e instanceof Spawner && ((Spawner) e).isReadyToSpawn()) {
+            if (e.isReadyToSpawn()) {
                 spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getPos());
                 ((Spawner) e).setReadyToSpawn(false);
             }

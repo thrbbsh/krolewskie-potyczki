@@ -2,6 +2,7 @@ package com.krolewskie_potyczki.model;
 
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityConfig;
+import com.krolewskie_potyczki.model.config.EntityType;
 
 import java.util.List;
 
@@ -60,11 +61,6 @@ public class Entity {
                 }
             }
         }
-
-        if (this instanceof Spawner) {
-            ((Spawner) this).updateSpawnUnit(delta);
-            this.receiveDamage(delta * config.totalHP / 30f);
-        }
     }
 
 
@@ -88,7 +84,7 @@ public class Entity {
         }
     }
 
-    void onDeath() {
+    public void onDeath() {
         // TODO (animation, case when tower is "dead")
     }
 
@@ -103,11 +99,26 @@ public class Entity {
     public void updateCurrentTarget(List<Entity> activeEntities) {
         currentTarget = null;
         for (Entity e : activeEntities) {
-            if (e.isPlayersEntity == this.isPlayersEntity || (this.config.ignoresMovingUnits && e instanceof MovingUnit)) continue;
-            if (currentTarget == null) currentTarget = e;
-            else if (distance(currentTarget) > distance(e)) currentTarget = e;
+            if (e.isPlayersEntity == this.isPlayersEntity || !e.canBeAttackedBy(config.type))
+                continue;
+            if (currentTarget == null)
+                currentTarget = e;
+            else if (distance(currentTarget) > distance(e))
+                currentTarget = e;
         }
     }
 
     public EntityConfig getConfig() { return config; }
+
+    public boolean canBeAttackedBy(EntityType type) {
+        return true;
+    }
+
+    public boolean isTowerForPlayer(boolean isPlayer) {
+        return false;
+    }
+
+    public boolean isReadyToSpawn() {
+        return false;
+    }
 }

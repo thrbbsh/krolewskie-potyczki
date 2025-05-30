@@ -54,19 +54,19 @@ public class EndGameView implements Disposable {
             default: status = "Draw."; break;
         }
 
+        status += "\n" + String.format("%d:%d", result.getPlayerCrowns(), result.getEnemyCrowns());
+
         String detail = "";
 
         if (result.getPlayerCrowns() == result.getEnemyCrowns() &&
             result.getWinner() != Winner.DRAW)
             detail = String.format(
-                "%d:%d\nPlayer HP: %.0f\nEnemy HP: %.0f",
-                result.getPlayerCrowns(),
-                result.getEnemyCrowns(),
+                "\nPlayer HP: %.0f\nEnemy HP: %.0f",
                 result.getPlayerMinTowerHP(),
                 result.getEnemyMinTowerHP()
             );
 
-        endLabel.setText(status + "\n" + detail);
+        endLabel.setText(status + detail);
         stage.addActor(endTable);
     }
 
