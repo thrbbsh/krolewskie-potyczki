@@ -1,7 +1,7 @@
 package com.krolewskie_potyczki.model.config;
 
 public class EntityConfig {
-    public String type;
+    public EntityType type;
     public float moveSpeed;
     public float totalHP;
     public float attackRadius;

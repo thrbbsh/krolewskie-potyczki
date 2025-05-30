@@ -5,11 +5,11 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class GameConfig {
-    private final Map<String, EntityConfig> entities = new HashMap<>();
+    private final Map<EntityType, EntityConfig> entities = new EnumMap<>(EntityType.class);
     private static GameConfig instance;
 
     private GameConfig() { }
@@ -30,13 +30,20 @@ public class GameConfig {
         JsonValue ents = root.get("entities");
         for (JsonValue entry : ents) {
             String typeName = entry.name();
+            EntityType type;
+            try {
+                type = EntityType.valueOf(typeName);
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Unknown entity type in config: " + typeName, e);
+            }
+
             EntityConfig cfg = json.readValue(EntityConfig.class, entry);
-            cfg.type = typeName;
-            entities.put(typeName, cfg);
+            cfg.type = type;
+            entities.put(type, cfg);
         }
     }
 
-    public EntityConfig getEntityConfig(String typeName) {
+    public EntityConfig getEntityConfig(EntityType typeName) {
         return entities.get(typeName);
     }
 }

@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.controller;
 
 import com.krolewskie_potyczki.model.*;
+import com.krolewskie_potyczki.model.config.EntityType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +13,16 @@ public class ArenaController {
         this.arena = arena;
     }
 
-    public void spawnEntity(String type, boolean isPlayersEntity, float x, float y) {
+    public void spawnEntity(EntityType type, boolean isPlayersEntity, float x, float y) {
         EntityFactory entityFactory = new EntityFactory();
-        if (type.equals("SkeletonArmy")) {
+        if (type == EntityType.SKELETON_ARMY) {
             int count = 15, squareSize = 4;
             for (int i = 0; i < squareSize; i++) {
                 for (int j = 0; j < squareSize; j++) {
                     count--;
                     if (count < 0)
                         continue;
-                    arena.addEntity(entityFactory.spawnEntity("Skeleton", isPlayersEntity, x + (i - squareSize / 2f) * 50, y + (j - squareSize / 2f) * 50));
+                    arena.addEntity(entityFactory.spawnEntity(EntityType.SKELETON, isPlayersEntity, x + (i - squareSize / 2f) * 50, y + (j - squareSize / 2f) * 50));
                 }
             }
             return;
@@ -38,9 +39,9 @@ public class ArenaController {
         for (Entity e: curActiveEntities)
             if (e.isDead()) {
                 if (e instanceof Spawner) {
-                    spawnEntity("Skeleton", e.getIsPlayersEntity(), e.getX(), e.getY() + 40);
-                    spawnEntity("Skeleton", e.getIsPlayersEntity(), e.getX() - 20, e.getY() + 40);
-                    spawnEntity("Skeleton", e.getIsPlayersEntity(), e.getX() + 20, e.getY() + 40);
+                    spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getX(), e.getY() + 40);
+                    spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getX() - 20, e.getY() + 40);
+                    spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getX() + 20, e.getY() + 40);
                 }
                 toRemove.add(e);
             }
@@ -52,7 +53,7 @@ public class ArenaController {
         curActiveEntities = new ArrayList<>(arena.getActiveEntities());
         for (Entity e: curActiveEntities)
             if (e instanceof Spawner && ((Spawner) e).isReadyToSpawn()) {
-                spawnEntity("Skeleton", e.getIsPlayersEntity(), e.getX(), e.getY());
+                spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getX(), e.getY());
                 ((Spawner) e).setReadyToSpawn(false);
             }
     }

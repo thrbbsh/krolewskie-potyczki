@@ -2,6 +2,7 @@ package com.krolewskie_potyczki.controller;
 
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.Arena;
+import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.screens.MenuScreen;
 import com.krolewskie_potyczki.view.CardView;
 
@@ -35,11 +36,11 @@ public class GameController {
     private void enemyMove(float delta) {
         EnemySpawnTimer += delta;
         if (EnemySpawnTimer >= EnemySpawn) {
-            String type;
-            if (Math.random() < 0.25) type = "Square";
-            else if (Math.random() < 0.5) type = "Triangle";
-            else if (Math.random() < 0.75) type = "SkeletonArmy";
-            else type = "Tombstone";
+            EntityType type;
+            if (Math.random() < 0.25) type = EntityType.SQUARE;
+            else if (Math.random() < 0.5) type = EntityType.TRIANGLE;
+            else if (Math.random() < 0.75) type = EntityType.SKELETON_ARMY;
+            else type = EntityType.TOMBSTONE;
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
             makeNewEntity(type, spawnX, spawnY);
@@ -48,7 +49,7 @@ public class GameController {
         }
     }
 
-    private void makeNewEntity(String type, float spawnX, float spawnY) {
+    private void makeNewEntity(EntityType type, float spawnX, float spawnY) { // TODO: do I need this?
         arenaController.spawnEntity(type, false, spawnX, spawnY);
     }
 
@@ -140,7 +141,7 @@ public class GameController {
         if (selectedCard == null || getPlayerElixir() < selectedCard.getCard().getElixirCost() ||
             !(287 <= x && x <= 1027 && 227 <= y && y <= 1062))
             return false;
-        arenaController.spawnEntity(selectedCard.getCard().getEntityType().type, true, x, y);
+        arenaController.spawnEntity(selectedCard.getCard().getEntityType(), true, x, y);
         selectedCard.setSelected(false);
         spendElixir(selectedCard.getCard().getElixirCost());
         selectedCard = null;

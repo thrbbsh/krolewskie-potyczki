@@ -3,6 +3,7 @@ package com.krolewskie_potyczki.model;
 import java.util.ArrayList;
 import java.util.List;
 import com.krolewskie_potyczki.model.EntityFactory;
+import com.krolewskie_potyczki.model.config.EntityType;
 
 public class Arena {
     List<Entity> activeEntities;
@@ -36,16 +37,16 @@ public class Arena {
     public Arena() {
         activeEntities = new ArrayList<>();
         EntityFactory factory = new EntityFactory();
-        activeEntities.add(factory.spawnEntity("MainTower", true, 380, 655));
-        activeEntities.add(factory.spawnEntity("SideTower", true, 470, 405));
-        activeEntities.add(factory.spawnEntity("SideTower", true, 470, 905));
-        activeEntities.add(factory.spawnEntity("MainTower", false, 1815, 655));
-        activeEntities.add(factory.spawnEntity("SideTower", false, 1725, 405));
-        activeEntities.add(factory.spawnEntity("SideTower", false, 1725, 905));
+        activeEntities.add(factory.spawnEntity(EntityType.MAIN_TOWER, true, 380, 655));
+        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, true, 470, 405));
+        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, true, 470, 905));
+        activeEntities.add(factory.spawnEntity(EntityType.MAIN_TOWER, false, 1815, 655));
+        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, false, 1725, 405));
+        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, false, 1725, 905));
         playerElixir = 5;
     }
 
-    public Entity createEntity(String type, boolean isPlayersEntity, float x, float y) {
+    public Entity createEntity(EntityType type, boolean isPlayersEntity, float x, float y) { // TODO: do I need this here?
         EntityFactory entityFactory = new EntityFactory();
         return entityFactory.spawnEntity(type, isPlayersEntity, x, y);
     }

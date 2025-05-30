@@ -12,6 +12,7 @@ import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Card;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.config.EntityConfig;
+import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
 import java.util.ArrayList;
@@ -40,12 +41,12 @@ public class ArenaView implements Disposable {
 
     public void setListener(CardClickListener listener) {
         for (int i = 0; i < cardViews.length; i++) {
-            EntityConfig entityConfig = null;
-            if (i == 0) entityConfig = GameConfig.getInstance().getEntityConfig("Square");
-            if (i == 1) entityConfig = GameConfig.getInstance().getEntityConfig("Triangle");
-            if (i == 2) entityConfig = GameConfig.getInstance().getEntityConfig("Tombstone");
-            if (i == 3) entityConfig = GameConfig.getInstance().getEntityConfig("SkeletonArmy");
-            cardViews[i] = new CardView(entityConfig, 650 + i * 160, 22.5f, listener);
+            EntityType type = null;
+            if (i == 0) type = EntityType.SQUARE;
+            if (i == 1) type = EntityType.TRIANGLE;
+            if (i == 2) type = EntityType.TOMBSTONE;
+            if (i == 3) type = EntityType.SKELETON_ARMY;
+            cardViews[i] = new CardView(type, 650 + i * 160, 22.5f, listener);
             cardViews[i].addToStage(stage);
         }
     }

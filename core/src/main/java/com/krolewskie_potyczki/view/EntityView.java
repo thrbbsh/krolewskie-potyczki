@@ -24,7 +24,6 @@ public class EntityView implements Disposable {
         if (entity.getIsPlayersEntity()) internalWay += "player/player";
         else internalWay += "bot/bot";
         internalWay += entity.getConfig().type;
-        if (entity instanceof Unit) internalWay += "Unit";
         internalWay += ".png";
         texture = new Texture(internalWay);
         batch = new SpriteBatch();

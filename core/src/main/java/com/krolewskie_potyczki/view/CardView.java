@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.krolewskie_potyczki.model.Card;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.krolewskie_potyczki.model.config.EntityConfig;
+import com.krolewskie_potyczki.model.config.EntityType;
 
 public class CardView implements Disposable {
     private final Card card;
@@ -21,17 +22,17 @@ public class CardView implements Disposable {
     private final BitmapFont font;
     private final float x, y;
 
-    public CardView(EntityConfig entityConfig, float x, float y, CardClickListener listener) {
+    public CardView(EntityType entityType, float x, float y, CardClickListener listener) {
         this.x = x;
         this.y = y;
         font = new BitmapFont();
         font.getData().setScale(2.5f);
-        this.card = new Card(entityConfig);
+        this.card = new Card(entityType);
         elixirDropTexture = new Texture("images/cards/elixirDrop.png");
         batch = new SpriteBatch();
         Texture texture;
         if (card.getEntityType() == null) texture = new Texture("images/cards/defaultCard.png");
-            else texture = new Texture("images/cards/" + card.getEntityType().type.toLowerCase() + "Card.png");
+            else texture = new Texture("images/cards/" + card.getEntityType().toString().toLowerCase() + "Card.png");
         imageButton = new ImageButton(new TextureRegionDrawable(texture));
         imageButton.setPosition(x, y);
         imageButton.addListener(new ChangeListener() {

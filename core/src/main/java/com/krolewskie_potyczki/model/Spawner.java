@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.model;
 
 import com.krolewskie_potyczki.model.config.EntityConfig;
+import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
 public class Spawner extends Building {
@@ -13,7 +14,7 @@ public class Spawner extends Building {
         curInterval = 0;
         spawnInterval = config.spawnInterval;
         readyToSpawn = false;
-        if (this instanceof TombstoneUnit) spawnType = GameConfig.getInstance().getEntityConfig("Skeleton");
+        if (this instanceof TombstoneUnit) spawnType = GameConfig.getInstance().getEntityConfig(EntityType.SKELETON);
             else spawnType = null;
     }
     public void updateSpawnUnit(float delta) {
