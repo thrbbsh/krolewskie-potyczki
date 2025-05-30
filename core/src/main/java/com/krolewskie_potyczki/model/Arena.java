@@ -51,58 +51,31 @@ public class Arena {
         return entityFactory.spawnEntity(type, isPlayersEntity, x, y);
     }
 
-    public int PlayerCrownsCount() {
+    public int CrownsCount(boolean isPlayer) {
+        if (MainTowerDestroyed(isPlayer)) return 3;
         int crowns = 3;
-        if (EnemyMainTowerDestroyed()) return 3;
         for (Entity e : activeEntities) {
-            if ((e instanceof MainTower || e instanceof SideTower) && !e.getIsPlayersEntity()) crowns--;
+            if ((e instanceof MainTower || e instanceof SideTower) && e.getIsPlayersEntity() == !isPlayer) crowns--;
         }
         return crowns;
     }
 
-    public int EnemyCrownsCount() {
-        int crowns = 3;
-        if (PlayerMainTowerDestroyed()) return 3;
+    public boolean MainTowerDestroyed(boolean isPlayer) {
         for (Entity e : activeEntities) {
-            if ((e instanceof MainTower || e instanceof SideTower) && e.getIsPlayersEntity()) crowns--;
-        }
-        return crowns;
-    }
-
-    public boolean EnemyMainTowerDestroyed() {
-        for (Entity e : activeEntities) {
-            if (e instanceof MainTower && !e.getIsPlayersEntity()) return false;
+            if (e instanceof MainTower && e.getIsPlayersEntity() == isPlayer) return false;
         }
         return true;
     }
 
-    public boolean PlayerMainTowerDestroyed() {
-        for (Entity e : activeEntities) {
-            if (e instanceof MainTower && e.getIsPlayersEntity()) return false;
-        }
-        return true;
-    }
-
-    public float getMinPlayerTowerHP() {
+    public float getMinTowerHP(boolean isPlayer) {
         float min = -1;
         for (Entity e : activeEntities) {
-            if (!(e instanceof MainTower || e instanceof SideTower) || !e.getIsPlayersEntity()) continue;
+            if (!(e instanceof MainTower || e instanceof SideTower) || e.getIsPlayersEntity() == !isPlayer) continue;
             if (min == -1) min = e.getHP();
                 else min = (int) Math.min(min, e.getHP());
         }
         if (min == -1) return 0;
             else return min;
-    }
-
-    public float getMinEnemyTowerHP() {
-        float min = -1;
-        for (Entity e : activeEntities) {
-            if (!(e instanceof MainTower || e instanceof SideTower) || e.getIsPlayersEntity()) continue;
-            if (min == -1) min = e.getHP();
-            else min = (int) Math.min(min, e.getHP());
-        }
-        if (min == -1) return 0;
-        else return min;
     }
 
     public void spendElixir(float elixirCost) {

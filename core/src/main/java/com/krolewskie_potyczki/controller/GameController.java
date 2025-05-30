@@ -28,18 +28,19 @@ public class GameController {
         arenaController.update(delta);
         updateTimer(delta);
         enemyMove(delta);
-        int pCount = arena.PlayerCrownsCount();
-        int eCount = arena.EnemyCrownsCount();
-        if (pCount == 3 || eCount == 3 || arena.PlayerMainTowerDestroyed() || arena.EnemyMainTowerDestroyed() || arena.getTimeLeft() <= 0f) ended = true;
+        int pCount = arena.CrownsCount(true);
+        int eCount = arena.CrownsCount(false);
+        if (pCount == 3 || eCount == 3 || arena.MainTowerDestroyed(true) || arena.MainTowerDestroyed(false) || arena.getTimeLeft() <= 0f) ended = true;
     }
 
     private void enemyMove(float delta) {
         EnemySpawnTimer += delta;
         if (EnemySpawnTimer >= EnemySpawn) {
             EntityType type;
-            if (Math.random() < 0.25) type = EntityType.SQUARE;
-            else if (Math.random() < 0.5) type = EntityType.TRIANGLE;
-            else if (Math.random() < 0.75) type = EntityType.SKELETON_ARMY;
+            double spawnChance = Math.random();
+            if (spawnChance < 0.25) type = EntityType.SQUARE;
+            else if (spawnChance < 0.5) type = EntityType.TRIANGLE;
+            else if (spawnChance < 0.75) type = EntityType.SKELETON_ARMY;
             else type = EntityType.TOMBSTONE;
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
@@ -54,15 +55,15 @@ public class GameController {
     }
 
     public String getMatchResult() {
-        int pCount = arena.PlayerCrownsCount();
-        int eCount = arena.EnemyCrownsCount();
+        int pCount = arena.CrownsCount(true);
+        int eCount = arena.CrownsCount(false);
         if (pCount > eCount) {
             return "You Win!\n" + pCount + ":" + eCount;
         } else if (pCount < eCount) {
             return "You Lose.\n" + pCount + ":" + eCount;
         } else {
-            float pHP = arena.getMinPlayerTowerHP();
-            float eHP = arena.getMinEnemyTowerHP();
+            float pHP = arena.getMinTowerHP(true);
+            float eHP = arena.getMinTowerHP(false);
             if (pHP > eHP) {
                 return "You Win!\n" + pCount + ":" + eCount + "\nPlayer's tower min HP: " + pHP + ".\nEnemy's tower min HP: " + eHP + ".";
             }

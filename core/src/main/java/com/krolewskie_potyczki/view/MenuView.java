@@ -36,7 +36,6 @@ public class MenuView implements Disposable {
         Image crownImage = new Image(crownTexture);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("font"), Color.WHITE);
-
         Label titleLabel = new Label("KROLEWSKIE POTYCZKI", labelStyle);
         titleLabel.setFontScale(3f);
 

@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.krolewskie_potyczki.model.Card;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class CardView implements Disposable {
