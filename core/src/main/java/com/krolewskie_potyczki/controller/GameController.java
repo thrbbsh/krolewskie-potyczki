@@ -1,5 +1,6 @@
 package com.krolewskie_potyczki.controller;
 
+import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.DefaultGameEndCondition;
@@ -54,12 +55,11 @@ public class GameController {
             else type = EntityType.TOMBSTONE;
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
-            arenaController.spawnEntity(type, false, spawnX, spawnY);
+            arenaController.spawnEntity(type, false, new Vector2(spawnX, spawnY));
             EnemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
             EnemySpawnTimer  = 0f;
         }
     }
-
     private void updateTimer(float delta) {
         float timeLeft = arena.getTimeLeft();
         arena.setTimeLeft(timeLeft - delta);
@@ -123,11 +123,11 @@ public class GameController {
         return selectedCard;
     }
 
-    public boolean onMapTouched(float x, float y) {
+    public boolean onMapTouched(Vector2 pos) {
         if (selectedCard == null || getPlayerElixir() < selectedCard.getCard().getElixirCost() ||
-            !(287 <= x && x <= 1027 && 227 <= y && y <= 1062))
+            !(287 <= pos.x && pos.x <= 1027 && 227 <= pos.y && pos.y <= 1062))
             return false;
-        arenaController.spawnEntity(selectedCard.getCard().getEntityType(), true, x, y);
+        arenaController.spawnEntity(selectedCard.getCard().getEntityType(), true, pos);
         selectedCard.setSelected(false);
         spendElixir(selectedCard.getCard().getElixirCost());
         selectedCard = null;

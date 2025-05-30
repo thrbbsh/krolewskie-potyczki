@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.model;
 
 import com.badlogic.gdx.graphics.g3d.particles.values.MeshSpawnShapeValue;
+import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 public class EntityFactory {
     public interface SpawnFunction {
-        Entity spawn(EntityConfig cfg, boolean isPlayerEntity, float x, float y);
+        Entity spawn(EntityConfig cfg, boolean isPlayerEntity, Vector2 pos);
     }
 
     private final Map<EntityType, SpawnFunction> registry = new HashMap<>();
@@ -19,19 +20,19 @@ public class EntityFactory {
     public EntityFactory() {
         gameConfig = GameConfig.getInstance();
 
-        register(EntityType.MAIN_TOWER, (cfg, isP, x, y) -> new MainTower(isP, x, y));
-        register(EntityType.SIDE_TOWER, (cfg, isP, x, y) -> new SideTower(isP, x, y));
-        register(EntityType.TRIANGLE, (cfg, isP, x, y) -> new TriangleUnit(isP, x, y));
-        register(EntityType.SQUARE, (cfg, isP, x, y) -> new SquareUnit(isP, x, y));
-        register(EntityType.TOMBSTONE, (cfg, isP, x, y) -> new TombstoneUnit(isP, x, y));
-        register(EntityType.SKELETON, (cfg, isP, x, y) -> new SkeletonUnit(isP, x, y));
+        register(EntityType.MAIN_TOWER, (cfg, isP, pos) -> new MainTower(isP, pos));
+        register(EntityType.SIDE_TOWER, (cfg, isP, pos) -> new SideTower(isP, pos));
+        register(EntityType.TRIANGLE, (cfg, isP, pos) -> new TriangleUnit(isP, pos));
+        register(EntityType.SQUARE, (cfg, isP, pos) -> new SquareUnit(isP, pos));
+        register(EntityType.TOMBSTONE, (cfg, isP, pos) -> new TombstoneUnit(isP, pos));
+        register(EntityType.SKELETON, (cfg, isP, pos) -> new SkeletonUnit(isP, pos));
     }
 
     private void register(EntityType type, SpawnFunction spawnFunction) {
         registry.put(type, spawnFunction);
     }
 
-    public Entity spawnEntity(EntityType type, boolean isPlayerEntity, float x, float y) {
+    public Entity spawnEntity(EntityType type, boolean isPlayerEntity, Vector2 pos) {
         EntityConfig cfg = gameConfig.getEntityConfig(type);
         if (cfg == null) {
             throw new IllegalArgumentException("Unknown entity type: " + type);
@@ -40,6 +41,6 @@ public class EntityFactory {
         if (fn == null) {
             throw new IllegalStateException("No spawn function for type: " + type);
         }
-        return fn.spawn(cfg, isPlayerEntity, x, y);
+        return fn.spawn(cfg, isPlayerEntity, pos);
     }
 }

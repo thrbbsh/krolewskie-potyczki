@@ -2,6 +2,8 @@ package com.krolewskie_potyczki.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.EntityFactory;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class Arena {
@@ -36,12 +38,12 @@ public class Arena {
     public Arena() {
         activeEntities = new ArrayList<>();
         EntityFactory factory = new EntityFactory();
-        activeEntities.add(factory.spawnEntity(EntityType.MAIN_TOWER, true, 380, 655));
-        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, true, 470, 405));
-        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, true, 470, 905));
-        activeEntities.add(factory.spawnEntity(EntityType.MAIN_TOWER, false, 1815, 655));
-        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, false, 1725, 405));
-        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, false, 1725, 905));
+        activeEntities.add(factory.spawnEntity(EntityType.MAIN_TOWER, true, new Vector2(380, 655)));
+        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, true, new Vector2(470, 405)));
+        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, true, new Vector2(470, 905)));
+        activeEntities.add(factory.spawnEntity(EntityType.MAIN_TOWER, false, new Vector2(1815, 655)));
+        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, false, new Vector2(1725, 405)));
+        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, false, new Vector2(1725, 905)));
         playerElixir = 5;
     }
 

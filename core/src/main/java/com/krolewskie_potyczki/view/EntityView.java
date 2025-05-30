@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.krolewskie_potyczki.model.*;
@@ -32,13 +33,17 @@ public class EntityView implements Disposable {
     public void render(float ignoredDelta) {
         batch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         batch.begin();
-        batch.draw(texture, entity.getX() - texture.getWidth() / 2f, entity.getY() - texture.getHeight() / 2f);
+        Vector2 pos = entity.getPos();
+        batch.draw(texture, pos.x - texture.getWidth() / 2f, pos.y - texture.getHeight() / 2f);
         batch.end();
         drawLifeBar();
     }
 
     private void drawLifeBar() {
-        float x = entity.getX(), y = entity.getY(), height = texture.getHeight(), width = texture.getWidth();
+        float x = entity.getPos().x;
+        float y = entity.getPos().y;
+        float height = texture.getHeight();
+        float width = texture.getWidth();
         shapeRenderer.setProjectionMatrix(stage.getViewport().getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.YELLOW);

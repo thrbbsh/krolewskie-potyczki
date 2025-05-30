@@ -1,5 +1,6 @@
 package com.krolewskie_potyczki.model;
 
+import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
@@ -9,8 +10,8 @@ public class Spawner extends Building {
     private final float spawnInterval;
     private boolean readyToSpawn;
     private final EntityConfig spawnType;
-    Spawner(EntityConfig config, boolean isPlayersEntity, float x, float y) {
-        super(config, isPlayersEntity, x, y);
+    Spawner(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
+        super(config, isPlayersEntity, pos);
         curInterval = 0;
         spawnInterval = config.spawnInterval;
         readyToSpawn = false;

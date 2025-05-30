@@ -1,41 +1,39 @@
 package com.krolewskie_potyczki.model;
 
+import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 
 import java.util.List;
 
 public class Entity {
-    float HP, x, y;
+    float HP;
+    Vector2 pos;
     boolean isPlayersEntity;
     Entity currentTarget, attackTarget;
     EntityConfig config;
 
     private float timeSinceLastAttack = 0f;
 
-    Entity(EntityConfig config, boolean isPlayersEntity, float x, float y) {
+    Entity(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
         currentTarget = null;
         this.isPlayersEntity = isPlayersEntity;
-        this.x = x;
-        this.y = y;
+        this.pos = pos;
         this.config = config;
         this.HP = config.totalHP;
     }
 
     float distance(Entity target) {
         if (target == null) return 0;
-        float dx = this.x - target.x;
-        float dy = this.y - target.y;
-        return (float) Math.sqrt(dx * dx + dy * dy);
+        return pos.dst(target.pos);
     }
 
     public void move(float delta) {
         if (currentTarget == null) return;
-        float dx = currentTarget.x - this.x;
-        float dy = currentTarget.y - this.y;
+        float dx = currentTarget.pos.x - this.pos.x;
+        float dy = currentTarget.pos.y - this.pos.y;
         float dist = distance(currentTarget);
         if (dist <= config.attackRadius) return;
-        x += dx / dist * delta * config.moveSpeed;
-        y += dy / dist * delta * config.moveSpeed;
+        pos.add(dx / dist * delta * config.moveSpeed, dy / dist * delta * config.moveSpeed);
     }
 
     public boolean getIsPlayersEntity() {
@@ -79,6 +77,7 @@ public class Entity {
     }
 
     void attack() {
+        if (currentTarget == null) return;
         currentTarget.receiveDamage(config.damage);
     }
 
@@ -93,11 +92,8 @@ public class Entity {
         // TODO (animation, case when tower is "dead")
     }
 
-    public float getX() {
-        return x;
-    }
-    public float getY() {
-        return y;
+    public Vector2 getPos() {
+        return pos;
     }
 
     public float getHP() {
