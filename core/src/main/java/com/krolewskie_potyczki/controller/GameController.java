@@ -111,10 +111,6 @@ public class GameController {
         return arena.getFormattedTimeLeft();
     }
 
-    public float getFormattedPlayerElixir() {
-        return (float) Math.floor(arena.getPlayerElixir() * 10) / 10;
-    }
-
     public void spendElixir(int elixirCost) {
         arenaController.spendElixir(elixirCost);
     }

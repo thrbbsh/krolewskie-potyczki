@@ -78,10 +78,7 @@ public class GameView implements Disposable {
             }
         });
 
-        currentElixirLabel = new Label(
-            "Current elixir:\n" + controller.getFormattedPlayerElixir() + "/" + controller.getMaxElixir(),
-            skin
-        );
+        currentElixirLabel = new Label(getFormattedPlayerElixir(), skin);
         currentElixirLabel.setWrap(true);
         currentElixirLabel.setAlignment(Align.center);
 
@@ -151,15 +148,21 @@ public class GameView implements Disposable {
             .size(350, 80);
     }
 
+    private String getFormattedPlayerElixir() {
+        String s = "Current elixir:\n";
+        s += String.valueOf(Math.floor(controller.getPlayerElixir() * 10) / 10);
+        s += "/";
+        s += controller.getMaxElixir();
+        return s;
+    }
+
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (!controller.isPaused()) {
             controller.update(delta);
-            currentElixirLabel.setText(
-                "Current elixir: " + controller.getFormattedPlayerElixir() + "/" + controller.getMaxElixir()
-            );
+            currentElixirLabel.setText(getFormattedPlayerElixir());
             timerLabel.setText(
                 "Time left: " + controller.getFormattedTimeLeft()
             );
@@ -184,7 +187,7 @@ public class GameView implements Disposable {
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.rect(1305, 35, 230, 40);
         shapeRenderer.setColor(Color.PURPLE);
-        shapeRenderer.rect(1305, 35, 230 * (controller.getFormattedPlayerElixir() / controller.getMaxElixir()), 40);
+        shapeRenderer.rect(1305, 35, 230 * (controller.getPlayerElixir() / controller.getMaxElixir()), 40);
         shapeRenderer.setColor(Color.BLACK);
         for (int i = 1; i <= 9; i++)
             shapeRenderer.rect(1305 + i * 23 - 2.5f, 35, 5, 40);

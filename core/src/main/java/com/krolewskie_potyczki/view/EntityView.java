@@ -21,12 +21,12 @@ public class EntityView implements Disposable {
         this.stage = stage;
         this.entity = entity;
 
-        String internalWay = "skins/";
-        if (entity.getIsPlayersEntity()) internalWay += "player/player";
-        else internalWay += "bot/bot";
-        internalWay += entity.getConfig().type;
-        internalWay += ".png";
-        texture = new Texture(internalWay);
+        String path = String.format("skins/%s/%s%s.png",
+            entity.getIsPlayersEntity() ? "player" : "bot",
+            entity.getIsPlayersEntity() ? "player" : "bot",
+            entity.getConfig().type
+        );
+        texture = new Texture(path);
         batch = new SpriteBatch();
     }
 
@@ -47,11 +47,12 @@ public class EntityView implements Disposable {
         shapeRenderer.setProjectionMatrix(stage.getViewport().getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.YELLOW);
-        shapeRenderer.rect(x - (100 - width) / 2 - texture.getWidth() / 2f, y + height + 10 - texture.getHeight() / 2f, 100, 25);
+        float lifebarX = x - (100 - width) / 2 - width / 2f, lifebarY = y + height - height / 2f + 10;
+        shapeRenderer.rect(lifebarX, lifebarY, 100, 25);
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(x - (100 - width) / 2 + 5 - texture.getWidth() / 2f, y + height + 15 - texture.getHeight() / 2f, 90, 15);
+        shapeRenderer.rect(lifebarX + 5, lifebarY + 5, 90, 15);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(x - (100 - width) / 2 + 5 - texture.getWidth() / 2f, y + height + 15 - texture.getHeight() / 2f, 90 * entity.getHP() / entity.getConfig().totalHP, 15);
+        shapeRenderer.rect(lifebarX + 5, lifebarY + 5, 90 * entity.getHP() / entity.getConfig().totalHP, 15);
         shapeRenderer.end();
     }
 
