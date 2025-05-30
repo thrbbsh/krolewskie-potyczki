@@ -99,16 +99,16 @@ public class GameController {
         }
     }
 
+    public float getTimeLeft() {
+        return arena.getTimeLeft();
+    }
+
     public float getPlayerElixir() {
         return arena.getPlayerElixir();
     }
 
     public float getMaxElixir() {
         return arena.getMaxElixir();
-    }
-
-    public String getFormattedTimeLeft() {
-        return arena.getFormattedTimeLeft();
     }
 
     public void spendElixir(int elixirCost) {

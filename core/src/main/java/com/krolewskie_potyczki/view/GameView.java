@@ -83,7 +83,7 @@ public class GameView implements Disposable {
         currentElixirLabel.setAlignment(Align.center);
 
         timerLabel = new Label(
-            "Time left:\n" + controller.getFormattedTimeLeft(),
+            "Time left:\n" + getFormattedTimeLeft(),
             skin
         );
         timerLabel.setWrap(true);
@@ -156,6 +156,10 @@ public class GameView implements Disposable {
         return s;
     }
 
+    private String getFormattedTimeLeft() {
+        return String.format("%01d:%02d", (int) Math.floor(controller.getTimeLeft() / 60), (int) Math.floor(controller.getTimeLeft() % 60));
+    }
+
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -164,7 +168,7 @@ public class GameView implements Disposable {
             controller.update(delta);
             currentElixirLabel.setText(getFormattedPlayerElixir());
             timerLabel.setText(
-                "Time left: " + controller.getFormattedTimeLeft()
+                "Time left: " + getFormattedTimeLeft()
             );
 
             gameStage.act(delta);
