@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.endcondition.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.config.EntityType;
+import com.krolewskie_potyczki.model.entity.Arena;
 import com.krolewskie_potyczki.screens.EndGameScreen;
 import com.krolewskie_potyczki.screens.MenuScreen;
 import com.krolewskie_potyczki.screens.PauseScreen;
@@ -15,6 +16,7 @@ import com.krolewskie_potyczki.view.GameView;
 public class GameController {
     private final Main game;
     private final ArenaController arenaController;
+    private final Arena arena;
     private boolean paused = false;
     private float enemySpawn;
     private float enemySpawnTimer = 0;
@@ -30,8 +32,9 @@ public class GameController {
         this.gameView = gameView;
 
         arenaController = new ArenaController();
+        arena = arenaController.getArena();
         endCondition = new DefaultGameEndCondition();
-        enemySpawn = (5f + (float) (Math.random() * 1f)) / arenaController.getElixirSpeed();
+        enemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
     }
 
     public void update(float delta) {
@@ -41,14 +44,15 @@ public class GameController {
         }
 
         arenaController.update(delta);
+        arena.updateTimer(-delta);
         enemyMove(delta);
 
-        if (arenaController.isGameOver(endCondition)) {
+        if (endCondition.isGameOver(arena)) {
             gameView.pause();
-            onGameEnded(arenaController.calculateResult(endCondition));
+            onGameEnded(endCondition.calculateResult(arena));
         }
 
-        gameView.renderGame(delta, arenaController.getPlayerElixir(), arenaController.getMaxElixir(), arenaController.getTimeLeft(), arenaController.getActiveEntities());
+        gameView.renderGame(delta, arena.getPlayerElixir(), arena.getMaxElixir(), arena.getTimeLeft(), arena.getActiveEntities());
     }
 
     private void onGameEnded(MatchResult result) {
@@ -67,7 +71,7 @@ public class GameController {
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
             arenaController.spawnEntity(type, false, new Vector2(spawnX, spawnY));
-            enemySpawn = (5f + (float) (Math.random() * 1f)) / arenaController.getElixirSpeed();
+            enemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
             enemySpawnTimer  = 0f;
         }
     }
@@ -95,7 +99,7 @@ public class GameController {
     }
 
     public void onSpawnEntityClicked(CardView cardView) {
-        if (arenaController.getPlayerElixir() < cardView.getCard().getElixirCost())
+        if (arena.getPlayerElixir() < cardView.getCard().getElixirCost())
             return;
 
         if (cardView == selectedCard) {
@@ -115,12 +119,12 @@ public class GameController {
     }
 
     public boolean onMapTouched(Vector2 pos) {
-        if (selectedCard == null || arenaController.getPlayerElixir() < selectedCard.getCard().getElixirCost() ||
+        if (selectedCard == null || arena.getPlayerElixir() < selectedCard.getCard().getElixirCost() ||
             !(287 <= pos.x && pos.x <= 1027 && 227 <= pos.y && pos.y <= 1062))
             return false;
         arenaController.spawnEntity(selectedCard.getCard().getEntityType(), true, pos);
         selectedCard.setSelected(false);
-        arenaController.spendElixir(selectedCard.getCard().getElixirCost());
+        arena.spendElixir(selectedCard.getCard().getElixirCost());
         selectedCard = null;
 
         return true;

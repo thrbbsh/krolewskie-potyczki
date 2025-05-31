@@ -3,11 +3,10 @@ package com.krolewskie_potyczki.controller;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.building.Spawner;
 import com.krolewskie_potyczki.model.config.EntityType;
-import com.krolewskie_potyczki.model.endcondition.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.entity.Arena;
 import com.krolewskie_potyczki.model.entity.Entity;
+import com.krolewskie_potyczki.model.factory.CompositeEntityFactory;
 import com.krolewskie_potyczki.model.factory.EntityFactory;
-import com.krolewskie_potyczki.model.result.MatchResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,29 +14,18 @@ import java.util.List;
 public class ArenaController {
     private final Arena arena;
     private final EntityFactory entityFactory;
+    private final CompositeEntityFactory compositeEntityFactory;
 
     public ArenaController() {
         arena = new Arena();
         entityFactory = new EntityFactory();
+        compositeEntityFactory = new CompositeEntityFactory();
     }
 
     public void spawnEntity(EntityType type, boolean isPlayersEntity, Vector2 pos) {
-        if (type == EntityType.SKELETON_ARMY) {
-            int count = 15, squareSize = 4;
-            for (int i = 0; i < squareSize; i++) {
-                for (int j = 0; j < squareSize; j++) {
-                    count--;
-                    if (count < 0)
-                        continue;
-                    Vector2 currentPos = pos.cpy().add((i - squareSize / 2f) * 50, (j - squareSize / 2f) * 50);
-                    arena.addEntity(entityFactory.spawnEntity(EntityType.SKELETON, isPlayersEntity, currentPos));
-                }
-            }
-            return;
-        }
-
-        Entity entity = entityFactory.spawnEntity(type, isPlayersEntity, pos.cpy());
-        arena.addEntity(entity);
+        //TODO: FIX IT SOMEHOW.
+        if (type == EntityType.SKELETON_ARMY) arena.addEntities(compositeEntityFactory.spawnEntity(type, isPlayersEntity, pos.cpy()));
+            else arena.addEntity(entityFactory.spawnEntity(type, isPlayersEntity, pos.cpy()));
     }
 
     public void update(float delta) {
@@ -67,35 +55,7 @@ public class ArenaController {
             }
     }
 
-    public float getPlayerElixir() {
-        return arena.getPlayerElixir();
-    }
-
-    public float getMaxElixir() {
-        return arena.getMaxElixir();
-    }
-
-    public float getTimeLeft() {
-        return arena.getTimeLeft();
-    }
-
-    public float getElixirSpeed() {
-        return arena.getElixirSpeed();
-    }
-
-    public void spendElixir(int elixirCost) {
-        arena.spendElixir(elixirCost);
-    }
-
-    public List<Entity> getActiveEntities() {
-        return arena.getActiveEntities();
-    }
-
-    public boolean isGameOver(DefaultGameEndCondition endCondition) {
-        return endCondition.isGameOver(arena);
-    }
-
-    public MatchResult calculateResult(DefaultGameEndCondition endCondition) {
-        return endCondition.calculateResult(arena);
+    public Arena getArena() {
+        return arena;
     }
 }
