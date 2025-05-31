@@ -61,6 +61,10 @@ public class Arena {
         activeEntities.add(entity);
     }
 
+    public void addEntities(List<Entity> entity) {
+        activeEntities.addAll(entity);
+    }
+
     public void removeEntity(Entity entity) {
         activeEntities.remove(entity);
     }
