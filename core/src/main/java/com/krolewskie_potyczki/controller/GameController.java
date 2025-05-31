@@ -9,6 +9,7 @@ import com.krolewskie_potyczki.screens.EndGameScreen;
 import com.krolewskie_potyczki.screens.MenuScreen;
 import com.krolewskie_potyczki.view.CardView;
 import com.krolewskie_potyczki.model.MatchResult;
+import com.krolewskie_potyczki.view.GameView;
 
 public class GameController {
     private final Arena arena;
@@ -20,17 +21,23 @@ public class GameController {
     private float EnemySpawnTimer = 0;
     private CardView selectedCard;
     private final DefaultGameEndCondition endCondition;
+    private final GameView gameView;
 
-    public GameController(Arena arena, Main game) {
-        this.arena = arena;
+    public GameController(Main game) {
+        this.arena = new Arena();
         this.game = game;
         arenaController = new ArenaController(arena);
         EnemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
         endCondition = new DefaultGameEndCondition();
+        this.gameView = new GameView(arena);
+        gameView.setListenersToController(this);
     }
 
     public void update(float delta) {
-        if (isEnded() || isPaused()) return;
+        if (isEnded() || isPaused()) {
+            gameView.render(delta);
+            return;
+        }
         arenaController.update(delta);
         updateTimer(delta);
         enemyMove(delta);
@@ -38,6 +45,7 @@ public class GameController {
             ended = true;
             onGameEnded(endCondition.calculateResult(arena));
         }
+        gameView.render(delta);
     }
 
     private void onGameEnded(MatchResult result) {
@@ -74,9 +82,11 @@ public class GameController {
 
     public void onPauseClicked() {
         paused = true;
+        gameView.pause();
     }
     public void onResumeClicked() {
         paused = false;
+        gameView.resume();
     }
 
     public void onMenuClicked() {
@@ -129,5 +139,29 @@ public class GameController {
         selectedCard = null;
 
         return true;
+    }
+
+    public void show() {
+        gameView.show();
+    }
+
+    public void resize(int w, int h) {
+        gameView.resize(w, h);
+    }
+
+    public void pause() {
+        gameView.pause();
+    }
+
+    public void resume() {
+        gameView.resume();
+    }
+
+    public void hide() {
+        gameView.hide();
+    }
+
+    public void dispose() {
+        gameView.dispose();
     }
 }

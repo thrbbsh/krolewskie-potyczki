@@ -7,31 +7,29 @@ import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.view.GameView;
 
 public class GameScreen implements Screen {
-    private final GameView view;
+    private final GameController controller;
 
     public GameScreen(Main game) {
-        Arena arena = new Arena();
-        GameController controller = new GameController(arena, game);
-        view = new GameView(arena, controller);
+        controller = new GameController(game);
     }
 
-    @Override public void show() { view.show(); }
+    @Override public void show() { controller.show(); }
     @Override public void render(float delta) {
-        view.render(delta);
+        controller.update(delta);
     }
     @Override public void resize(int w, int h) {
-        view.resize(w, h);
+        controller.resize(w, h);
     }
     @Override public void pause() {
-        view.pause();
+        controller.pause();
     }
     @Override public void resume() {
-        view.resume();
+        controller.resume();
     }
     @Override public void hide() {
-        view.hide();
+        controller.hide();
     }
     @Override public void dispose() {
-        view.dispose();
+        controller.dispose();
     }
 }
