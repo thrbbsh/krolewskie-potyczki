@@ -10,43 +10,39 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
-import com.krolewskie_potyczki.model.entity.Card;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class CardView implements Disposable {
-    private final Card card;
     private final ImageButton imageButton;
     private final Texture elixirDropTexture;
     private final SpriteBatch batch;
     private final BitmapFont font;
     private final Vector2 pos;
+    private final int elixirCost;
 
-    public CardView(EntityType entityType, Vector2 pos, CardClickListener listener) {
-        this.pos = pos;
+    public CardView(EntityType entityType, int elixirCost, int cardIdx, CardClickListener listener) {
+        this.elixirCost = elixirCost;
 
         font = new BitmapFont();
         font.getData().setScale(2.5f);
 
-        this.card = new Card(entityType);
+        pos = new Vector2(650 + cardIdx * 160, 22.5f);
+
         elixirDropTexture = new Texture("images/cards/elixirDrop.png");
         batch = new SpriteBatch();
         Texture texture;
-        if (card.getEntityType() == null) texture = new Texture("images/cards/defaultCard.png");
-            else texture = new Texture("images/cards/" + getCardPath());
+        if (entityType == null) texture = new Texture("images/cards/defaultCard.png");
+            else texture = new Texture("images/cards/" + entityType.toString().toLowerCase() + "Card.png");
 
         imageButton = new ImageButton(new TextureRegionDrawable(texture));
         imageButton.setPosition(pos.x, pos.y);
         imageButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                listener.onCardClicked(card);
+                listener.onCardClicked(cardIdx);
             }
         });
-    }
-
-    private String getCardPath() {
-        return card.getEntityType().toString().toLowerCase() + "Card.png";
     }
 
     public void setSelected(boolean selected) {
@@ -64,7 +60,7 @@ public class CardView implements Disposable {
         batch.begin();
         batch.draw(elixirDropTexture, pos.x + (imageButton.getWidth() - elixirDropTexture.getWidth() * 1.2f) / 2, pos.y - 10, elixirDropTexture.getWidth() * 1.2f, elixirDropTexture.getHeight() * 1.2f);
         font.setColor(Color.WHITE);
-        font.draw(batch, String.valueOf(card.getElixirCost()), pos.x + (imageButton.getWidth() - elixirDropTexture.getWidth() * 1.2f) / 2 + 7, pos.y + 25);
+        font.draw(batch, String.valueOf(elixirCost), pos.x + (imageButton.getWidth() - elixirDropTexture.getWidth() * 1.2f) / 2 + 7, pos.y + 25);
         batch.end();
     }
     @Override
@@ -72,9 +68,5 @@ public class CardView implements Disposable {
         elixirDropTexture.dispose();
         batch.dispose();
         font.dispose();
-    }
-
-    public Card getCard() {
-        return card;
     }
 }

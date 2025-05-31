@@ -9,7 +9,6 @@ import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.screens.EndGameScreen;
 import com.krolewskie_potyczki.screens.MenuScreen;
 import com.krolewskie_potyczki.screens.PauseScreen;
-import com.krolewskie_potyczki.view.CardView;
 import com.krolewskie_potyczki.model.result.MatchResult;
 import com.krolewskie_potyczki.view.GameView;
 
@@ -20,12 +19,13 @@ public class GameController {
     private boolean paused = false;
     private float EnemySpawn;
     private float EnemySpawnTimer = 0;
-    private CardView selectedCard;
     private final DefaultGameEndCondition endCondition;
     private final GameView gameView;
 
     private Screen gameScreen;
     private PauseScreen pauseScreen;
+
+    private final DeckController deckController;
 
     public GameController(Main game, GameView gameView) {
         this.game = game;
@@ -35,6 +35,8 @@ public class GameController {
         arenaController = new ArenaController(arena);
         EnemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
         endCondition = new DefaultGameEndCondition();
+
+        deckController = new DeckController(arena, gameView.getArenaView(), arenaController);
     }
 
     public void update(float delta) {
@@ -53,6 +55,7 @@ public class GameController {
         }
 
         gameView.renderGame(delta, arena.getPlayerElixir(), arena.getMaxElixir(), arena.getTimeLeft(), arena.getActiveEntities());
+        deckController.update(delta);
     }
 
     private void onGameEnded(MatchResult result) {
@@ -98,35 +101,7 @@ public class GameController {
         game.setScreen(new MenuScreen(game));
     }
 
-    public void onSpawnEntityClicked(CardView cardView) {
-        if (arena.getPlayerElixir() < cardView.getCard().getElixirCost())
-            return;
-
-        if (cardView == selectedCard) {
-            cardView.setSelected(false);
-            selectedCard = null;
-        } else {
-            if (selectedCard != null) {
-                selectedCard.setSelected(false);
-            }
-            selectedCard = cardView;
-            cardView.setSelected(true);
-        }
-    }
-
-    public CardView getSelectedCardView() {
-        return selectedCard;
-    }
-
-    public boolean onMapTouched(Vector2 pos) {
-        if (selectedCard == null || arena.getPlayerElixir() < selectedCard.getCard().getElixirCost() ||
-            !(287 <= pos.x && pos.x <= 1027 && 227 <= pos.y && pos.y <= 1062))
-            return false;
-        arenaController.spawnEntity(selectedCard.getCard().getEntityType(), true, pos);
-        selectedCard.setSelected(false);
-        arena.spendElixir(selectedCard.getCard().getElixirCost());
-        selectedCard = null;
-
-        return true;
+    public void onMapTouched(Vector2 pos) {
+        deckController.onMapTouched(pos);
     }
 }
