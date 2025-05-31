@@ -34,8 +34,6 @@ public class GameView implements Disposable {
 
     private Music gameMusic;
 
-    private boolean isPaused = false;
-
     public GameView() {
         shapeRenderer = new ShapeRenderer();
 
@@ -112,7 +110,7 @@ public class GameView implements Disposable {
     }
 
     private String getFormattedPlayerElixir(float playerElixir, float maxElixir) {
-        return String.format("Current elixir:\n %s / %d", String.valueOf(Math.floor(playerElixir * 10) / 10), (int)maxElixir);
+        return String.format("Current elixir:\n %s / %d", Math.floor(playerElixir * 10) / 10, (int)maxElixir);
     }
 
     private String getFormattedTimeLeft(float timeLeft) {
@@ -167,13 +165,11 @@ public class GameView implements Disposable {
 
     public void pause() {
         gameMusic.pause();
-        isPaused = true;
     }
 
     public void resume() {
         Gdx.input.setInputProcessor(gameStage);
         gameMusic.play();
-        isPaused = false;
     }
 
 

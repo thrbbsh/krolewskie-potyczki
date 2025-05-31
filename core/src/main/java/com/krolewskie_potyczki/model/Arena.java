@@ -8,7 +8,7 @@ import com.krolewskie_potyczki.model.config.EntityType;
 public class Arena {
     List<Entity> activeEntities;
     private float playerElixir;
-    private float timeLeft = 30;
+    private float timeLeft = 180;
 
     public float getTimeLeft() {
         return timeLeft;

@@ -2,7 +2,6 @@ package com.krolewskie_potyczki.screens;
 
 import com.badlogic.gdx.Screen;
 import com.krolewskie_potyczki.Main;
-import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.controller.MenuController;
 import com.krolewskie_potyczki.view.MenuView;
 

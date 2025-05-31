@@ -1,6 +1,5 @@
 package com.krolewskie_potyczki.view;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,12 +8,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
-import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Card;
 import com.krolewskie_potyczki.model.Entity;
-import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
-import com.krolewskie_potyczki.model.config.GameConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
