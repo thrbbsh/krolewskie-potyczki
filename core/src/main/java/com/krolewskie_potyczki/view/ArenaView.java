@@ -47,7 +47,7 @@ public class ArenaView implements Disposable {
 
     public void sync(List<Entity> activeEntities) {
         activeEntities.forEach(e ->
-            entityViews.computeIfAbsent(e, key -> new EntityView(key, stage))
+            entityViews.computeIfAbsent(e, key -> new EntityView(stage, e.getIsPlayersEntity(), e.getConfig().type, e.getConfig().totalHP))
         );
         entityViews.keySet().removeIf(key -> !activeEntities.contains(key));
     }
@@ -64,8 +64,12 @@ public class ArenaView implements Disposable {
 
         for (int i = 0; i < 4; i++)
             cardViews[i].render(delta);
-        for (EntityView entityView: entityViews.values())
+        for (Map.Entry<Entity, EntityView> entry : entityViews.entrySet()) {
+            Entity entity = entry.getKey();
+            EntityView entityView = entry.getValue();
+            entityView.receivePackage(entity.getPos(), entity.getHP());
             entityView.render(delta);
+        }
         stage.act(delta);
         stage.draw();
         for (int i = 0; i < 4; i++)
