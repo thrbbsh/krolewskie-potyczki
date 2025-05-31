@@ -21,11 +21,17 @@ public class EndGameView implements Disposable {
     private final Stage stage;
     private final Skin skin;
 
-    public EndGameView(GameController controller, MatchResult result) {
+    private TextButton endMenuButton;
+
+    public EndGameView(MatchResult result) {
         stage = new Stage(new FitViewport(1920, 1080));
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
+        createUI(result);
+    }
+
+    private void createUI(MatchResult result) {
         Table endTable = new Table();
         endTable.setFillParent(true);
         Label.LabelStyle ls = new Label.LabelStyle(skin.getFont("font"), Color.WHITE);
@@ -34,18 +40,12 @@ public class EndGameView implements Disposable {
         endLabel.setFontScale(3f);
         endLabel.setAlignment(Align.center);
 
-        TextButton endMenuBtn = new TextButton("Menu", skin);
-        endMenuBtn.getLabel().setFontScale(2f);
-        endMenuBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                controller.onMenuClicked();
-            }
-        });
+        endMenuButton = new TextButton("Menu", skin);
+        endMenuButton.getLabel().setFontScale(2f);
 
         endTable.center();
         endTable.add(endLabel).padBottom(50).row();
-        endTable.add(endMenuBtn).size(525, 120);
+        endTable.add(endMenuButton).size(525, 120);
 
         String status;
         switch (result.getWinner()) {
@@ -68,6 +68,15 @@ public class EndGameView implements Disposable {
 
         endLabel.setText(status + detail);
         stage.addActor(endTable);
+    }
+
+    public void setController(GameController controller) {
+        endMenuButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                controller.onMenuClicked();
+            }
+        });
     }
 
     public void show() {

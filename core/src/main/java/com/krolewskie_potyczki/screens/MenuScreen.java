@@ -6,43 +6,47 @@ import com.krolewskie_potyczki.controller.MenuController;
 import com.krolewskie_potyczki.view.MenuView;
 
 public class MenuScreen implements Screen {
-    private final MenuView view;
+    private final MenuController menuController;
+    private final MenuView menuView;
 
     public MenuScreen(Main game) {
-        MenuController controller = new MenuController(game);
-        this.view = new MenuView(controller);
+        menuView = new MenuView();
+        menuController = new MenuController(game, menuView);
+        menuView.setController(menuController);
     }
 
     @Override
-    public void show() {view.show();}
+    public void show() {
+        menuView.show();
+    }
 
     @Override
     public void render(float delta) {
-        view.render(delta);
+        menuController.update(delta);
     }
 
     @Override
-    public void resize(int width, int height) {
-        view.resize(width, height);
+    public void resize(int w, int h) {
+        menuView.resize(w, h);
     }
 
     @Override
     public void pause() {
-        view.pause();
+        menuView.pause();
     }
 
     @Override
     public void resume() {
-        view.resume();
+        menuView.resume();
     }
 
     @Override
     public void hide() {
-        view.hide();
+        menuView.hide();
     }
 
     @Override
     public void dispose() {
-        view.dispose();
+        menuView.dispose();
     }
 }

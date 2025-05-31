@@ -1,6 +1,5 @@
 package com.krolewskie_potyczki.view;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,12 +8,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
-import com.krolewskie_potyczki.model.Arena;
 import com.krolewskie_potyczki.model.Card;
 import com.krolewskie_potyczki.model.Entity;
-import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
-import com.krolewskie_potyczki.model.config.GameConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,12 +23,10 @@ public class ArenaView implements Disposable {
     private final CardView[] cardViews;
     private final SpriteBatch bgBatch;
     private final Texture bgTexture;
-    private final Arena arena;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private boolean drawSpawnArea = false;
 
-    public ArenaView(Arena arena, Stage stage) {
-        this.arena = arena;
+    public ArenaView(Stage stage) {
         this.stage = stage;
         entityViews = new HashMap<>();
         bgBatch = new SpriteBatch();
@@ -52,8 +46,8 @@ public class ArenaView implements Disposable {
         }
     }
 
-    private void sync() {
-        for (Entity e : arena.getActiveEntities()) {
+    public void sync(List<Entity> activeEntities) {
+        for (Entity e : activeEntities) {
             if (!entityViews.containsKey(e)) {
                 EntityView ev = new EntityView(e, stage);
                 entityViews.put(e, ev);
@@ -61,14 +55,13 @@ public class ArenaView implements Disposable {
         }
         List<Map.Entry<Entity, EntityView>> list = new ArrayList<>();
         for (Map.Entry<Entity, EntityView> e : entityViews.entrySet())
-            if (!arena.getActiveEntities().contains(e.getKey())) list.add(e);
+            if (!activeEntities.contains(e.getKey())) list.add(e);
         for (Map.Entry<Entity, EntityView> e : list) {
             entityViews.remove(e.getKey());
         }
     }
 
     public void render(float delta) {
-        sync();
         bgBatch.begin();
         bgBatch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         bgBatch.draw(bgTexture, 0, 0, stage.getWidth(), stage.getHeight());

@@ -3,20 +3,15 @@ package com.krolewskie_potyczki.model;
 import java.util.ArrayList;
 import java.util.List;
 import com.badlogic.gdx.math.Vector2;
-import com.krolewskie_potyczki.model.EntityFactory;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class Arena {
     List<Entity> activeEntities;
-    private float playerElixir = 0;
-    private float timeLeft = 30;
+    private float playerElixir;
+    private float timeLeft = 180;
 
     public float getTimeLeft() {
         return timeLeft;
-    }
-
-    public void setTimeLeft(float timeLeft) {
-        this.timeLeft = timeLeft;
     }
 
     public float getElixirSpeed() {
@@ -68,10 +63,6 @@ public class Arena {
         playerElixir -= elixirCost;
     }
 
-    public void setPlayerElixir(float playerElixir) {
-        this.playerElixir = playerElixir;
-    }
-
     public void addEntity(Entity entity) {
         activeEntities.add(entity);
     }
@@ -82,5 +73,13 @@ public class Arena {
 
     public List<Entity> getActiveEntities() {
         return activeEntities;
+    }
+
+    public void updatePlayerElixir(float delta) {
+        playerElixir = Math.min(getMaxElixir(), delta * getElixirSpeed() + getPlayerElixir());
+    }
+
+    public void updateTimer(float delta) {
+        timeLeft += delta;
     }
 }

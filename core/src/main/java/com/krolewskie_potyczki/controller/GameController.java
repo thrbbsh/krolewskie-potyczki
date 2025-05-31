@@ -1,5 +1,6 @@
 package com.krolewskie_potyczki.controller;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.Arena;
@@ -7,6 +8,7 @@ import com.krolewskie_potyczki.model.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.screens.EndGameScreen;
 import com.krolewskie_potyczki.screens.MenuScreen;
+import com.krolewskie_potyczki.screens.PauseScreen;
 import com.krolewskie_potyczki.view.CardView;
 import com.krolewskie_potyczki.model.MatchResult;
 import com.krolewskie_potyczki.view.GameView;
@@ -16,36 +18,43 @@ public class GameController {
     private final Main game;
     private final ArenaController arenaController;
     private boolean paused = false;
-    private boolean ended = false;
     private float EnemySpawn;
     private float EnemySpawnTimer = 0;
     private CardView selectedCard;
     private final DefaultGameEndCondition endCondition;
     private final GameView gameView;
 
-    public GameController(Main game) {
-        this.arena = new Arena();
+    private Screen gameScreen;
+    private PauseScreen pauseScreen;
+
+    public GameController(Main game, GameView gameView) {
         this.game = game;
+        this.gameView = gameView;
+        arena = new Arena();
+
         arenaController = new ArenaController(arena);
         EnemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
         endCondition = new DefaultGameEndCondition();
-        this.gameView = new GameView(arena);
-        gameView.setListenersToController(this);
     }
 
     public void update(float delta) {
-        if (isEnded() || isPaused()) {
-            gameView.render(delta);
+        if (isPaused()) {
+            pauseScreen.getView().render(delta);
             return;
         }
+
         arenaController.update(delta);
-        updateTimer(delta);
+        arena.updateTimer(-delta);
         enemyMove(delta);
+
         if (endCondition.isGameOver(arena)) {
-            ended = true;
+            gameView.pause();
             onGameEnded(endCondition.calculateResult(arena));
         }
-        gameView.render(delta);
+
+        System.out.println(arena.getTimeLeft());
+
+        gameView.renderGame(delta, arena.getPlayerElixir(), arena.getMaxElixir(), arena.getTimeLeft(), arena.getActiveEntities());
     }
 
     private void onGameEnded(MatchResult result) {
@@ -68,25 +77,23 @@ public class GameController {
             EnemySpawnTimer  = 0f;
         }
     }
-    private void updateTimer(float delta) {
-        float timeLeft = arena.getTimeLeft();
-        arena.setTimeLeft(timeLeft - delta);
-    }
 
     public boolean isPaused() {
         return paused;
-    }
-    public boolean isEnded() {
-        return ended;
     }
 
     public void onPauseClicked() {
         paused = true;
         gameView.pause();
+        gameScreen = game.getScreen();
+        pauseScreen = new PauseScreen(this);
+        game.setScreen(pauseScreen);
     }
+
     public void onResumeClicked() {
         paused = false;
         gameView.resume();
+        game.setScreen(gameScreen);
     }
 
     public void onMenuClicked() {
@@ -94,7 +101,7 @@ public class GameController {
     }
 
     public void onSpawnEntityClicked(CardView cardView) {
-        if (getPlayerElixir() < cardView.getCard().getElixirCost())
+        if (arena.getPlayerElixir() < cardView.getCard().getElixirCost())
             return;
 
         if (cardView == selectedCard) {
@@ -109,59 +116,19 @@ public class GameController {
         }
     }
 
-    public float getTimeLeft() {
-        return arena.getTimeLeft();
-    }
-
-    public float getPlayerElixir() {
-        return arena.getPlayerElixir();
-    }
-
-    public float getMaxElixir() {
-        return arena.getMaxElixir();
-    }
-
-    public void spendElixir(int elixirCost) {
-        arenaController.spendElixir(elixirCost);
-    }
-
     public CardView getSelectedCardView() {
         return selectedCard;
     }
 
     public boolean onMapTouched(Vector2 pos) {
-        if (selectedCard == null || getPlayerElixir() < selectedCard.getCard().getElixirCost() ||
+        if (selectedCard == null || arena.getPlayerElixir() < selectedCard.getCard().getElixirCost() ||
             !(287 <= pos.x && pos.x <= 1027 && 227 <= pos.y && pos.y <= 1062))
             return false;
         arenaController.spawnEntity(selectedCard.getCard().getEntityType(), true, pos);
         selectedCard.setSelected(false);
-        spendElixir(selectedCard.getCard().getElixirCost());
+        arena.spendElixir(selectedCard.getCard().getElixirCost());
         selectedCard = null;
 
         return true;
-    }
-
-    public void show() {
-        gameView.show();
-    }
-
-    public void resize(int w, int h) {
-        gameView.resize(w, h);
-    }
-
-    public void pause() {
-        gameView.pause();
-    }
-
-    public void resume() {
-        gameView.resume();
-    }
-
-    public void hide() {
-        gameView.hide();
-    }
-
-    public void dispose() {
-        gameView.dispose();
     }
 }
