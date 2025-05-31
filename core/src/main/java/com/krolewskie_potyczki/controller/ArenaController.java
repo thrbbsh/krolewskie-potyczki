@@ -35,7 +35,7 @@ public class ArenaController {
         List<Entity> curActiveEntities = new ArrayList<>(arena.getActiveEntities());
         for (Entity e: curActiveEntities)
             if (e.isDead()) {
-                if (e.getConfig().type == EntityType.SKELETON_ARMY) {
+                if (e.getConfig().type == EntityType.TOMBSTONE) {
                     spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getPos().add(0, 20));
                     spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getPos().add(-20, 40));
                     spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getPos().add(20, 40));
