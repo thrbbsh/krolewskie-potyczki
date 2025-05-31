@@ -47,7 +47,6 @@ public class ArenaView implements Disposable {
             if (i == 1) type = EntityType.TRIANGLE;
             if (i == 2) type = EntityType.TOMBSTONE;
             if (i == 3) type = EntityType.SKELETON_ARMY;
-            System.out.println(650 + i * 160 + " " + 22.5f);
             cardViews[i] = new CardView(type, new Vector2(650 + i * 160, 22.5f), listener);
             cardViews[i].addToStage(stage);
         }

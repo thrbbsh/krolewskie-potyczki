@@ -24,14 +24,17 @@ public class CardView implements Disposable {
 
     public CardView(EntityType entityType, Vector2 pos, CardClickListener listener) {
         this.pos = pos;
+
         font = new BitmapFont();
         font.getData().setScale(2.5f);
+
         this.card = new Card(entityType);
         elixirDropTexture = new Texture("images/cards/elixirDrop.png");
         batch = new SpriteBatch();
         Texture texture;
         if (card.getEntityType() == null) texture = new Texture("images/cards/defaultCard.png");
-            else texture = new Texture("images/cards/" + card.getEntityType().toString().toLowerCase() + "Card.png");
+            else texture = new Texture("images/cards/" + getCardPath());
+
         imageButton = new ImageButton(new TextureRegionDrawable(texture));
         imageButton.setPosition(pos.x, pos.y);
         imageButton.addListener(new ChangeListener() {
@@ -40,6 +43,10 @@ public class CardView implements Disposable {
                 listener.onCardClicked(card);
             }
         });
+    }
+
+    private String getCardPath() {
+        return card.getEntityType().toString().toLowerCase() + "Card.png";
     }
 
     public void setSelected(boolean selected) {
@@ -61,7 +68,11 @@ public class CardView implements Disposable {
         batch.end();
     }
     @Override
-    public void dispose() {}
+    public void dispose() {
+        elixirDropTexture.dispose();
+        batch.dispose();
+        font.dispose();
+    }
 
     public Card getCard() {
         return card;

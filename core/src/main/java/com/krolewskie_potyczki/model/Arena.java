@@ -23,10 +23,6 @@ public class Arena {
         return 1 / 2.8f;
     }
 
-    public String getFormattedTimeLeft() {
-        return String.format("%01d:%02d", (int) Math.floor(timeLeft / 60), (int) Math.floor(timeLeft % 60));
-    }
-
     public float getPlayerElixir() {
         return playerElixir;
     }
