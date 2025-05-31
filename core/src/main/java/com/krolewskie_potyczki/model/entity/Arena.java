@@ -1,9 +1,10 @@
-package com.krolewskie_potyczki.model;
+package com.krolewskie_potyczki.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityType;
+import com.krolewskie_potyczki.model.factory.EntityFactory;
 
 public class Arena {
     List<Entity> activeEntities;
@@ -41,18 +42,11 @@ public class Arena {
     public int crownsCount(boolean isPlayer) {
         if (mainTowerDestroyed(!isPlayer))
             return 3;
-        int crowns = 3;
-        for (Entity e : activeEntities)
-            if (e.isTowerForPlayer(!isPlayer))
-                crowns--;
-        return crowns;
+        return 3 - (int) activeEntities.stream().filter(e -> e.isTowerForPlayer(!isPlayer)).count();
     }
 
     public boolean mainTowerDestroyed(boolean isPlayer) {
-        for (Entity e : activeEntities)
-            if (e.config.type == EntityType.MAIN_TOWER && e.getIsPlayersEntity() == isPlayer)
-                return false;
-        return true;
+        return activeEntities.stream().noneMatch(e -> e.config.type == EntityType.MAIN_TOWER && e.getIsPlayersEntity() == isPlayer);
     }
 
     public float getMinTowerHP(boolean isPlayer) {

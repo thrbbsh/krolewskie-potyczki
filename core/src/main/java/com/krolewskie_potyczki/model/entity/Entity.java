@@ -1,21 +1,23 @@
-package com.krolewskie_potyczki.model;
+package com.krolewskie_potyczki.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class Entity {
     float HP;
     Vector2 pos;
     boolean isPlayersEntity;
-    Entity currentTarget, attackTarget;
-    EntityConfig config;
+    Entity currentTarget;
+    Entity attackTarget;
+    protected EntityConfig config;
 
     private float timeSinceLastAttack = 0f;
 
-    Entity(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
+    public Entity(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
         currentTarget = null;
         this.isPlayersEntity = isPlayersEntity;
         this.pos = pos;
@@ -63,7 +65,6 @@ public class Entity {
         }
     }
 
-
     void updateHP(float change) {
         HP = Math.min(config.totalHP, Math.max(0F, HP + change));
     }
@@ -73,11 +74,12 @@ public class Entity {
     }
 
     void attack() {
-        if (currentTarget == null) return;
+        if (currentTarget == null)
+            return;
         currentTarget.receiveDamage(config.damage);
     }
 
-    void receiveDamage(float amount) {
+    public void receiveDamage(float amount) {
         updateHP(-amount);
         if (isDead()) {
             onDeath();
@@ -97,15 +99,11 @@ public class Entity {
     }
 
     public void updateCurrentTarget(List<Entity> activeEntities) {
-        currentTarget = null;
-        for (Entity e : activeEntities) {
-            if (e.isPlayersEntity == this.isPlayersEntity || !e.canBeAttackedBy(config.type))
-                continue;
-            if (currentTarget == null)
-                currentTarget = e;
-            else if (distance(currentTarget) > distance(e))
-                currentTarget = e;
-        }
+        currentTarget = activeEntities.stream()
+            .filter(e -> e.isPlayersEntity != this.isPlayersEntity)
+            .filter(e -> e.canBeAttackedBy(config.type))
+            .min(Comparator.comparingDouble(this::distance))
+            .orElse(null);
     }
 
     public EntityConfig getConfig() { return config; }

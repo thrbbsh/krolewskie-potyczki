@@ -1,4 +1,4 @@
-package com.krolewskie_potyczki.model;
+package com.krolewskie_potyczki.model.result;
 
 public class MatchResult {
     private final Winner winner;

@@ -1,4 +1,8 @@
-package com.krolewskie_potyczki.model;
+package com.krolewskie_potyczki.model.endcondition;
+
+import com.krolewskie_potyczki.model.result.MatchResult;
+import com.krolewskie_potyczki.model.result.Winner;
+import com.krolewskie_potyczki.model.entity.Arena;
 
 public class DefaultGameEndCondition implements GameEndCondition {
     private static final int MAX_CROWNS = 3;

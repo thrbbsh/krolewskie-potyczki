@@ -1,9 +1,16 @@
-package com.krolewskie_potyczki.model;
+package com.krolewskie_potyczki.model.factory;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.building.MainTower;
+import com.krolewskie_potyczki.model.building.SideTower;
+import com.krolewskie_potyczki.model.building.Tombstone;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
+import com.krolewskie_potyczki.model.entity.Entity;
+import com.krolewskie_potyczki.model.unit.SkeletonUnit;
+import com.krolewskie_potyczki.model.unit.SquareUnit;
+import com.krolewskie_potyczki.model.unit.TriangleUnit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +30,7 @@ public class EntityFactory {
         register(EntityType.SIDE_TOWER, (cfg, isP, pos) -> new SideTower(isP, pos));
         register(EntityType.TRIANGLE, (cfg, isP, pos) -> new TriangleUnit(isP, pos));
         register(EntityType.SQUARE, (cfg, isP, pos) -> new SquareUnit(isP, pos));
-        register(EntityType.TOMBSTONE, (cfg, isP, pos) -> new TombstoneUnit(isP, pos));
+        register(EntityType.TOMBSTONE, (cfg, isP, pos) -> new Tombstone(isP, pos));
         register(EntityType.SKELETON, (cfg, isP, pos) -> new SkeletonUnit(isP, pos));
     }
 

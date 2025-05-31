@@ -1,8 +1,11 @@
 package com.krolewskie_potyczki.controller;
 
 import com.badlogic.gdx.math.Vector2;
-import com.krolewskie_potyczki.model.*;
+import com.krolewskie_potyczki.model.building.Spawner;
 import com.krolewskie_potyczki.model.config.EntityType;
+import com.krolewskie_potyczki.model.entity.Arena;
+import com.krolewskie_potyczki.model.entity.Entity;
+import com.krolewskie_potyczki.model.factory.EntityFactory;
 
 import java.util.ArrayList;
 import java.util.List;
