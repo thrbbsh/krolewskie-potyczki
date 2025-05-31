@@ -3,14 +3,14 @@ package com.krolewskie_potyczki.controller;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.Main;
-import com.krolewskie_potyczki.model.Arena;
-import com.krolewskie_potyczki.model.DefaultGameEndCondition;
+import com.krolewskie_potyczki.model.entity.Arena;
+import com.krolewskie_potyczki.model.endcondition.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.screens.EndGameScreen;
 import com.krolewskie_potyczki.screens.MenuScreen;
 import com.krolewskie_potyczki.screens.PauseScreen;
 import com.krolewskie_potyczki.view.CardView;
-import com.krolewskie_potyczki.model.MatchResult;
+import com.krolewskie_potyczki.model.result.MatchResult;
 import com.krolewskie_potyczki.view.GameView;
 
 public class GameController {

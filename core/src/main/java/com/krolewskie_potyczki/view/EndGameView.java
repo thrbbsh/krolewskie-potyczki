@@ -14,8 +14,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.krolewskie_potyczki.controller.GameController;
-import com.krolewskie_potyczki.model.MatchResult;
-import com.krolewskie_potyczki.model.Winner;
+import com.krolewskie_potyczki.model.result.MatchResult;
+import com.krolewskie_potyczki.model.result.Winner;
 
 public class EndGameView implements Disposable {
     private final Stage stage;

@@ -1,4 +1,4 @@
-package com.krolewskie_potyczki.model;
+package com.krolewskie_potyczki.model.unit;
 
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityType;

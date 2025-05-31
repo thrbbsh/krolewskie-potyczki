@@ -1,4 +1,4 @@
-package com.krolewskie_potyczki.model;
+package com.krolewskie_potyczki.model.entity;
 
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;

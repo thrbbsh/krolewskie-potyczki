@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import com.krolewskie_potyczki.controller.GameController;
-import com.krolewskie_potyczki.model.Entity;
+import com.krolewskie_potyczki.model.entity.Entity;
 import java.util.List;
 
 public class GameView implements Disposable {

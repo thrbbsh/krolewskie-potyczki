@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
-import com.krolewskie_potyczki.model.*;
+import com.krolewskie_potyczki.model.entity.Entity;
 
 public class EntityView implements Disposable {
     private final Texture texture;

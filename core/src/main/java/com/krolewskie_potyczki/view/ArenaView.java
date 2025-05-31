@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
-import com.krolewskie_potyczki.model.Card;
-import com.krolewskie_potyczki.model.Entity;
+import com.krolewskie_potyczki.model.entity.Card;
+import com.krolewskie_potyczki.model.entity.Entity;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 import java.util.HashMap;

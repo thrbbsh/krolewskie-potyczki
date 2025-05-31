@@ -1,4 +1,4 @@
-package com.krolewskie_potyczki.model;
+package com.krolewskie_potyczki.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityConfig;
@@ -13,11 +13,11 @@ public class Entity {
     boolean isPlayersEntity;
     Entity currentTarget;
     Entity attackTarget;
-    EntityConfig config;
+    protected EntityConfig config;
 
     private float timeSinceLastAttack = 0f;
 
-    Entity(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
+    public Entity(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
         currentTarget = null;
         this.isPlayersEntity = isPlayersEntity;
         this.pos = pos;
@@ -79,7 +79,7 @@ public class Entity {
         currentTarget.receiveDamage(config.damage);
     }
 
-    void receiveDamage(float amount) {
+    public void receiveDamage(float amount) {
         updateHP(-amount);
         if (isDead()) {
             onDeath();

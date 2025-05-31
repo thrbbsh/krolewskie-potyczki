@@ -2,7 +2,7 @@ package com.krolewskie_potyczki.screens;
 
 import com.badlogic.gdx.Screen;
 import com.krolewskie_potyczki.controller.GameController;
-import com.krolewskie_potyczki.model.MatchResult;
+import com.krolewskie_potyczki.model.result.MatchResult;
 import com.krolewskie_potyczki.view.EndGameView;
 
 public class EndGameScreen implements Screen {

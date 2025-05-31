@@ -1,9 +1,16 @@
-package com.krolewskie_potyczki.model;
+package com.krolewskie_potyczki.model.factory;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.building.MainTower;
+import com.krolewskie_potyczki.model.building.SideTower;
+import com.krolewskie_potyczki.model.building.Tombstone;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
+import com.krolewskie_potyczki.model.entity.Entity;
+import com.krolewskie_potyczki.model.unit.SkeletonUnit;
+import com.krolewskie_potyczki.model.unit.SquareUnit;
+import com.krolewskie_potyczki.model.unit.TriangleUnit;
 
 import java.util.HashMap;
 import java.util.Map;

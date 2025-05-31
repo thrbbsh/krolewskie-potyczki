@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
-import com.krolewskie_potyczki.model.Card;
+import com.krolewskie_potyczki.model.entity.Card;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.krolewskie_potyczki.model.config.EntityType;
 
