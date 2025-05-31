@@ -23,7 +23,7 @@ public class EntityFactory {
         register(EntityType.SIDE_TOWER, (cfg, isP, pos) -> new SideTower(isP, pos));
         register(EntityType.TRIANGLE, (cfg, isP, pos) -> new TriangleUnit(isP, pos));
         register(EntityType.SQUARE, (cfg, isP, pos) -> new SquareUnit(isP, pos));
-        register(EntityType.TOMBSTONE, (cfg, isP, pos) -> new TombstoneUnit(isP, pos));
+        register(EntityType.TOMBSTONE, (cfg, isP, pos) -> new Tombstone(isP, pos));
         register(EntityType.SKELETON, (cfg, isP, pos) -> new SkeletonUnit(isP, pos));
     }
 

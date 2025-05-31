@@ -110,7 +110,7 @@ public class GameView implements Disposable {
     }
 
     private String getFormattedPlayerElixir(float playerElixir, float maxElixir) {
-        return String.format("Current elixir:\n %s / %d", Math.floor(playerElixir * 10) / 10, (int)maxElixir);
+        return String.format("Current elixir:\n %s / %s", Math.floor(playerElixir * 10) / 10, Math.floor(maxElixir * 10) / 10);
     }
 
     private String getFormattedTimeLeft(float timeLeft) {

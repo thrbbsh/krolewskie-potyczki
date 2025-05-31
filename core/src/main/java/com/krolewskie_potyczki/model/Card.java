@@ -10,7 +10,7 @@ public class Card {
         // TODO: fix it!!
         if (type == EntityType.SQUARE) elixirCost = 3;
         else if (type == EntityType.TRIANGLE) elixirCost = 5;
-        else if (type == EntityType.TOMBSTONE) elixirCost = 3;
+        else if (type == EntityType.TOMBSTONE) elixirCost = 4;
         else if (type == EntityType.SKELETON_ARMY) elixirCost = 7;
     }
     public EntityType getEntityType() {

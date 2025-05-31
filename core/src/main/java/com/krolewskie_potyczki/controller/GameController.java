@@ -52,8 +52,6 @@ public class GameController {
             onGameEnded(endCondition.calculateResult(arena));
         }
 
-        System.out.println(arena.getTimeLeft());
-
         gameView.renderGame(delta, arena.getPlayerElixir(), arena.getMaxElixir(), arena.getTimeLeft(), arena.getActiveEntities());
     }
 

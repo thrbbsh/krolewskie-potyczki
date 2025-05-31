@@ -10,7 +10,8 @@ public class Entity {
     float HP;
     Vector2 pos;
     boolean isPlayersEntity;
-    Entity currentTarget, attackTarget;
+    Entity currentTarget;
+    Entity attackTarget;
     EntityConfig config;
 
     private float timeSinceLastAttack = 0f;
@@ -62,7 +63,6 @@ public class Entity {
             }
         }
     }
-
 
     void updateHP(float change) {
         HP = Math.min(config.totalHP, Math.max(0F, HP + change));
