@@ -12,7 +12,6 @@ import com.krolewskie_potyczki.model.Card;
 import com.krolewskie_potyczki.model.Entity;
 import com.krolewskie_potyczki.model.config.EntityType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,18 +46,10 @@ public class ArenaView implements Disposable {
     }
 
     public void sync(List<Entity> activeEntities) {
-        for (Entity e : activeEntities) {
-            if (!entityViews.containsKey(e)) {
-                EntityView ev = new EntityView(e, stage);
-                entityViews.put(e, ev);
-            }
-        }
-        List<Map.Entry<Entity, EntityView>> list = new ArrayList<>();
-        for (Map.Entry<Entity, EntityView> e : entityViews.entrySet())
-            if (!activeEntities.contains(e.getKey())) list.add(e);
-        for (Map.Entry<Entity, EntityView> e : list) {
-            entityViews.remove(e.getKey());
-        }
+        activeEntities.forEach(e ->
+            entityViews.computeIfAbsent(e, key -> new EntityView(key, stage))
+        );
+        entityViews.keySet().removeIf(key -> !activeEntities.contains(key));
     }
 
     public void render(float delta) {
@@ -68,17 +59,7 @@ public class ArenaView implements Disposable {
         bgBatch.end();
 
         if (drawSpawnArea) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-            shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(0.8f, 0.8f, 0.8f, 0.5f);
-            shapeRenderer.rect(
-                1030, 227,
-                875, 835
-            );
-            shapeRenderer.end();
+            showSpawnArea();
         }
 
         for (int i = 0; i < 4; i++)
@@ -89,6 +70,20 @@ public class ArenaView implements Disposable {
         stage.draw();
         for (int i = 0; i < 4; i++)
             cardViews[i].render(delta);
+    }
+
+    private void showSpawnArea() {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0.8f, 0.8f, 0.8f, 0.5f);
+        shapeRenderer.rect(
+            1030, 227,
+            875, 835
+        );
+        shapeRenderer.end();
     }
 
     @Override

@@ -9,6 +9,7 @@ public class EntityConfig {
     public float attackInterval;
     public float spawnInterval;
     public boolean ignoresMovingUnits;
+    public int elixirCost;
 
     public EntityConfig() {}
 }

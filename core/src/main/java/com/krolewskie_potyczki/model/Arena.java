@@ -41,18 +41,11 @@ public class Arena {
     public int crownsCount(boolean isPlayer) {
         if (mainTowerDestroyed(!isPlayer))
             return 3;
-        int crowns = 3;
-        for (Entity e : activeEntities)
-            if (e.isTowerForPlayer(!isPlayer))
-                crowns--;
-        return crowns;
+        return 3 - (int) activeEntities.stream().filter(e -> e.isTowerForPlayer(!isPlayer)).count();
     }
 
     public boolean mainTowerDestroyed(boolean isPlayer) {
-        for (Entity e : activeEntities)
-            if (e.config.type == EntityType.MAIN_TOWER && e.getIsPlayersEntity() == isPlayer)
-                return false;
-        return true;
+        return activeEntities.stream().noneMatch(e -> e.config.type == EntityType.MAIN_TOWER && e.getIsPlayersEntity() == isPlayer);
     }
 
     public float getMinTowerHP(boolean isPlayer) {
