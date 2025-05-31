@@ -92,21 +92,10 @@ public class GameView implements Disposable {
         gameStage.addListener(new InputListener(){
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                if (controller.onMapTouched(new Vector2(x, y))) {
-                    arenaView.setSpawnArea(false);
-                    return true;
-                }
-                return false;
+                controller.onMapTouched(new Vector2(x, y));
+                return true;
             }
         });
-        CardClickListener listener = (card) -> {
-            if (card.getEntityType() == null)
-                return;
-            controller.onSpawnEntityClicked(arenaView.getCardView(card));
-            arenaView.setSpawnArea(controller.getSelectedCardView() != null);
-        };
-
-        arenaView.setListener(listener);
     }
 
     private String getFormattedPlayerElixir(float playerElixir, float maxElixir) {
@@ -174,4 +163,8 @@ public class GameView implements Disposable {
 
 
     public void hide() { }
+
+    public ArenaView getArenaView() {
+        return arenaView;
+    }
 }
