@@ -17,53 +17,52 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import com.krolewskie_potyczki.controller.GameController;
-import com.krolewskie_potyczki.model.Arena;
+import com.krolewskie_potyczki.model.Entity;
+import java.util.List;
 
 public class GameView implements Disposable {
 
     private final Skin skin;
     private final Stage gameStage;
-    private final Stage pauseStage;
-    private final Label currentElixirLabel;
-    private final Label timerLabel;
+    private Label currentElixirLabel;
+    private Label timerLabel;
 
-    private final TextButton pauseButton;
-    private final TextButton resumeButton;
-    private final TextButton menuButton;
+    private TextButton pauseButton;
 
     private final ShapeRenderer shapeRenderer;
     private final ArenaView arenaView;
-    private final Arena arena;
-    private final Music gameMusic;
+
+    private Music gameMusic;
 
     private boolean isPaused = false;
 
-    public GameView(Arena arena) {
-        this.arena = arena;
-
+    public GameView() {
         shapeRenderer = new ShapeRenderer();
 
         gameStage = new Stage(new FitViewport(1920, 1080));
-        pauseStage = new Stage(new FitViewport(1920, 1080));
-        arenaView = new ArenaView(arena, gameStage);
+        arenaView = new ArenaView(gameStage);
 
+        skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
+
+        setupMusic();
+        createUI();
+    }
+
+    private void setupMusic() {
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/GameSoundtrack.mp3"));
         gameMusic.setLooping(true);
         gameMusic.setVolume(0.1f);
         gameMusic.play();
+    }
 
-        skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
-
+    private void createUI() {
         pauseButton = new TextButton("Pause", skin);
 
-        currentElixirLabel = new Label(getFormattedPlayerElixir(), skin);
+        currentElixirLabel = new Label(getFormattedPlayerElixir(0f, 0f), skin);
         currentElixirLabel.setWrap(true);
         currentElixirLabel.setAlignment(Align.center);
 
-        timerLabel = new Label(
-            "Time left:\n" + getFormattedTimeLeft(),
-            skin
-        );
+        timerLabel = new Label("Time left:\n" + getFormattedTimeLeft(0f), skin);
         timerLabel.setWrap(true);
         timerLabel.setAlignment(Align.center);
 
@@ -72,62 +71,24 @@ public class GameView implements Disposable {
         topTable.top().left();
         gameStage.addActor(topTable);
 
-        topTable.add(pauseButton)
-            .size(250, 60)
-            .padTop(6)
-            .row();
-
-        topTable.add(timerLabel)
-            .padTop(7)
-            .left()
-            .width(300);
-
+        topTable.add(pauseButton).size(250, 60).padTop(6).row();
+        topTable.add(timerLabel).padTop(7).left().width(300);
 
         Table bottomTable = new Table();
         bottomTable.setFillParent(true);
         bottomTable.bottom().left();
+
         gameStage.addActor(bottomTable);
 
         bottomTable.add().expandX();
         bottomTable.add(currentElixirLabel).padRight(350).padBottom(100).right().width(300).padLeft(500);
-
-        resumeButton = new TextButton("Resume", skin);
-        menuButton = new TextButton("Menu", skin);
-
-        pauseStage.addActor(resumeButton);
-        pauseStage.addActor(menuButton);
-
-        Table pauseTable = new Table();
-        pauseTable.setFillParent(true);
-        pauseTable.center();
-        pauseStage.addActor(pauseTable);
-
-        pauseTable.add(resumeButton)
-            .size(350, 80)
-            .padBottom(20)
-            .row();
-
-        pauseTable.add(menuButton)
-            .size(350, 80);
     }
 
-    public void setListenersToController(GameController controller) {
+    public void setController(GameController controller) {
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 controller.onPauseClicked();
-            }
-        });
-        resumeButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                controller.onResumeClicked();
-            }
-        });
-        menuButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                controller.onMenuClicked();
             }
         });
         gameStage.addListener(new InputListener(){
@@ -150,40 +111,30 @@ public class GameView implements Disposable {
         arenaView.setListener(listener);
     }
 
-    private String getFormattedPlayerElixir() {
-        String s = "Current elixir:\n";
-        s += String.valueOf(Math.floor(arena.getPlayerElixir() * 10) / 10);
-        s += "/";
-        s += arena.getMaxElixir();
-        return s;
+    private String getFormattedPlayerElixir(float playerElixir, float maxElixir) {
+        return String.format("Current elixir:\n %s / %d", String.valueOf(Math.floor(playerElixir * 10) / 10), (int)maxElixir);
     }
 
-    private String getFormattedTimeLeft() {
-        return String.format("%01d:%02d", (int) Math.floor(arena.getTimeLeft() / 60), (int) Math.floor(arena.getTimeLeft() % 60));
+    private String getFormattedTimeLeft(float timeLeft) {
+        return String.format("%01d:%02d", (int) Math.floor(timeLeft / 60), (int) Math.floor(timeLeft % 60));
     }
 
-    public void render(float delta) {
+    public void renderGame(float delta, float playerElixir, float maxElixir, float timeLeft, List<Entity> activeEntities) {
         Gdx.gl.glClearColor(0f, 0, 0, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (!isPaused) {
-            currentElixirLabel.setText(getFormattedPlayerElixir());
-            timerLabel.setText(
-                "Time left: " + getFormattedTimeLeft()
-            );
+        currentElixirLabel.setText(getFormattedPlayerElixir(playerElixir, maxElixir));
+        timerLabel.setText("Time left: " + getFormattedTimeLeft(timeLeft));
 
-            gameStage.act(delta);
-            gameStage.draw();
-            arenaView.render(delta);
-            renderElixirBar();
-        }
-        else {
-            pauseStage.act(delta);
-            pauseStage.draw();
-        }
+        gameStage.act(delta);
+        gameStage.draw();
+        arenaView.sync(activeEntities);
+        arenaView.render(delta);
+
+        renderElixirBar(playerElixir, maxElixir);
     }
 
-    private void renderElixirBar() {
+    private void renderElixirBar(float playerElixir, float maxElixir) {
         shapeRenderer.setProjectionMatrix(gameStage.getViewport().getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK);
@@ -191,7 +142,7 @@ public class GameView implements Disposable {
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.rect(1305, 35, 230, 40);
         shapeRenderer.setColor(Color.PURPLE);
-        shapeRenderer.rect(1305, 35, 230 * (arena.getPlayerElixir() / arena.getMaxElixir()), 40);
+        shapeRenderer.rect(1305, 35, 230 * (playerElixir / maxElixir), 40);
         shapeRenderer.setColor(Color.BLACK);
         for (int i = 1; i <= 9; i++)
             shapeRenderer.rect(1305 + i * 23 - 2.5f, 35, 5, 40);
@@ -205,19 +156,16 @@ public class GameView implements Disposable {
 
     public void resize(int w, int h) {
         gameStage.getViewport().update(w, h, true);
-        pauseStage.getViewport().update(w, h, true);
     }
 
     @Override
     public void dispose() {
         gameMusic.dispose();
         gameStage.dispose();
-        pauseStage.dispose();
         skin.dispose();
     }
 
     public void pause() {
-        Gdx.input.setInputProcessor(pauseStage);
         gameMusic.pause();
         isPaused = true;
     }
@@ -229,5 +177,5 @@ public class GameView implements Disposable {
     }
 
 
-    public void hide()   { }
+    public void hide() { }
 }

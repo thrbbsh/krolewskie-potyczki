@@ -7,5 +7,5 @@ public enum EntityType {
     SQUARE,
     TOMBSTONE,
     SKELETON,
-    SKELETON_ARMY;
+    SKELETON_ARMY
 }

@@ -17,61 +17,40 @@ import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.MatchResult;
 import com.krolewskie_potyczki.model.Winner;
 
-public class EndGameView implements Disposable {
+public class PauseView implements Disposable {
     private final Stage stage;
-    private final Skin skin;
 
-    private TextButton endMenuButton;
+    private final TextButton resumeButton;
+    private final TextButton menuButton;
 
-    public EndGameView(MatchResult result) {
+    public PauseView() {
         stage = new Stage(new FitViewport(1920, 1080));
+        Skin skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
-        skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
+        resumeButton = new TextButton("Resume", skin);
+        menuButton = new TextButton("Menu", skin);
 
-        createUI(result);
-    }
+        stage.addActor(resumeButton);
+        stage.addActor(menuButton);
 
-    private void createUI(MatchResult result) {
-        Table endTable = new Table();
-        endTable.setFillParent(true);
-        Label.LabelStyle ls = new Label.LabelStyle(skin.getFont("font"), Color.WHITE);
+        Table pauseTable = new Table();
+        pauseTable.setFillParent(true);
+        pauseTable.center();
 
-        Label endLabel = new Label("", ls);
-        endLabel.setFontScale(3f);
-        endLabel.setAlignment(Align.center);
+        pauseTable.add(resumeButton).size(350, 80).padBottom(20).row();
+        pauseTable.add(menuButton).size(350, 80);
 
-        endMenuButton = new TextButton("Menu", skin);
-        endMenuButton.getLabel().setFontScale(2f);
-
-        endTable.center();
-        endTable.add(endLabel).padBottom(50).row();
-        endTable.add(endMenuButton).size(525, 120);
-
-        String status;
-        switch (result.getWinner()) {
-            case PLAYER: status = "You Win!"; break;
-            case ENEMY: status = "You Lose."; break;
-            default: status = "Draw."; break;
-        }
-
-        status += "\n" + String.format("%d:%d", result.getPlayerCrowns(), result.getEnemyCrowns());
-
-        String detail = "";
-
-        if (result.getPlayerCrowns() == result.getEnemyCrowns() &&
-            result.getWinner() != Winner.DRAW)
-            detail = String.format(
-                "\nPlayer HP: %.0f\nEnemy HP: %.0f",
-                result.getPlayerMinTowerHP(),
-                result.getEnemyMinTowerHP()
-            );
-
-        endLabel.setText(status + detail);
-        stage.addActor(endTable);
+        stage.addActor(pauseTable);
     }
 
     public void setController(GameController controller) {
-        endMenuButton.addListener(new ChangeListener() {
+        resumeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                controller.onResumeClicked();
+            }
+        });
+        menuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 controller.onMenuClicked();

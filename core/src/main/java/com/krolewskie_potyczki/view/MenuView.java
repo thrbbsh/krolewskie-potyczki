@@ -17,21 +17,29 @@ import com.krolewskie_potyczki.controller.MenuController;
 public class MenuView implements Disposable {
     private final Stage stage;
     private final Skin skin;
-    private final Music menuMusic;
 
-    public MenuView(MenuController controller) {
+    private Music menuMusic;
+    private TextButton startButton;
+    private TextButton exitButton;
+
+    public MenuView() {
         stage = new Stage(new FitViewport(1920, 1080));
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
+        setupMusic();
+        createUI();
+    }
+
+    private void setupMusic() {
         menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/MenuSoundtrack.mp3"));
         menuMusic.setLooping(true);
         menuMusic.setVolume(0.1f);
         menuMusic.play();
+    }
 
-
-        // TODO: add crown image directly to background
+    private void createUI() {
         Texture crownTexture = new Texture(Gdx.files.internal("images/background/menu/crown.png"));
         Image crownImage = new Image(crownTexture);
 
@@ -39,8 +47,25 @@ public class MenuView implements Disposable {
         Label titleLabel = new Label("KROLEWSKIE POTYCZKI", labelStyle);
         titleLabel.setFontScale(3f);
 
-        TextButton startButton = new TextButton("Start", skin);
+        startButton = new TextButton("Start", skin);
         startButton.getLabel().setFontScale(2f);
+
+        exitButton = new TextButton("Exit", skin);
+        exitButton.getLabel().setFontScale(2f);
+
+        Table menu = new Table();
+        menu.setFillParent(true);
+
+        menu.top();
+        menu.add(crownImage).size(360, 250).padTop(20).row();
+        menu.add(titleLabel).padTop(30).row();
+        menu.add(startButton).size(525, 120).padTop(50).row();
+        menu.add(exitButton).padTop(20).size(525, 120);
+
+        stage.addActor(menu);
+    }
+
+    public void setController(MenuController controller) {
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -48,37 +73,12 @@ public class MenuView implements Disposable {
             }
         });
 
-        TextButton exitButton = new TextButton("Exit", skin);
-        exitButton.getLabel().setFontScale(2f);
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 controller.onExitClicked();
             }
         });
-
-        Table menu = new Table();
-        menu.setFillParent(true);
-        stage.addActor(menu);
-
-        menu.top();
-        menu.add(crownImage)
-            .size(360, 250)
-            .padTop(20)
-            .row();
-
-        menu.add(titleLabel)
-            .padTop(30)
-            .row();
-
-        menu.add(startButton)
-            .size(525, 120)
-            .padTop(50)
-            .row();
-
-        menu.add(exitButton)
-            .padTop(20)
-            .size(525, 120);
     }
 
     public void show() {

@@ -36,7 +36,7 @@ public class ArenaController {
     }
 
     public void update(float delta) {
-        updatePlayerElixir(delta);
+        arena.updatePlayerElixir(delta);
         List<Entity> toRemove = new ArrayList<>();
         List<Entity> curActiveEntities = new ArrayList<>(arena.getActiveEntities());
         for (Entity e: curActiveEntities)
@@ -59,16 +59,6 @@ public class ArenaController {
                 spawnEntity(EntityType.SKELETON, e.getIsPlayersEntity(), e.getPos());
                 ((Spawner) e).setReadyToSpawn(false);
             }
-    }
-
-    private void updatePlayerElixir(float delta) {
-        float playerElixir = arena.getPlayerElixir();
-        float newPlayerElixir = Math.min(playerElixir + delta * arena.getElixirSpeed(), arena.getMaxElixir());
-        arena.setPlayerElixir(newPlayerElixir);
-    }
-
-    public void spendElixir(int elixirCost) {
-        arena.spendElixir(elixirCost);
     }
 
 }
