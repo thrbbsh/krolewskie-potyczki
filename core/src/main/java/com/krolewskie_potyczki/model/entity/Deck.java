@@ -10,13 +10,8 @@ public class Deck {
 
     int selectedCardIdx;
 
-    public Deck() {
-        deckCards = new EntityType[]{
-            EntityType.SQUARE,
-            EntityType.TRIANGLE,
-            EntityType.TOMBSTONE,
-            EntityType.SKELETON_ARMY
-        };
+    public Deck(EntityType[] deckCards) {
+        this.deckCards = deckCards;
 
         cards = new Card[DECK_SIZE];
 

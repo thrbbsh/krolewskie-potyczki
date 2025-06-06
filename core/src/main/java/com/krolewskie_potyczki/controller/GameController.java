@@ -46,7 +46,6 @@ public class GameController {
         }
 
         arenaController.update(delta);
-        arena.updateTimer(-delta);
         enemyMove(delta);
 
         if (endCondition.isGameOver(arena)) {
