@@ -8,11 +8,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Entity {
-    float HP;
-    Vector2 pos;
-    boolean isPlayersEntity;
-    Entity currentTarget;
-    Entity attackTarget;
+    private float HP;
+    private final Vector2 pos;
+    private final boolean isPlayersEntity;
+    private Entity currentTarget;
+    private Entity attackTarget;
     protected EntityConfig config;
 
     private float timeSinceLastAttack = 0f;
@@ -31,12 +31,12 @@ public class Entity {
     }
 
     public void move(float delta) {
-        if (currentTarget == null) return;
-        float dx = currentTarget.pos.x - this.pos.x;
-        float dy = currentTarget.pos.y - this.pos.y;
-        float dist = distance(currentTarget);
-        if (dist <= config.attackRadius) return;
-        pos.add(dx / dist * delta * config.moveSpeed, dy / dist * delta * config.moveSpeed);
+        if (currentTarget == null)
+            return;
+        if (distance(currentTarget) <= config.attackRadius)
+            return;
+        Vector2 dv = currentTarget.pos.cpy().sub(pos);
+        pos.add(dv.scl(delta * config.moveSpeed / distance(currentTarget)));
     }
 
     public boolean getIsPlayersEntity() {

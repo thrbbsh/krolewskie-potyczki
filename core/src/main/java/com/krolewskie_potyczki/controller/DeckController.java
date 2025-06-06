@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.controller;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.entity.Arena;
 import com.krolewskie_potyczki.view.ArenaView;
 import com.krolewskie_potyczki.view.CardView;
@@ -18,7 +19,14 @@ public class DeckController {
         this.arenaView = arenaView;
         this.arenaController = arenaController;
 
-        deck = new Deck();
+        EntityType[] deckCards = new EntityType[]{
+            EntityType.SQUARE,
+            EntityType.TRIANGLE,
+            EntityType.TOMBSTONE,
+            EntityType.SKELETON_ARMY
+        };
+
+        deck = new Deck(deckCards);
 
         cardViews = new CardView[Deck.DECK_SIZE];
 

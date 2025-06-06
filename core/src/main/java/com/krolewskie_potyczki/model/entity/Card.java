@@ -10,10 +10,10 @@ public class Card {
         type = entityType;
         elixirCost = GameConfig.getInstance().getEntityConfig(entityType).elixirCost;
     }
-    public EntityType getEntityType() {
+    protected EntityType getEntityType() {
         return type;
     }
-    public int getElixirCost() {
+    protected int getElixirCost() {
         return elixirCost;
     }
 }

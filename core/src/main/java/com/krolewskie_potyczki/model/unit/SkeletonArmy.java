@@ -14,5 +14,4 @@ public class SkeletonArmy extends CompositeUnit {
             addChild(new SkeletonUnit(isPlayersEntity, childPos));
         }
     }
-
 }
