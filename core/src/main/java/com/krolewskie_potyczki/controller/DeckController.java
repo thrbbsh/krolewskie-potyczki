@@ -25,7 +25,6 @@ public class DeckController {
             EntityType.TOMBSTONE,
             EntityType.SKELETON_ARMY
         };
-
         deck = new Deck(deckCards);
 
         cardViews = new CardView[Deck.DECK_SIZE];

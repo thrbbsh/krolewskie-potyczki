@@ -8,16 +8,16 @@ import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.entity.Entity;
-import com.krolewskie_potyczki.model.unit.SkeletonUnit;
-import com.krolewskie_potyczki.model.unit.SquareUnit;
-import com.krolewskie_potyczki.model.unit.TriangleUnit;
+import com.krolewskie_potyczki.model.unit.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class EntityFactory {
     public interface SpawnFunction {
-        Entity spawn(EntityConfig cfg, boolean isPlayerEntity, Vector2 pos);
+        void spawn(boolean isPlayerEntity, Vector2 pos, Consumer<Entity> doSpawn);
     }
 
     private final Map<EntityType, SpawnFunction> registry = new HashMap<>();
@@ -26,19 +26,45 @@ public class EntityFactory {
     public EntityFactory() {
         gameConfig = GameConfig.getInstance();
 
-        register(EntityType.MAIN_TOWER, (cfg, isP, pos) -> new MainTower(isP, pos));
-        register(EntityType.SIDE_TOWER, (cfg, isP, pos) -> new SideTower(isP, pos));
-        register(EntityType.TRIANGLE, (cfg, isP, pos) -> new TriangleUnit(isP, pos));
-        register(EntityType.SQUARE, (cfg, isP, pos) -> new SquareUnit(isP, pos));
-        register(EntityType.TOMBSTONE, (cfg, isP, pos) -> new Tombstone(isP, pos));
-        register(EntityType.SKELETON, (cfg, isP, pos) -> new SkeletonUnit(isP, pos));
+        register(EntityType.MAIN_TOWER, (isP, pos, doSpawn) -> {
+            MainTower tower = new MainTower(isP, pos);
+            doSpawn.accept(tower);
+        });
+        register(EntityType.SIDE_TOWER, (isP, pos, doSpawn) -> {
+            SideTower tower = new SideTower(isP, pos);
+            doSpawn.accept(tower);
+        });
+        register(EntityType.TRIANGLE, (isP, pos, doSpawn) -> {
+            TriangleUnit unit = new TriangleUnit(isP, pos);
+            doSpawn.accept(unit);
+        });
+        register(EntityType.SQUARE, (isP, pos, doSpawn) -> {
+            SquareUnit unit = new SquareUnit(isP, pos);
+            doSpawn.accept(unit);
+        });
+        register(EntityType.TOMBSTONE, (isP, pos, doSpawn) -> {
+            Tombstone tomb = new Tombstone(isP, pos, doSpawn);
+            doSpawn.accept(tomb);
+        });
+        register(EntityType.SKELETON, (isP, pos, doSpawn) -> {
+            SkeletonUnit sk = new SkeletonUnit(isP, pos);
+            doSpawn.accept(sk);
+        });
+
+        register(EntityType.SKELETON_ARMY, (isP, pos, doSpawn) -> {
+            CompositeUnit army = new SkeletonArmy(isP, pos);
+            List<Entity> members = army.getEntities();
+            for (Entity member : members) {
+                doSpawn.accept(member);
+            }
+        });
     }
 
     private void register(EntityType type, SpawnFunction spawnFunction) {
         registry.put(type, spawnFunction);
     }
 
-    public Entity spawnEntity(EntityType type, boolean isPlayerEntity, Vector2 pos) {
+    public void spawnEntity(EntityType type, boolean isPlayerEntity, Vector2 pos, Consumer<Entity> doSpawn) {
         EntityConfig cfg = gameConfig.getEntityConfig(type);
         if (cfg == null) {
             throw new IllegalArgumentException("Unknown entity type: " + type);
@@ -47,6 +73,6 @@ public class EntityFactory {
         if (fn == null) {
             throw new IllegalStateException("No spawn function for type: " + type);
         }
-        return fn.spawn(cfg, isPlayerEntity, pos);
+        fn.spawn(isPlayerEntity, pos, doSpawn);
     }
 }
