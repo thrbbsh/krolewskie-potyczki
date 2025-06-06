@@ -3,10 +3,19 @@ package com.krolewskie_potyczki.model.building;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
+import com.krolewskie_potyczki.model.entity.Entity;
+import com.krolewskie_potyczki.model.unit.SkeletonUnit;
+
+import java.util.function.Consumer;
 
 public class Tombstone extends Spawner {
-    public Tombstone(boolean isPlayersEntity, Vector2 pos) {
-        super(GameConfig.getInstance().getEntityConfig(EntityType.TOMBSTONE), isPlayersEntity, pos);
+    public Tombstone(boolean isPlayersEntity, Vector2 pos, Consumer<Entity> doSpawn) {
+        super(GameConfig.getInstance().getEntityConfig(EntityType.TOMBSTONE), isPlayersEntity, pos, doSpawn);
+    }
+
+    @Override
+    protected Entity newEntity(Vector2 pos) {
+        return new SkeletonUnit(getIsPlayersEntity(), pos);
     }
 }
 

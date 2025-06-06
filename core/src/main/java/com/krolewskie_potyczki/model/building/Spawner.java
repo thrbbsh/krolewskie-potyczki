@@ -5,35 +5,37 @@ import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.entity.Entity;
 
 import java.util.List;
+import java.util.function.Consumer;
 
-public class Spawner extends Building {
+public abstract class Spawner extends Building {
     private float curInterval;
     private final float spawnInterval;
-    private boolean readyToSpawn;
-    Spawner(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
+    private final Consumer<Entity> doSpawn;
+
+    Spawner(EntityConfig config, boolean isPlayersEntity, Vector2 pos, Consumer<Entity> doSpawn) {
         super(config, isPlayersEntity, pos);
         curInterval = 0;
         spawnInterval = config.spawnInterval;
-        readyToSpawn = false;
-    }
-    public void updateSpawnUnit(float delta) {
-        curInterval += delta;
-        if (curInterval > spawnInterval) {
-            curInterval -= spawnInterval;
-            readyToSpawn = true;
-        }
+        this.doSpawn = doSpawn;
     }
     @Override
     public void update(float delta, List<Entity> activeEntities) {
         super.update(delta, activeEntities);
-        updateSpawnUnit(delta);
         receiveDamage(delta * config.totalHP / 30f);
+
+        curInterval += delta;
+        if (curInterval > spawnInterval) {
+            curInterval -= spawnInterval;
+            doSpawn.accept(newEntity(getPos().cpy()));
+        }
     }
+
     @Override
-    public boolean isReadyToSpawn() {
-        return readyToSpawn;
+    public void onDeath() {
+        doSpawn.accept(newEntity(getPos().cpy().add(0, 20)));
+        doSpawn.accept(newEntity(getPos().cpy().add(20, 40)));
+        doSpawn.accept(newEntity(getPos().cpy().add(-20, 40)));
     }
-    public void setReadyToSpawn(boolean readyToSpawn) {
-        this.readyToSpawn = readyToSpawn;
-    }
+
+    protected abstract Entity newEntity(Vector2 pos);
 }

@@ -47,23 +47,22 @@ public class EndGameView implements Disposable {
         endTable.add(endLabel).padBottom(50).row();
         endTable.add(endMenuButton).size(525, 120);
 
-        String status;
-        switch (result.getWinner()) {
-            case PLAYER: status = "You Win!"; break;
-            case ENEMY: status = "You Lose."; break;
-            default: status = "Draw."; break;
-        }
+        String status = switch (result.winner()) {
+            case PLAYER -> "You Win!";
+            case ENEMY -> "You Lose.";
+            default -> "Draw.";
+        };
 
-        status += "\n" + String.format("%d:%d", result.getPlayerCrowns(), result.getEnemyCrowns());
+        status += "\n" + String.format("%d:%d", result.playerCrowns(), result.enemyCrowns());
 
         String detail = "";
 
-        if (result.getPlayerCrowns() == result.getEnemyCrowns() &&
-            result.getWinner() != Winner.DRAW)
+        if (result.playerCrowns() == result.enemyCrowns() &&
+            result.winner() != Winner.DRAW)
             detail = String.format(
                 "\nPlayer HP: %.0f\nEnemy HP: %.0f",
-                result.getPlayerMinTowerHP(),
-                result.getEnemyMinTowerHP()
+                result.playerMinTowerHP(),
+                result.enemyMinTowerHP()
             );
 
         endLabel.setText(status + detail);

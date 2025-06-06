@@ -29,20 +29,20 @@ public class Arena {
 
     public Arena() {
         activeEntities = new ArrayList<>();
-        EntityFactory factory = new EntityFactory();
-        activeEntities.add(factory.spawnEntity(EntityType.MAIN_TOWER, true, new Vector2(380, 655)));
-        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, true, new Vector2(470, 405)));
-        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, true, new Vector2(470, 905)));
-        activeEntities.add(factory.spawnEntity(EntityType.MAIN_TOWER, false, new Vector2(1815, 655)));
-        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, false, new Vector2(1725, 405)));
-        activeEntities.add(factory.spawnEntity(EntityType.SIDE_TOWER, false, new Vector2(1725, 905)));
+        EntityFactory entityFactory = new EntityFactory();
+        entityFactory.spawnEntity(EntityType.MAIN_TOWER, true, new Vector2(380, 655), this::addEntity);
+        entityFactory.spawnEntity(EntityType.SIDE_TOWER, true, new Vector2(470, 405), this::addEntity);
+        entityFactory.spawnEntity(EntityType.SIDE_TOWER, true, new Vector2(470, 905), this::addEntity);
+        entityFactory.spawnEntity(EntityType.MAIN_TOWER, false, new Vector2(1815, 655), this::addEntity);
+        entityFactory.spawnEntity(EntityType.SIDE_TOWER, false, new Vector2(1725, 405), this::addEntity);
+        entityFactory.spawnEntity(EntityType.SIDE_TOWER, false, new Vector2(1725, 905), this::addEntity);
         playerElixir = 5;
     }
 
     public int crownsCount(boolean isPlayer) {
         if (mainTowerDestroyed(!isPlayer))
             return 3;
-        return 3 - (int) activeEntities.stream().filter(e -> e.isTowerForPlayer(!isPlayer)).count();
+        return 3 - (int) activeEntities.stream().filter(e -> isTowerForPlayer(e, !isPlayer)).count();
     }
 
     public boolean mainTowerDestroyed(boolean isPlayer) {
@@ -50,7 +50,7 @@ public class Arena {
     }
 
     public float getMinTowerHP(boolean isPlayer) {
-        return activeEntities.stream().filter(e -> e.isTowerForPlayer(isPlayer)).map(Entity::getHP).min(Float::compare).orElse(0f);
+        return activeEntities.stream().filter(e -> isTowerForPlayer(e, isPlayer)).map(Entity::getHP).min(Float::compare).orElse(0f);
     }
 
     public void spendElixir(float elixirCost) {
@@ -59,10 +59,6 @@ public class Arena {
 
     public void addEntity(Entity entity) {
         activeEntities.add(entity);
-    }
-
-    public void addEntities(List<Entity> entity) {
-        activeEntities.addAll(entity);
     }
 
     public void removeEntity(Entity entity) {
@@ -79,5 +75,9 @@ public class Arena {
 
     public void updateTimer(float delta) {
         timeLeft += delta;
+    }
+
+    private boolean isTowerForPlayer(Entity e, boolean isPlayer) {
+        return (e.config.type == EntityType.MAIN_TOWER || e.config.type == EntityType.SIDE_TOWER) && e.getIsPlayersEntity() == isPlayer;
     }
 }

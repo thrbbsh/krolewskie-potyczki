@@ -111,12 +111,4 @@ public class Entity {
     public boolean canBeAttackedBy(EntityType type) {
         return true;
     }
-
-    public boolean isTowerForPlayer(boolean isPlayer) {
-        return false;
-    }
-
-    public boolean isReadyToSpawn() {
-        return false;
-    }
 }
