@@ -38,6 +38,7 @@ public class GameView implements Disposable {
         shapeRenderer = new ShapeRenderer();
 
         gameStage = new Stage(new FitViewport(1920, 1080));
+
         arenaView = new ArenaView(gameStage);
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));

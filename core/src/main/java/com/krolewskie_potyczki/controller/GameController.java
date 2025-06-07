@@ -45,9 +45,6 @@ public class GameController {
             return;
         }
 
-        arenaController.update(delta);
-        enemyMove(delta);
-
         if (endCondition.isGameOver(arena)) {
             gameView.pause();
             onGameEnded(endCondition.calculateResult(arena));
@@ -55,6 +52,8 @@ public class GameController {
 
         gameView.renderGame(delta, arena.getPlayerElixir(), arena.getMaxElixir(), arena.getTimeLeft(), arena.getActiveEntities());
         deckController.update(delta);
+        arenaController.update(delta);
+        enemyMove(delta);
     }
 
     private void onGameEnded(MatchResult result) {

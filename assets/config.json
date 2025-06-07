@@ -33,7 +33,7 @@
     "SQUARE": {
       "moveSpeed": 60,
       "totalHP": 690,
-      "attackRadius": 80,
+      "attackRadius": 100,
       "damage": 79,
       "attackInterval": 1.2,
       "spawnInterval": 0,
@@ -43,7 +43,7 @@
     "TRIANGLE": {
       "moveSpeed": 45,
       "totalHP": 1933,
-      "attackRadius": 80,
+      "attackRadius": 100,
       "damage": 119,
       "attackInterval": 1.5,
       "spawnInterval": 0,

@@ -1,11 +1,14 @@
 package com.krolewskie_potyczki.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 import java.util.Comparator;
 import java.util.List;
+
+import static com.krolewskie_potyczki.model.physics.PhysicsWorld.PPM;
 
 public class Entity {
     private float HP;
@@ -17,6 +20,8 @@ public class Entity {
 
     private float timeSinceLastAttack = 0f;
     protected float timeSinceFirstAttack = 0f;
+
+    private Body body;
 
     public Entity(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
         currentTarget = null;
@@ -31,13 +36,33 @@ public class Entity {
         return pos.dst(target.pos);
     }
 
+    public void setBody(Body body) {
+        this.body = body;
+        this.body.setUserData(this);
+        updatePosFromBody();
+    }
+
+    public Body getBody() {
+        return body;
+    }
+
+    private void updatePosFromBody() {
+        if (body == null) return;
+        Vector2 worldPos = body.getPosition();
+        pos.set(worldPos.x * PPM, worldPos.y * PPM);
+    }
+
     public void move(float delta) {
-        if (currentTarget == null)
+        if (currentTarget == null || distance(currentTarget) <= config.attackRadius) {
+            body.setLinearVelocity(0, 0);
             return;
-        if (distance(currentTarget) <= config.attackRadius)
-            return;
-        Vector2 dv = currentTarget.pos.cpy().sub(pos);
-        pos.add(dv.scl(delta * config.moveSpeed / distance(currentTarget)));
+        }
+        Vector2 dir = new Vector2(
+            (currentTarget.pos.x - pos.x) / PPM,
+            (currentTarget.pos.y - pos.y) / PPM
+        ).nor();
+        float velocity = config.moveSpeed / PPM;
+        body.setLinearVelocity(dir.scl(velocity));
     }
 
     public boolean getIsPlayersEntity() {
@@ -45,6 +70,7 @@ public class Entity {
     }
 
     public void update(float delta, List<Entity> activeEntities) {
+        updatePosFromBody();
         updateCurrentTarget(activeEntities);
 
         if (attackTarget == null && distance(currentTarget) > config.attackRadius) {
@@ -94,6 +120,7 @@ public class Entity {
     }
 
     public Vector2 getPos() {
+        updatePosFromBody();
         return pos;
     }
 
