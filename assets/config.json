@@ -78,7 +78,7 @@
       "attackInterval": -1,
       "spawnInterval": -1,
       "ignoresMovingUnits": false,
-      "elixirCost": 7
+      "elixirCost": 5
     },
     "ARCHER": {
       "moveSpeed": 60,
