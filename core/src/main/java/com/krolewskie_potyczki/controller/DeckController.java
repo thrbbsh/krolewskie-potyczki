@@ -23,6 +23,7 @@ public class DeckController {
             EntityType.SQUARE,
             EntityType.TRIANGLE,
             EntityType.TOMBSTONE,
+            EntityType.INFERNO,
             EntityType.SKELETON_ARMY
         };
         deck = new Deck(deckCards);
@@ -59,7 +60,11 @@ public class DeckController {
             return;
         arenaController.spawnEntity(deck.getSelectedCardEntityType(), true, pos);
         arena.spendElixir(deck.getSelectedCardElixirCost());
-        cardViews[deck.getSelectedCardIdx()].setSelected(false);
+        int idx = deck.getSelectedCardIdx();
+        cardViews[idx].setSelected(false);
+        deck.selectedCardWasChosen();
+        cardViews[idx].dispose();
+        cardViews[idx] = arenaView.createCardView(deck.getDeckCardEntityType(idx), deck.getDeckCardElixirCost(idx), idx, this::onCardClicked);
         deck.setSelectedCardIdx(-1);
         arenaView.setSpawnArea(false);
     }

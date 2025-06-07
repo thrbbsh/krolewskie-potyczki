@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.model.factory;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.building.Inferno;
 import com.krolewskie_potyczki.model.building.MainTower;
 import com.krolewskie_potyczki.model.building.SideTower;
 import com.krolewskie_potyczki.model.building.Tombstone;
@@ -33,6 +34,10 @@ public class EntityFactory {
         register(EntityType.SIDE_TOWER, (isP, pos, doSpawn) -> {
             SideTower tower = new SideTower(isP, pos);
             doSpawn.accept(tower);
+        });
+        register(EntityType.INFERNO, (isP, pos, doSpawn) -> {
+            Inferno inferno = new Inferno(isP, pos);
+            doSpawn.accept(inferno);
         });
         register(EntityType.TRIANGLE, (isP, pos, doSpawn) -> {
             TriangleUnit unit = new TriangleUnit(isP, pos);

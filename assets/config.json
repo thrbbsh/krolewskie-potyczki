@@ -20,6 +20,16 @@
       "ignoresMovingUnits": false,
       "elixirCost": 0
     },
+    "INFERNO": {
+      "moveSpeed": 0,
+      "totalHP": 826,
+      "attackRadius": 400,
+      "damage": 20,
+      "attackInterval": 0.4,
+      "spawnInterval": 0,
+      "ignoresMovingUnits": false,
+      "elixirCost": 5
+    },
     "SQUARE": {
       "moveSpeed": 60,
       "totalHP": 690,

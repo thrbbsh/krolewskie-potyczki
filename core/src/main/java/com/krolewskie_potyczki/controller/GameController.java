@@ -66,10 +66,11 @@ public class GameController {
         if (enemySpawnTimer >= enemySpawn) {
             EntityType type;
             double spawnChance = Math.random();
-            if (spawnChance < 0.25) type = EntityType.SQUARE;
-            else if (spawnChance < 0.5) type = EntityType.TRIANGLE;
-            else if (spawnChance < 0.75) type = EntityType.SKELETON_ARMY;
-            else type = EntityType.TOMBSTONE;
+            if (spawnChance < 0.2) type = EntityType.SQUARE;
+            else if (spawnChance < 0.4) type = EntityType.TRIANGLE;
+            else if (spawnChance < 0.6) type = EntityType.SKELETON_ARMY;
+            else if (spawnChance < 0.8) type = EntityType.TOMBSTONE;
+            else type = EntityType.INFERNO;
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
             arenaController.spawnEntity(type, false, new Vector2(spawnX, spawnY));
