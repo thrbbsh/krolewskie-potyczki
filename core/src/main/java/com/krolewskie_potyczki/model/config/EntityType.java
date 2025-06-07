@@ -8,5 +8,8 @@ public enum EntityType {
     TOMBSTONE,
     SKELETON,
     SKELETON_ARMY,
-    INFERNO
+    INFERNO,
+    ARCHER,
+    ARCHER_ARMY,
+    VALKYRIE
 }

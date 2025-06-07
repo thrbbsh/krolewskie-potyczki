@@ -52,12 +52,27 @@ public class EntityFactory {
             doSpawn.accept(tomb);
         });
         register(EntityType.SKELETON, (isP, pos, doSpawn) -> {
-            SkeletonUnit sk = new SkeletonUnit(isP, pos);
-            doSpawn.accept(sk);
+            SkeletonUnit unit = new SkeletonUnit(isP, pos);
+            doSpawn.accept(unit);
+        });
+        register(EntityType.ARCHER, (isP, pos, doSpawn) -> {
+            ArcherUnit unit = new ArcherUnit(isP, pos);
+            doSpawn.accept(unit);
+        });
+        register(EntityType.VALKYRIE, (isP, pos, doSpawn) -> {
+            ValkyrieUnit unit = new ValkyrieUnit(isP, pos);
+            doSpawn.accept(unit);
         });
 
         register(EntityType.SKELETON_ARMY, (isP, pos, doSpawn) -> {
             CompositeUnit army = new SkeletonArmy(isP, pos);
+            List<Entity> members = army.getEntities();
+            for (Entity member : members) {
+                doSpawn.accept(member);
+            }
+        });
+        register(EntityType.ARCHER_ARMY, (isP, pos, doSpawn) -> {
+            CompositeUnit army = new ArcherArmy(isP, pos);
             List<Entity> members = army.getEntities();
             for (Entity member : members) {
                 doSpawn.accept(member);

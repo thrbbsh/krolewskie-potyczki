@@ -26,7 +26,7 @@ public class Entity {
         this.HP = config.totalHP;
     }
 
-    float distance(Entity target) {
+    protected float distance(Entity target) {
         if (target == null) return 0;
         return pos.dst(target.pos);
     }
@@ -60,7 +60,7 @@ public class Entity {
                 timeSinceFirstAttack += delta;
                 timeSinceLastAttack += delta;
                 if (timeSinceLastAttack >= config.attackInterval) {
-                    attack();
+                    attack(activeEntities);
                     timeSinceLastAttack -= config.attackInterval;
                     attackTarget = null;
                 }
@@ -76,7 +76,7 @@ public class Entity {
         return (HP <= 0F);
     }
 
-    protected void attack() {
+    protected void attack(List<Entity> activeEntities) {
         if (currentTarget == null)
             return;
         currentTarget.receiveDamage(config.damage);

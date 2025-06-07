@@ -20,8 +20,10 @@ public class DeckController {
         this.arenaController = arenaController;
 
         EntityType[] deckCards = new EntityType[]{
+            EntityType.ARCHER_ARMY,
             EntityType.SQUARE,
             EntityType.TRIANGLE,
+            EntityType.VALKYRIE,
             EntityType.TOMBSTONE,
             EntityType.INFERNO,
             EntityType.SKELETON_ARMY

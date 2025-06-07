@@ -19,7 +19,7 @@ public class Inferno extends Building {
     }
 
     @Override
-    protected void attack() {
+    protected void attack(List<Entity> activeEntities) {
         if (currentTarget == null)
             return;
         currentTarget.receiveDamage(config.damage * (1 + timeSinceFirstAttack));
