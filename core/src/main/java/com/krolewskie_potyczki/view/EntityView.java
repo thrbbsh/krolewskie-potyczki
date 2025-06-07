@@ -2,6 +2,7 @@ package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -16,7 +17,7 @@ public class EntityView implements Disposable {
     private final ShapeRenderer shapeRenderer;
     private final float totalHP;
 
-    private Vector2 pos;
+    private final Sprite sprite;
     private float HP;
 
     public EntityView(Stage stage, boolean isPlayers, EntityType entityType, float totalHP) {
@@ -29,37 +30,57 @@ public class EntityView implements Disposable {
             isPlayers ? "player" : "bot",
             entityType
         );
+
         texture = new Texture(path);
+        sprite = new Sprite(texture);
+        sprite.setOriginCenter();
         batch = new SpriteBatch();
     }
 
     public void receivePackage(Vector2 pos, float HP) {
-        this.pos = pos;
+        sprite.setCenter(pos.x, pos.y);
         this.HP = HP;
     }
 
     public void render(float ignoredDelta) {
         batch.setProjectionMatrix(stage.getViewport().getCamera().combined);
         batch.begin();
-        batch.draw(texture, pos.x - texture.getWidth() / 2f, pos.y - texture.getHeight() / 2f);
+        sprite.draw(batch);
         batch.end();
         drawLifeBar();
     }
 
     private void drawLifeBar() {
-        float x = pos.x;
-        float y = pos.y;
-        float height = texture.getHeight();
-        float width = texture.getWidth();
+        float width  = sprite.getWidth();
+        float height = sprite.getHeight();
+
+        float barWidth  = width * 0.8f;
+        float barHeight = Math.max(height * 0.1f, 5f);
+
+        float xOffset = (width - barWidth) / 2f;
+        float yOffset = height + 5f;
+
+        float lifebarX = sprite.getX() + xOffset;
+        float lifebarY = sprite.getY() + yOffset;
+
+        float border = Math.min(10f, barHeight * 0.3f);
+
         shapeRenderer.setProjectionMatrix(stage.getViewport().getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.YELLOW);
-        float lifebarX = x - (100 - width) / 2 - width / 2f, lifebarY = y + height - height / 2f + 10;
-        shapeRenderer.rect(lifebarX, lifebarY, 100, 25);
+
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rect(
+            lifebarX - border,
+            lifebarY - border,
+            barWidth + 2 * border,
+            barHeight + 2 * border
+        );
+
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(lifebarX + 5, lifebarY + 5, 90, 15);
+        shapeRenderer.rect(lifebarX, lifebarY, barWidth, barHeight);
+
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(lifebarX + 5, lifebarY + 5, 90 * HP / totalHP, 15);
+        shapeRenderer.rect(lifebarX, lifebarY, barWidth * (HP / totalHP), barHeight);
         shapeRenderer.end();
     }
 

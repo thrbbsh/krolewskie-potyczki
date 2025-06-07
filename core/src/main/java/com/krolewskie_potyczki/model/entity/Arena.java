@@ -2,9 +2,7 @@ package com.krolewskie_potyczki.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityType;
-import com.krolewskie_potyczki.model.factory.EntityFactory;
 
 public class Arena {
     List<Entity> activeEntities;
@@ -29,13 +27,6 @@ public class Arena {
 
     public Arena() {
         activeEntities = new ArrayList<>();
-        EntityFactory entityFactory = new EntityFactory();
-        entityFactory.spawnEntity(EntityType.MAIN_TOWER, true, new Vector2(380, 655), this::addEntity);
-        entityFactory.spawnEntity(EntityType.SIDE_TOWER, true, new Vector2(470, 405), this::addEntity);
-        entityFactory.spawnEntity(EntityType.SIDE_TOWER, true, new Vector2(470, 905), this::addEntity);
-        entityFactory.spawnEntity(EntityType.MAIN_TOWER, false, new Vector2(1815, 655), this::addEntity);
-        entityFactory.spawnEntity(EntityType.SIDE_TOWER, false, new Vector2(1725, 405), this::addEntity);
-        entityFactory.spawnEntity(EntityType.SIDE_TOWER, false, new Vector2(1725, 905), this::addEntity);
         playerElixir = 5;
     }
 
