@@ -11,11 +11,12 @@ public class Entity {
     private float HP;
     private final Vector2 pos;
     private final boolean isPlayersEntity;
-    private Entity currentTarget;
+    protected Entity currentTarget;
     private Entity attackTarget;
     protected EntityConfig config;
 
     private float timeSinceLastAttack = 0f;
+    protected float timeSinceFirstAttack = 0f;
 
     public Entity(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
         currentTarget = null;
@@ -25,7 +26,7 @@ public class Entity {
         this.HP = config.totalHP;
     }
 
-    float distance(Entity target) {
+    protected float distance(Entity target) {
         if (target == null) return 0;
         return pos.dst(target.pos);
     }
@@ -48,6 +49,7 @@ public class Entity {
 
         if (attackTarget == null && distance(currentTarget) > config.attackRadius) {
             move(delta);
+            timeSinceFirstAttack = 0f;
             timeSinceLastAttack = 0f;
         } else {
             if (attackTarget != null && attackTarget != currentTarget) {
@@ -55,9 +57,10 @@ public class Entity {
                 timeSinceLastAttack = 0f;
             } else {
                 attackTarget = currentTarget;
+                timeSinceFirstAttack += delta;
                 timeSinceLastAttack += delta;
                 if (timeSinceLastAttack >= config.attackInterval) {
-                    attack();
+                    attack(activeEntities);
                     timeSinceLastAttack -= config.attackInterval;
                     attackTarget = null;
                 }
@@ -73,7 +76,7 @@ public class Entity {
         return (HP <= 0F);
     }
 
-    void attack() {
+    protected void attack(List<Entity> activeEntities) {
         if (currentTarget == null)
             return;
         currentTarget.receiveDamage(config.damage);
@@ -99,11 +102,13 @@ public class Entity {
     }
 
     public void updateCurrentTarget(List<Entity> activeEntities) {
+        Entity previousTarget = currentTarget;
         currentTarget = activeEntities.stream()
             .filter(e -> e.isPlayersEntity != this.isPlayersEntity)
             .filter(e -> e.canBeAttackedBy(config.type))
             .min(Comparator.comparingDouble(this::distance))
             .orElse(null);
+        if (previousTarget != currentTarget) timeSinceFirstAttack = 0;
     }
 
     public EntityConfig getConfig() { return config; }

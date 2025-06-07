@@ -2,32 +2,33 @@ package com.krolewskie_potyczki.model.entity;
 
 import com.krolewskie_potyczki.model.config.EntityType;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Deck {
     public static final int DECK_SIZE = 4;
 
-    EntityType[] deckCards;
-    Card[] cards;
+    Card[] deckCards;
+    Queue<Card> waitingCards;
 
     int selectedCardIdx;
 
-    public Deck(EntityType[] deckCards) {
-        this.deckCards = deckCards;
+    public Deck(EntityType[] cardTypes) {
+        deckCards = new Card[DECK_SIZE];
+        waitingCards = new LinkedList<>();
 
-        cards = new Card[DECK_SIZE];
-
-        for (int i = 0; i < deckCards.length; i++) {
-            cards[i] = new Card(deckCards[i]);
-        }
-
+        for (int i = 0; i < cardTypes.length; i++)
+            if (i < DECK_SIZE) deckCards[i] = new Card(cardTypes[i]);
+                else waitingCards.add(new Card(cardTypes[i]));
         selectedCardIdx = -1;
     }
 
     public EntityType getDeckCardEntityType(int i) {
-        return cards[i].getEntityType();
+        return deckCards[i].getEntityType();
     }
 
     public int getDeckCardElixirCost(int i) {
-        return cards[i].getElixirCost();
+        return deckCards[i].getElixirCost();
     }
 
     public void setSelectedCardIdx(int i) {
@@ -43,10 +44,15 @@ public class Deck {
     }
 
     public int getSelectedCardElixirCost() {
-        return cards[selectedCardIdx].getElixirCost();
+        return deckCards[selectedCardIdx].getElixirCost();
     }
 
     public EntityType getSelectedCardEntityType() {
-        return cards[selectedCardIdx].getEntityType();
+        return deckCards[selectedCardIdx].getEntityType();
+    }
+
+    public void selectedCardWasChosen() {
+        waitingCards.add(deckCards[selectedCardIdx]);
+        deckCards[selectedCardIdx] = waitingCards.poll();
     }
 }

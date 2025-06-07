@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.model.factory;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.building.Inferno;
 import com.krolewskie_potyczki.model.building.MainTower;
 import com.krolewskie_potyczki.model.building.SideTower;
 import com.krolewskie_potyczki.model.building.Tombstone;
@@ -34,6 +35,10 @@ public class EntityFactory {
             SideTower tower = new SideTower(isP, pos);
             doSpawn.accept(tower);
         });
+        register(EntityType.INFERNO, (isP, pos, doSpawn) -> {
+            Inferno inferno = new Inferno(isP, pos);
+            doSpawn.accept(inferno);
+        });
         register(EntityType.TRIANGLE, (isP, pos, doSpawn) -> {
             TriangleUnit unit = new TriangleUnit(isP, pos);
             doSpawn.accept(unit);
@@ -47,12 +52,27 @@ public class EntityFactory {
             doSpawn.accept(tomb);
         });
         register(EntityType.SKELETON, (isP, pos, doSpawn) -> {
-            SkeletonUnit sk = new SkeletonUnit(isP, pos);
-            doSpawn.accept(sk);
+            SkeletonUnit unit = new SkeletonUnit(isP, pos);
+            doSpawn.accept(unit);
+        });
+        register(EntityType.ARCHER, (isP, pos, doSpawn) -> {
+            ArcherUnit unit = new ArcherUnit(isP, pos);
+            doSpawn.accept(unit);
+        });
+        register(EntityType.VALKYRIE, (isP, pos, doSpawn) -> {
+            ValkyrieUnit unit = new ValkyrieUnit(isP, pos);
+            doSpawn.accept(unit);
         });
 
         register(EntityType.SKELETON_ARMY, (isP, pos, doSpawn) -> {
             CompositeUnit army = new SkeletonArmy(isP, pos);
+            List<Entity> members = army.getEntities();
+            for (Entity member : members) {
+                doSpawn.accept(member);
+            }
+        });
+        register(EntityType.ARCHER_ARMY, (isP, pos, doSpawn) -> {
+            CompositeUnit army = new ArcherArmy(isP, pos);
             List<Entity> members = army.getEntities();
             for (Entity member : members) {
                 doSpawn.accept(member);
