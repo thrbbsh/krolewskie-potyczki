@@ -97,14 +97,24 @@ public class ArenaView implements Disposable {
     public void showGhostEntity(EntityType entityType) {
         drawSpawnArea = true;
         if (entityType == EntityType.ARCHER_ARMY) {
-            for (int i = 0; i < 2; i++)
-                ghostEntityViews.add(new EntityView(stage, true, EntityType.ARCHER, null));
+            for (int i = 0; i < 2; i++) {
+                EntityView entityView = new EntityView(stage, true, EntityType.ARCHER, null);
+                ghostEntityViews.add(entityView);
+                entityView.setGhost();
+            }
         }
         else if (entityType == EntityType.SKELETON_ARMY) {
-            for (int i = 0; i < 15; i++)
-                ghostEntityViews.add(new EntityView(stage, true, EntityType.SKELETON, null));
+            for (int i = 0; i < 15; i++) {
+                EntityView entityView = new EntityView(stage, true, EntityType.SKELETON, null);
+                ghostEntityViews.add(entityView);
+                entityView.setGhost();
+            }
         }
-        else ghostEntityViews.add(new EntityView(stage, true, entityType, null));
+        else {
+            EntityView entityView = new EntityView(stage, true, entityType, null);
+            ghostEntityViews.add(entityView);
+            entityView.setGhost();
+        }
     }
 
     public void hideGhostEntity() {

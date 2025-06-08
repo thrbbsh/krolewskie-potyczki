@@ -89,4 +89,8 @@ public class EntityView implements Disposable {
         texture.dispose();
         batch.dispose();
     }
+
+    public void setGhost() {
+        sprite.setColor(1f, 1f, 1f, 0.3f);
+    }
 }
