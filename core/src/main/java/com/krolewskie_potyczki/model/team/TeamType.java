@@ -1,4 +1,4 @@
-package com.krolewskie_potyczki.model;
+package com.krolewskie_potyczki.model.team;
 
 public enum TeamType {
     PLAYER,

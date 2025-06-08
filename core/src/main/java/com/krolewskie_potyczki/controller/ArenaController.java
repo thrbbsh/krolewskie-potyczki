@@ -4,7 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.krolewskie_potyczki.model.TeamType;
+import com.krolewskie_potyczki.model.building.Building;
+import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.entity.Arena;
 import com.krolewskie_potyczki.model.entity.Entity;
@@ -55,10 +56,7 @@ public class ArenaController {
             float wM = wPx / PhysicsWorld.PPM;
             float hM = hPx / PhysicsWorld.PPM;
 
-            BodyDef.BodyType bodyType = switch (entity.getConfig().type) {
-                case MAIN_TOWER, SIDE_TOWER, TOMBSTONE, INFERNO -> BodyDef.BodyType.StaticBody;
-                default -> BodyDef.BodyType.DynamicBody;
-            };
+            BodyDef.BodyType bodyType = entity instanceof Building ? BodyDef.BodyType.StaticBody : BodyDef.BodyType.DynamicBody;
 
             Body body = physicsWorld.createRectangleBody(
                 entity.getConfig().type,

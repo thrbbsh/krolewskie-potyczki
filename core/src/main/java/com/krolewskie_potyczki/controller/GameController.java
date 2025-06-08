@@ -3,7 +3,7 @@ package com.krolewskie_potyczki.controller;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.Main;
-import com.krolewskie_potyczki.model.TeamType;
+import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.endcondition.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.entity.Arena;

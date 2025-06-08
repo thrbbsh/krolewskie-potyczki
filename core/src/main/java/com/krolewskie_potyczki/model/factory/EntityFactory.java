@@ -1,7 +1,7 @@
 package com.krolewskie_potyczki.model.factory;
 
 import com.badlogic.gdx.math.Vector2;
-import com.krolewskie_potyczki.model.TeamType;
+import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.building.Inferno;
 import com.krolewskie_potyczki.model.building.MainTower;
 import com.krolewskie_potyczki.model.building.SideTower;

@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
-import com.krolewskie_potyczki.model.TeamType;
+import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class EntityView implements Disposable {

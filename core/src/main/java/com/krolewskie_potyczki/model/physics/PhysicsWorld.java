@@ -21,6 +21,7 @@ public class PhysicsWorld {
 
     public PhysicsWorld() {
         this.world = new World(new Vector2(0, 0), true);
+        setWalls();
 
         float w = Gdx.graphics.getWidth()  / PPM;
         float h = Gdx.graphics.getHeight() / PPM;
@@ -76,6 +77,35 @@ public class PhysicsWorld {
         shape.dispose();
 
         return body;
+    }
+
+    public void createWall(float x, float y, float width, float height) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(x + width / 2, y + height / 2);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bodyDef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width / 2f, height / 2f);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.friction = 0.5f;
+        fixtureDef.restitution = 0f;
+
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+    }
+
+    private void setWalls() {
+        createWall(1032 / PhysicsWorld.PPM, 937 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM);
+        createWall(1032 / PhysicsWorld.PPM, 421 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM, 446 / PhysicsWorld.PPM);
+        createWall(1032 / PhysicsWorld.PPM, 225 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM);
+        createWall(0 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, 1920 / PhysicsWorld.PPM, 227 / PhysicsWorld.PPM);
+        createWall(0 / PhysicsWorld.PPM, 1062 / PhysicsWorld.PPM, 1920 / PhysicsWorld.PPM, 18 / PhysicsWorld.PPM);
+        createWall(0 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, 287 / PhysicsWorld.PPM, 1080 / PhysicsWorld.PPM);
+        createWall(1905 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, 15 / PhysicsWorld.PPM, 1080 / PhysicsWorld.PPM);
     }
 
     public void destroyBody(Body body) {

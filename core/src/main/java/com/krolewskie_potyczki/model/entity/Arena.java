@@ -3,7 +3,7 @@ package com.krolewskie_potyczki.model.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.krolewskie_potyczki.model.TeamType;
+import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class Arena {
