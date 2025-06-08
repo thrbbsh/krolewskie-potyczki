@@ -23,7 +23,7 @@ import java.util.List;
 public class GameView implements Disposable {
 
     private final Skin skin;
-    private final Stage gameStage;
+    public final Stage gameStage;
     private Label currentElixirLabel;
     private Label timerLabel;
 

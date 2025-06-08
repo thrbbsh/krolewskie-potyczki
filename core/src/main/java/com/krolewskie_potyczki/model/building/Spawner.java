@@ -27,15 +27,15 @@ public abstract class Spawner extends Building {
         curInterval += delta;
         if (curInterval > spawnInterval) {
             curInterval -= spawnInterval;
-            doSpawn.accept(newEntity(getPos().cpy()));
+            doSpawn.accept(newEntity(getViewPos().cpy()));
         }
     }
 
     @Override
     public void onDeath() {
-        doSpawn.accept(newEntity(getPos().cpy().add(0, 20)));
-        doSpawn.accept(newEntity(getPos().cpy().add(20, 40)));
-        doSpawn.accept(newEntity(getPos().cpy().add(-20, 40)));
+        doSpawn.accept(newEntity(getViewPos().cpy().add(0, 20)));
+        doSpawn.accept(newEntity(getViewPos().cpy().add(20, 40)));
+        doSpawn.accept(newEntity(getViewPos().cpy().add(-20, 40)));
     }
 
     protected abstract Entity newEntity(Vector2 pos);

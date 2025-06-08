@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.math.Vector2;
-import com.krolewskie_potyczki.model.config.EntityType;
+import com.krolewskie_potyczki.model.config.EntityConfig;
 
 public class PhysicsWorld {
     public static final float PPM = 100f;
@@ -50,7 +50,7 @@ public class PhysicsWorld {
         debugRenderer.render(world, debugCamera.combined);
     }
 
-    public Body createRectangleBody(EntityType tp, float x, float y, float width, float height, BodyDef.BodyType type) {
+    public Body createRectangleBody(EntityConfig cf, float x, float y, float radius, float hitboxOffsetY, BodyDef.BodyType type) {
         BodyDef bd = new BodyDef();
         bd.type = type;
         bd.position.set(x, y);
@@ -60,19 +60,16 @@ public class PhysicsWorld {
         body.setLinearDamping(5f);
         body.setAngularDamping(5f);
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2f, height/2f);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(radius);
+        shape.setPosition(new Vector2(0, hitboxOffsetY));
 
         FixtureDef fd = new FixtureDef();
         fd.shape = shape;
 
-        // TODO: load weight from config.
-        fd.density = 1000.0f;
-        if (tp == EntityType.SKELETON) {
-            fd.density = 0.1f;
-        }
-        fd.friction = 0.8f;
-        fd.restitution = 0.0f;
+        fd.density = cf.density;
+        fd.friction = 0;
+        fd.restitution = cf.restitution;
         body.createFixture(fd);
         shape.dispose();
 
@@ -90,7 +87,7 @@ public class PhysicsWorld {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.friction = 0.5f;
+        fixtureDef.friction = 0f;
         fixtureDef.restitution = 0f;
 
         body.createFixture(fixtureDef);
@@ -103,9 +100,9 @@ public class PhysicsWorld {
         createWall(1032 / PhysicsWorld.PPM, 421 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM, 446 / PhysicsWorld.PPM);
         createWall(1032 / PhysicsWorld.PPM, 225 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM);
         createWall(0 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, 1920 / PhysicsWorld.PPM, 227 / PhysicsWorld.PPM);
-        createWall(0 / PhysicsWorld.PPM, 1062 / PhysicsWorld.PPM, 1920 / PhysicsWorld.PPM, 18 / PhysicsWorld.PPM);
+        createWall(0 / PhysicsWorld.PPM, 1062 / PhysicsWorld.PPM, 1920 / PhysicsWorld.PPM, 200 / PhysicsWorld.PPM);
         createWall(0 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, 287 / PhysicsWorld.PPM, 1080 / PhysicsWorld.PPM);
-        createWall(1905 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, 15 / PhysicsWorld.PPM, 1080 / PhysicsWorld.PPM);
+        createWall(1905 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, 200 / PhysicsWorld.PPM, 1080 / PhysicsWorld.PPM);
     }
 
     public void destroyBody(Body body) {

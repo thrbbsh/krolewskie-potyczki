@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.krolewskie_potyczki.model.building.Building;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.entity.Arena;
@@ -49,22 +48,30 @@ public class ArenaController {
             ));
             float wPx = tex.getWidth();
             float hPx = tex.getHeight();
+            float hitboxRadiusPx = wPx / 2 * 0.8f;
+            float hitboxOffsetYPx = (hitboxRadiusPx - hPx) / 2;
 
-            float xM = entity.getPos().x / PhysicsWorld.PPM;
-            float yM = entity.getPos().y / PhysicsWorld.PPM;
+            float xM = entity.getViewPos().x / PhysicsWorld.PPM;
+            float yM = entity.getViewPos().y / PhysicsWorld.PPM;
 
-            float wM = wPx / PhysicsWorld.PPM;
-            float hM = hPx / PhysicsWorld.PPM;
+            float hitboxRadiusM = hitboxRadiusPx / PhysicsWorld.PPM;
+            float hitboxOffsetYM = hitboxOffsetYPx / PhysicsWorld.PPM;
 
-            BodyDef.BodyType bodyType = entity instanceof Building ? BodyDef.BodyType.StaticBody : BodyDef.BodyType.DynamicBody;
+            BodyDef.BodyType bodyType = switch (entity.getConfig().type) {
+                case MAIN_TOWER, SIDE_TOWER, TOMBSTONE, INFERNO -> BodyDef.BodyType.StaticBody;
+                default -> BodyDef.BodyType.DynamicBody;
+            };
 
             Body body = physicsWorld.createRectangleBody(
-                entity.getConfig().type,
+                entity.getConfig(),
                 xM, yM,
-                wM, hM,
+                hitboxRadiusM,
+                hitboxOffsetYM,
                 bodyType
             );
+
             entity.setBody(body);
+            entity.setHitbox(hitboxRadiusPx, hitboxOffsetYPx);
             arena.addEntity(entity);
         });
     }

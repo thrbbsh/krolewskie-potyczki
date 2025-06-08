@@ -3,52 +3,62 @@
     "SIDE_TOWER": {
       "moveSpeed": 0,
       "totalHP": 1400,
-      "attackRadius": 500,
+      "attackRadius": 300,
       "damage": 50,
       "attackInterval": 0.8,
       "spawnInterval": 0,
       "ignoresMovingUnits": false,
-      "elixirCost": 0
+      "elixirCost": 0,
+      "density": 0,
+      "restitution": 0
     },
     "MAIN_TOWER": {
       "moveSpeed": 0,
       "totalHP": 2400,
-      "attackRadius": 300,
+      "attackRadius": 280,
       "damage": 50,
       "attackInterval": 1.0,
       "spawnInterval": 0,
       "ignoresMovingUnits": false,
-      "elixirCost": 0
+      "elixirCost": 0,
+      "density": 0,
+      "restitution": 0
     },
     "INFERNO": {
       "moveSpeed": 0,
       "totalHP": 826,
-      "attackRadius": 400,
+      "attackRadius": 240,
       "damage": 20,
       "attackInterval": 0.4,
       "spawnInterval": 0,
       "ignoresMovingUnits": false,
-      "elixirCost": 5
+      "elixirCost": 5,
+      "density": 0,
+      "restitution": 0
     },
     "SQUARE": {
       "moveSpeed": 60,
       "totalHP": 690,
-      "attackRadius": 100,
+      "attackRadius": 56,
       "damage": 79,
       "attackInterval": 1.2,
       "spawnInterval": 0,
       "ignoresMovingUnits": false,
-      "elixirCost": 3
+      "elixirCost": 3,
+      "density": 1,
+      "restitution": 0
     },
     "TRIANGLE": {
       "moveSpeed": 45,
       "totalHP": 1933,
-      "attackRadius": 100,
+      "attackRadius": 56,
       "damage": 119,
       "attackInterval": 1.5,
       "spawnInterval": 0,
       "ignoresMovingUnits": true,
-      "elixirCost": 5
+      "elixirCost": 5,
+      "density": 2,
+      "restitution": 0
     },
     "TOMBSTONE": {
       "moveSpeed": 0,
@@ -58,17 +68,21 @@
       "attackInterval": 0,
       "spawnInterval": 4,
       "ignoresMovingUnits": false,
-      "elixirCost": 4
+      "elixirCost": 4,
+      "density": 0,
+      "restitution": 0
     },
     "SKELETON": {
       "moveSpeed": 90,
       "totalHP": 32,
-      "attackRadius": 80,
+      "attackRadius": 20,
       "damage": 32,
       "attackInterval": 1.0,
       "spawnInterval": 0,
       "ignoresMovingUnits": false,
-      "elixirCost": 0
+      "elixirCost": 0,
+      "density": 0.7,
+      "restitution": 0
     },
     "SKELETON_ARMY": {
       "moveSpeed": -1,
@@ -78,17 +92,21 @@
       "attackInterval": -1,
       "spawnInterval": -1,
       "ignoresMovingUnits": false,
-      "elixirCost": 5
+      "elixirCost": 5,
+      "density": -1,
+      "restitution": -1
     },
     "ARCHER": {
       "moveSpeed": 60,
       "totalHP": 119,
-      "attackRadius": 333,
+      "attackRadius": 200,
       "damage": 42,
       "attackInterval": 0.9,
       "spawnInterval": 0,
       "ignoresMovingUnits": false,
-      "elixirCost": 0
+      "elixirCost": 0,
+      "density": 0.8,
+      "restitution": 0
     },
     "ARCHER_ARMY": {
       "moveSpeed": -1,
@@ -98,17 +116,21 @@
       "attackInterval": -1,
       "spawnInterval": -1,
       "ignoresMovingUnits": false,
-      "elixirCost": 3
+      "elixirCost": 3,
+      "density": -1,
+      "restitution": -1
     },
     "VALKYRIE": {
       "moveSpeed": 60,
       "totalHP": 901,
-      "attackRadius": 80,
+      "attackRadius": 56,
       "damage": 125,
       "attackInterval": 1.0,
       "spawnInterval": 0,
       "ignoresMovingUnits": false,
-      "elixirCost": 4
+      "elixirCost": 4,
+      "density": 1.2,
+      "restitution": 0.1
     }
   }
 }

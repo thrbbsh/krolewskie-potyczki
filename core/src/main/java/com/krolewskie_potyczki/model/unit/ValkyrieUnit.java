@@ -16,8 +16,8 @@ public class ValkyrieUnit extends Unit {
 
     public void attack(List<Entity> activeEntities) {
         List<Entity> damagedEntities = new ArrayList<>();
-        for (Entity ent: activeEntities)
-            if (distance(ent) <= config.attackRadius) damagedEntities.add(ent);
+        for (Entity entity: activeEntities)
+            if (getTeamType() != entity.getTeamType() && entity.canBeAttackedBy(config.type) && directDistance(entity) <= config.attackRadius) damagedEntities.add(entity);
         for (Entity ent: damagedEntities)
             ent.receiveDamage(config.damage);
     }

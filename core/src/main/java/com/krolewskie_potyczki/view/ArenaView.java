@@ -14,10 +14,7 @@ import com.krolewskie_potyczki.model.entity.Entity;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.unit.CompositeUnit;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ArenaView implements Disposable {
     private final Stage stage;
@@ -57,12 +54,16 @@ public class ArenaView implements Disposable {
         if (drawSpawnArea) {
             showSpawnArea();
         }
-        for (Map.Entry<Entity, EntityView> entry : entityViews.entrySet()) {
-            Entity entity = entry.getKey();
-            EntityView entityView = entry.getValue();
-            entityView.receivePackage(entity.getPos(), entity.getHP());
-            entityView.render(delta);
-        }
+        entityViews.entrySet().stream()
+            .sorted(Comparator
+                .comparing((Map.Entry<Entity, EntityView> e) -> e.getKey().getHitboxPos().y).reversed()
+                .thenComparing(e -> e.getKey().getHitboxPos().x))
+            .forEach(entry -> {
+                Entity entity = entry.getKey();
+                EntityView entityView = entry.getValue();
+                entityView.receivePackage(entity.getViewPos(), entity.getHP());
+                entityView.render(delta);
+            });
         Vector3 cursorPos = stage.getViewport().getCamera().unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
         for (int i = 0; i < ghostEntityViews.size(); i++) {
             EntityView entityView = ghostEntityViews.get(i);

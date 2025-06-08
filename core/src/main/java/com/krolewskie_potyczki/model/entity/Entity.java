@@ -6,19 +6,26 @@ import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.unit.ValkyrieUnit;
+import com.krolewskie_potyczki.model.Zone;
+import com.krolewskie_potyczki.model.building.Tower;
+import com.krolewskie_potyczki.model.pathfinder.PathFinder;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.krolewskie_potyczki.model.physics.PhysicsWorld.PPM;
 
 public class Entity {
     private float HP;
-    private final Vector2 pos;
+    private final Vector2 viewPos;
+    private float hitboxRadius;
+    private float hitboxOffsetY;
+    private Zone zone;
     private final TeamType teamType;
     protected Entity currentTarget;
     protected Entity attackTarget;
     protected EntityConfig config;
+    private List<Vector2> movePath = new ArrayList<>();
 
     protected float timeSinceLastAttack = 0f;
     protected float timeSinceFirstAttack = 0f;
@@ -28,20 +35,30 @@ public class Entity {
     public Entity(EntityConfig config, TeamType teamType, Vector2 pos) {
         currentTarget = null;
         this.teamType = teamType;
-        this.pos = pos;
+        this.viewPos = pos;
+        this.zone = Zone.getZone(pos);
         this.config = config;
         this.HP = config.totalHP;
     }
 
-    protected float distance(Entity target) {
+    protected float directDistance(Entity target) {
         if (target == null) return 0;
-        return pos.dst(target.pos);
+        return getHitboxPos().dst(target.getHitboxPos()) - hitboxRadius - target.hitboxRadius;
     }
 
     public void setBody(Body body) {
         this.body = body;
         this.body.setUserData(this);
         updatePosFromBody();
+    }
+
+    public void setHitbox(float hitboxRadius, float hitboxOffsetY) {
+        this.hitboxRadius = hitboxRadius;
+        this.hitboxOffsetY = hitboxOffsetY;
+    }
+
+    public Vector2 getHitboxPos() {
+        return viewPos.cpy().add(0, hitboxOffsetY);
     }
 
     public Body getBody() {
@@ -51,17 +68,18 @@ public class Entity {
     protected void updatePosFromBody() {
         if (body == null) return;
         Vector2 worldPos = body.getPosition();
-        pos.set(worldPos.x * PPM, worldPos.y * PPM);
+        viewPos.set(worldPos.x * PPM, worldPos.y * PPM);
     }
 
     public void move(float ignoredDelta) {
-        if (currentTarget == null || distance(currentTarget) <= config.attackRadius) {
+        if (currentTarget == null || directDistance(currentTarget) <= config.attackRadius || movePath.isEmpty()) {
             body.setLinearVelocity(0, 0);
             return;
         }
+        Vector2 targetPos = movePath.get(0);
         Vector2 dir = new Vector2(
-            (currentTarget.pos.x - pos.x) / PPM,
-            (currentTarget.pos.y - pos.y) / PPM
+            (targetPos.x - getHitboxPos().x) / PPM,
+            (targetPos.y - getHitboxPos().y) / PPM
         ).nor();
         float velocity = config.moveSpeed / PPM;
         body.setLinearVelocity(dir.scl(velocity));
@@ -73,9 +91,10 @@ public class Entity {
 
     public void update(float delta, List<Entity> activeEntities) {
         updatePosFromBody();
+        zone = Zone.getZone(viewPos);
         updateCurrentTarget(activeEntities);
 
-        if (attackTarget == null && distance(currentTarget) > config.attackRadius) {
+        if (attackTarget == null && directDistance(currentTarget) > config.attackRadius) {
             move(delta);
             timeSinceFirstAttack = 0f;
             timeSinceLastAttack = 0f;
@@ -112,6 +131,7 @@ public class Entity {
     }
 
     public void receiveDamage(float amount) {
+        if (isDead()) return;
         updateHP(-amount);
         if (isDead()) {
             onDeath();
@@ -122,9 +142,9 @@ public class Entity {
         // TODO (animation, case when tower is "dead")
     }
 
-    public Vector2 getPos() {
+    public Vector2 getViewPos() {
         updatePosFromBody();
-        return pos;
+        return viewPos;
     }
 
     public float getHP() {
@@ -133,11 +153,15 @@ public class Entity {
 
     public void updateCurrentTarget(List<Entity> activeEntities) {
         Entity previousTarget = currentTarget;
-        currentTarget = activeEntities.stream()
-            .filter(e -> e.teamType != this.teamType)
-            .filter(e -> e.canBeAttackedBy(config.type))
-            .min(Comparator.comparingDouble(this::distance))
-            .orElse(null);
+        currentTarget = null;
+        for (Entity entity : activeEntities) {
+            if (teamType == entity.teamType || !entity.canBeAttackedBy(config.type) || !(entity instanceof Tower || directDistance(entity) <= 250)) continue;
+            List<Vector2> curPath = PathFinder.findShortestPath(getHitboxPos(), this.zone, entity.getHitboxPos(), entity.zone);
+            if (currentTarget == null || (PathFinder.routeDistance(getHitboxPos(), curPath) < PathFinder.routeDistance(getHitboxPos(), movePath))) {
+                currentTarget = entity;
+                movePath = curPath;
+            }
+        }
         if (previousTarget != currentTarget) timeSinceFirstAttack = 0;
     }
 
