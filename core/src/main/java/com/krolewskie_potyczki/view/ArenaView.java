@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
+import com.krolewskie_potyczki.model.TeamType;
 import com.krolewskie_potyczki.model.entity.Entity;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.unit.CompositeUnit;
@@ -42,7 +43,7 @@ public class ArenaView implements Disposable {
 
     public void sync(List<Entity> activeEntities) {
         activeEntities.forEach(e ->
-            entityViews.computeIfAbsent(e, key -> new EntityView(stage, e.getIsPlayersEntity(), e.getConfig().type, e.getConfig().totalHP))
+            entityViews.computeIfAbsent(e, key -> new EntityView(stage, e.getTeamType(), e.getConfig().type, e.getConfig().totalHP))
         );
         entityViews.keySet().removeIf(key -> !activeEntities.contains(key));
     }
@@ -98,20 +99,20 @@ public class ArenaView implements Disposable {
         drawSpawnArea = true;
         if (entityType == EntityType.ARCHER_ARMY) {
             for (int i = 0; i < 2; i++) {
-                EntityView entityView = new EntityView(stage, true, EntityType.ARCHER, null);
+                EntityView entityView = new EntityView(stage, TeamType.PLAYER, EntityType.ARCHER, null);
                 ghostEntityViews.add(entityView);
                 entityView.setGhost();
             }
         }
         else if (entityType == EntityType.SKELETON_ARMY) {
             for (int i = 0; i < 15; i++) {
-                EntityView entityView = new EntityView(stage, true, EntityType.SKELETON, null);
+                EntityView entityView = new EntityView(stage, TeamType.PLAYER, EntityType.SKELETON, null);
                 ghostEntityViews.add(entityView);
                 entityView.setGhost();
             }
         }
         else {
-            EntityView entityView = new EntityView(stage, true, entityType, null);
+            EntityView entityView = new EntityView(stage, TeamType.PLAYER, entityType, null);
             ghostEntityViews.add(entityView);
             entityView.setGhost();
         }

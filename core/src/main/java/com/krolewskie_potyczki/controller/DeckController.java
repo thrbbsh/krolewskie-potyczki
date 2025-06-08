@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.controller;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.entity.Arena;
 import com.krolewskie_potyczki.view.ArenaView;
@@ -61,7 +62,7 @@ public class DeckController {
         if (!deck.someCardIsSelected() || arena.getPlayerElixir() < deck.getSelectedCardElixirCost() ||
             !(287 <= pos.x && pos.x <= 1027 && 227 <= pos.y && pos.y <= 1062))
             return;
-        arenaController.spawnEntity(deck.getSelectedCardEntityType(), true, pos);
+        arenaController.spawnEntity(deck.getSelectedCardEntityType(), TeamType.PLAYER, pos);
         arena.spendElixir(deck.getSelectedCardElixirCost());
         int idx = deck.getSelectedCardIdx();
         cardViews[idx].setSelected(false);

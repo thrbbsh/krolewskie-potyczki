@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.model.unit;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.TeamType;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.entity.Entity;
 
@@ -9,8 +10,8 @@ import java.util.List;
 
 public class CompositeUnit extends Unit {
     private final List<Entity> entities;
-    CompositeUnit(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
-        super(config, isPlayersEntity, pos);
+    CompositeUnit(EntityConfig config, TeamType teamType, Vector2 pos) {
+        super(config, teamType, pos);
         entities = new ArrayList<>();
     }
 

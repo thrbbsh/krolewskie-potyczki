@@ -2,6 +2,7 @@ package com.krolewskie_potyczki.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.krolewskie_potyczki.model.TeamType;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.unit.ValkyrieUnit;
@@ -14,7 +15,7 @@ import static com.krolewskie_potyczki.model.physics.PhysicsWorld.PPM;
 public class Entity {
     private float HP;
     private final Vector2 pos;
-    private final boolean isPlayersEntity;
+    private final TeamType teamType;
     protected Entity currentTarget;
     protected Entity attackTarget;
     protected EntityConfig config;
@@ -24,9 +25,9 @@ public class Entity {
 
     private Body body;
 
-    public Entity(EntityConfig config, boolean isPlayersEntity, Vector2 pos) {
+    public Entity(EntityConfig config, TeamType teamType, Vector2 pos) {
         currentTarget = null;
-        this.isPlayersEntity = isPlayersEntity;
+        this.teamType = teamType;
         this.pos = pos;
         this.config = config;
         this.HP = config.totalHP;
@@ -66,8 +67,8 @@ public class Entity {
         body.setLinearVelocity(dir.scl(velocity));
     }
 
-    public boolean getIsPlayersEntity() {
-        return isPlayersEntity;
+    public TeamType getTeamType() {
+        return teamType;
     }
 
     public void update(float delta, List<Entity> activeEntities) {
@@ -133,7 +134,7 @@ public class Entity {
     public void updateCurrentTarget(List<Entity> activeEntities) {
         Entity previousTarget = currentTarget;
         currentTarget = activeEntities.stream()
-            .filter(e -> e.isPlayersEntity != this.isPlayersEntity)
+            .filter(e -> e.teamType != this.teamType)
             .filter(e -> e.canBeAttackedBy(config.type))
             .min(Comparator.comparingDouble(this::distance))
             .orElse(null);

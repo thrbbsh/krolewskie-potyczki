@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.krolewskie_potyczki.model.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.entity.Arena;
 import com.krolewskie_potyczki.model.entity.Entity;
@@ -29,21 +30,20 @@ public class ArenaController {
     }
 
     void spawnTowers() {
-        spawnEntity(EntityType.MAIN_TOWER, true, new Vector2(380, 655));
-        spawnEntity(EntityType.SIDE_TOWER, true, new Vector2(470, 405));
-        spawnEntity(EntityType.SIDE_TOWER, true, new Vector2(470, 905));
-        spawnEntity(EntityType.MAIN_TOWER, false, new Vector2(1815, 655));
-        spawnEntity(EntityType.SIDE_TOWER, false, new Vector2(1725, 405));
-        spawnEntity(EntityType.SIDE_TOWER, false, new Vector2(1725, 905));
+        spawnEntity(EntityType.MAIN_TOWER, TeamType.PLAYER, new Vector2(380, 655));
+        spawnEntity(EntityType.SIDE_TOWER, TeamType.PLAYER, new Vector2(470, 405));
+        spawnEntity(EntityType.SIDE_TOWER, TeamType.PLAYER, new Vector2(470, 905));
+        spawnEntity(EntityType.MAIN_TOWER, TeamType.BOT, new Vector2(1815, 655));
+        spawnEntity(EntityType.SIDE_TOWER, TeamType.BOT, new Vector2(1725, 405));
+        spawnEntity(EntityType.SIDE_TOWER, TeamType.BOT, new Vector2(1725, 905));
     }
 
-    public void spawnEntity(EntityType type, boolean isPlayersEntity, Vector2 pos) {
-        entityFactory.spawnEntity(type, isPlayersEntity, pos.cpy(), entity -> {
-            // TODO: load some data to get wight/height (not texture)
+    public void spawnEntity(EntityType type, TeamType teamType, Vector2 pos) {
+        entityFactory.spawnEntity(type, teamType, pos.cpy(), entity -> {
             Texture tex = new Texture(String.format(
                 "skins/%s/%s%s.png",
-                isPlayersEntity ? "player" : "bot",
-                isPlayersEntity ? "player" : "bot",
+                teamType == TeamType.PLAYER ? "player" : "bot",
+                teamType == TeamType.PLAYER ? "player" : "bot",
                 entity.getConfig().type
             ));
             float wPx = tex.getWidth();

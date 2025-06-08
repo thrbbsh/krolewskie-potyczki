@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.model.building;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.entity.Entity;
@@ -8,8 +9,8 @@ import com.krolewskie_potyczki.model.entity.Entity;
 import java.util.List;
 
 public class Inferno extends Building {
-    public Inferno(boolean isPlayersEntity, Vector2 pos) {
-        super(GameConfig.getInstance().getEntityConfig(EntityType.INFERNO), isPlayersEntity, pos);
+    public Inferno(TeamType teamType, Vector2 pos) {
+        super(GameConfig.getInstance().getEntityConfig(EntityType.INFERNO), teamType, pos);
     }
 
     @Override

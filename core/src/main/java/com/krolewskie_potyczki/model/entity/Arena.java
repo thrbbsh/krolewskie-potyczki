@@ -2,6 +2,8 @@ package com.krolewskie_potyczki.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.krolewskie_potyczki.model.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class Arena {
@@ -30,18 +32,17 @@ public class Arena {
         playerElixir = 5;
     }
 
-    public int crownsCount(boolean isPlayer) {
-        if (mainTowerDestroyed(!isPlayer))
-            return 3;
-        return 3 - (int) activeEntities.stream().filter(e -> isTowerForPlayer(e, !isPlayer)).count();
+    public int crownsCount(TeamType teamType) {
+        if (mainTowerDestroyed(TeamType.otherTeamType(teamType))) return 3;
+        return 3 - (int) activeEntities.stream().filter(e -> isTowerForTeamType(e, TeamType.otherTeamType(teamType))).count();
     }
 
-    public boolean mainTowerDestroyed(boolean isPlayer) {
-        return activeEntities.stream().noneMatch(e -> e.config.type == EntityType.MAIN_TOWER && e.getIsPlayersEntity() == isPlayer);
+    public boolean mainTowerDestroyed(TeamType teamType) {
+        return activeEntities.stream().noneMatch(e -> e.config.type == EntityType.MAIN_TOWER && e.getTeamType() == teamType);
     }
 
-    public float getMinTowerHP(boolean isPlayer) {
-        return activeEntities.stream().filter(e -> isTowerForPlayer(e, isPlayer)).map(Entity::getHP).min(Float::compare).orElse(0f);
+    public float getMinTowerHP(TeamType teamType) {
+        return activeEntities.stream().filter(e -> isTowerForTeamType(e, teamType)).map(Entity::getHP).min(Float::compare).orElse(0f);
     }
 
     public void spendElixir(float elixirCost) {
@@ -68,7 +69,7 @@ public class Arena {
         timeLeft += delta;
     }
 
-    private boolean isTowerForPlayer(Entity e, boolean isPlayer) {
-        return (e.config.type == EntityType.MAIN_TOWER || e.config.type == EntityType.SIDE_TOWER) && e.getIsPlayersEntity() == isPlayer;
+    private boolean isTowerForTeamType(Entity e, TeamType teamType) {
+        return (e.config.type == EntityType.MAIN_TOWER || e.config.type == EntityType.SIDE_TOWER) && e.getTeamType() == teamType;
     }
 }

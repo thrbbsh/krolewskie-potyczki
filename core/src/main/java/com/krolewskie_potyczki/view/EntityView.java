@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
+import com.krolewskie_potyczki.model.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class EntityView implements Disposable {
@@ -20,14 +21,14 @@ public class EntityView implements Disposable {
     private final Sprite sprite;
     private Float HP;
 
-    public EntityView(Stage stage, boolean isPlayers, EntityType entityType, Float totalHP) {
+    public EntityView(Stage stage, TeamType teamType, EntityType entityType, Float totalHP) {
         shapeRenderer = new ShapeRenderer();
         this.stage = stage;
         this.totalHP = totalHP;
 
         String path = String.format("skins/%s/%s%s.png",
-            isPlayers ? "player" : "bot",
-            isPlayers ? "player" : "bot",
+            teamType == TeamType.PLAYER ? "player" : "bot",
+            teamType == TeamType.PLAYER ? "player" : "bot",
             entityType
         );
 

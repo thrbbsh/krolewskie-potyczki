@@ -3,6 +3,7 @@ package com.krolewskie_potyczki.controller;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.Main;
+import com.krolewskie_potyczki.model.TeamType;
 import com.krolewskie_potyczki.model.endcondition.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.entity.Arena;
@@ -74,7 +75,7 @@ public class GameController {
             else type = EntityType.VALKYRIE;
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
-            arenaController.spawnEntity(type, false, new Vector2(spawnX, spawnY));
+            arenaController.spawnEntity(type, TeamType.BOT, new Vector2(spawnX, spawnY));
             enemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
             enemySpawnTimer  = 0f;
         }
