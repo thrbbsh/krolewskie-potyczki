@@ -5,7 +5,7 @@ import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
 public class ArcherArmy extends CompositeUnit {
-    private static final int ARCHER_COUNT = 3;
+    private static final int ARCHER_COUNT = 2;
 
     public ArcherArmy(boolean isPlayersEntity, Vector2 pos) {
         super(GameConfig.getInstance().getEntityConfig(EntityType.ARCHER_ARMY), isPlayersEntity, pos);

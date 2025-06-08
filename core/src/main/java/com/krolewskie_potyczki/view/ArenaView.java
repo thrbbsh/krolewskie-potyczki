@@ -5,11 +5,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.krolewskie_potyczki.model.entity.Entity;
 import com.krolewskie_potyczki.model.config.EntityType;
+import com.krolewskie_potyczki.model.unit.CompositeUnit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +21,7 @@ import java.util.Map;
 public class ArenaView implements Disposable {
     private final Stage stage;
     private final Map<Entity, EntityView> entityViews;
+    private final List<EntityView> ghostEntityViews = new ArrayList<>();
     private final SpriteBatch bgBatch;
     private final Texture bgTexture;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -57,6 +62,13 @@ public class ArenaView implements Disposable {
             entityView.receivePackage(entity.getPos(), entity.getHP());
             entityView.render(delta);
         }
+        Vector3 cursorPos = stage.getViewport().getCamera().unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+        for (int i = 0; i < ghostEntityViews.size(); i++) {
+            EntityView entityView = ghostEntityViews.get(i);
+            if (ghostEntityViews.size() == 1) entityView.receivePackage(new Vector2(cursorPos.x, cursorPos.y), null);
+                else entityView.receivePackage(CompositeUnit.calculateOffsetPosition(new Vector2(cursorPos.x, cursorPos.y), i, ghostEntityViews.size()), null);
+            entityView.render(delta);
+        }
         stage.act(delta);
         stage.draw();
     }
@@ -82,7 +94,22 @@ public class ArenaView implements Disposable {
         stage.dispose();
     }
 
-    public void setSpawnArea(boolean state) {
-        drawSpawnArea = state;
+    public void showGhostEntity(EntityType entityType) {
+        drawSpawnArea = true;
+        if (entityType == EntityType.ARCHER_ARMY) {
+            for (int i = 0; i < 2; i++)
+                ghostEntityViews.add(new EntityView(stage, true, EntityType.ARCHER, null));
+        }
+        else if (entityType == EntityType.SKELETON_ARMY) {
+            for (int i = 0; i < 15; i++)
+                ghostEntityViews.add(new EntityView(stage, true, EntityType.SKELETON, null));
+        }
+        else ghostEntityViews.add(new EntityView(stage, true, entityType, null));
+    }
+
+    public void hideGhostEntity() {
+        drawSpawnArea = false;
+        ghostEntityViews.forEach(EntityView::dispose);
+        ghostEntityViews.clear();
     }
 }

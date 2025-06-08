@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
+import com.krolewskie_potyczki.model.unit.ValkyrieUnit;
 
 import java.util.Comparator;
 import java.util.List;
@@ -15,10 +16,10 @@ public class Entity {
     private final Vector2 pos;
     private final boolean isPlayersEntity;
     protected Entity currentTarget;
-    private Entity attackTarget;
+    protected Entity attackTarget;
     protected EntityConfig config;
 
-    private float timeSinceLastAttack = 0f;
+    protected float timeSinceLastAttack = 0f;
     protected float timeSinceFirstAttack = 0f;
 
     private Body body;
@@ -46,13 +47,13 @@ public class Entity {
         return body;
     }
 
-    private void updatePosFromBody() {
+    protected void updatePosFromBody() {
         if (body == null) return;
         Vector2 worldPos = body.getPosition();
         pos.set(worldPos.x * PPM, worldPos.y * PPM);
     }
 
-    public void move(float delta) {
+    public void move(float ignoredDelta) {
         if (currentTarget == null || distance(currentTarget) <= config.attackRadius) {
             body.setLinearVelocity(0, 0);
             return;
@@ -86,7 +87,8 @@ public class Entity {
                 timeSinceFirstAttack += delta;
                 timeSinceLastAttack += delta;
                 if (timeSinceLastAttack >= config.attackInterval) {
-                    attack(activeEntities);
+                    if (!(this instanceof ValkyrieUnit)) attack();
+                        else ((ValkyrieUnit) this).attack(activeEntities);
                     timeSinceLastAttack -= config.attackInterval;
                     attackTarget = null;
                 }
@@ -102,7 +104,7 @@ public class Entity {
         return (HP <= 0F);
     }
 
-    protected void attack(List<Entity> activeEntities) {
+    protected void attack() {
         if (currentTarget == null)
             return;
         currentTarget.receiveDamage(config.damage);

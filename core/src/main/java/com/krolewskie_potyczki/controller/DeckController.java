@@ -45,14 +45,15 @@ public class DeckController {
         if (deck.getSelectedCardIdx() == cardIdx) {
             cardViews[cardIdx].setSelected(false);
             deck.setSelectedCardIdx(-1);
-            arenaView.setSpawnArea(false);
+            arenaView.hideGhostEntity();
         } else {
             if (deck.someCardIsSelected()) {
                 cardViews[deck.getSelectedCardIdx()].setSelected(false);
+                arenaView.hideGhostEntity();
             }
             deck.setSelectedCardIdx(cardIdx);
             cardViews[deck.getSelectedCardIdx()].setSelected(true);
-            arenaView.setSpawnArea(true);
+            arenaView.showGhostEntity(deck.getSelectedCardEntityType());
         }
     }
 
@@ -68,7 +69,7 @@ public class DeckController {
         cardViews[idx].dispose();
         cardViews[idx] = arenaView.createCardView(deck.getDeckCardEntityType(idx), deck.getDeckCardElixirCost(idx), idx, this::onCardClicked);
         deck.setSelectedCardIdx(-1);
-        arenaView.setSpawnArea(false);
+        arenaView.hideGhostEntity();
     }
 
     public void update(float delta) {

@@ -15,12 +15,12 @@ public class EntityView implements Disposable {
     private final SpriteBatch batch;
     private final Stage stage;
     private final ShapeRenderer shapeRenderer;
-    private final float totalHP;
+    private final Float totalHP;
 
     private final Sprite sprite;
-    private float HP;
+    private Float HP;
 
-    public EntityView(Stage stage, boolean isPlayers, EntityType entityType, float totalHP) {
+    public EntityView(Stage stage, boolean isPlayers, EntityType entityType, Float totalHP) {
         shapeRenderer = new ShapeRenderer();
         this.stage = stage;
         this.totalHP = totalHP;
@@ -37,7 +37,7 @@ public class EntityView implements Disposable {
         batch = new SpriteBatch();
     }
 
-    public void receivePackage(Vector2 pos, float HP) {
+    public void receivePackage(Vector2 pos, Float HP) {
         sprite.setCenter(pos.x, pos.y);
         this.HP = HP;
     }
@@ -47,7 +47,7 @@ public class EntityView implements Disposable {
         batch.begin();
         sprite.draw(batch);
         batch.end();
-        drawLifeBar();
+        if (totalHP != null) drawLifeBar();
     }
 
     private void drawLifeBar() {
