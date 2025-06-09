@@ -1,11 +1,8 @@
 package com.krolewskie_potyczki.model.projectile;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.krolewskie_potyczki.model.building.Tower;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
-import com.krolewskie_potyczki.model.pathfinder.PathFinder;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.entity.Entity;
 
