@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityConfig;
+import com.krolewskie_potyczki.model.config.EntityType;
 
 public class PhysicsWorld {
     public static final float PPM = 100f;
@@ -70,6 +71,8 @@ public class PhysicsWorld {
         fd.density = cf.density;
         fd.friction = 0;
         fd.restitution = cf.restitution;
+        if (cf.type == EntityType.SHURIKEN) fd.filter.maskBits = 0;
+
         body.createFixture(fd);
         shape.dispose();
 

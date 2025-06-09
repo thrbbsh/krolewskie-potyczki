@@ -13,6 +13,7 @@ public class Projectile extends Entity {
     boolean targetNotSet = true;
     public Projectile(EntityConfig config, TeamType teamType, Vector2 pos) {
         super(config, teamType, pos);
+        HP = null;
     }
     @Override
     public boolean canBeAttackedBy(EntityType type) {
@@ -25,7 +26,7 @@ public class Projectile extends Entity {
             .min(Comparator.comparingDouble(this::directDistance))
             .orElse(null);
         if (currentTarget != null) movePath.add(currentTarget.getHitboxPos());
-            else HP = 0;
+            else HP = 0f;
     }
     @Override
     public void updateCurrentTarget(List<Entity> activeEntities) {
@@ -33,11 +34,12 @@ public class Projectile extends Entity {
             setTarget(activeEntities);
             targetNotSet = false;
         }
+        else if (currentTarget == null) HP = 0f;
     }
 
     @Override
     protected void attack() {
         currentTarget.receiveDamage(config.damage);
-        HP = 0;
+        HP = 0f;
     }
 }

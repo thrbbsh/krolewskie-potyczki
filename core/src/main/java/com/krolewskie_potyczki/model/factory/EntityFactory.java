@@ -88,8 +88,8 @@ public class EntityFactory {
         });
 
         register(EntityType.SHURIKEN, (teamType, pos, doSpawn) -> {
-            ShurikenProjectile shuriken = new ShurikenProjectile(teamType, pos);
-            doSpawn.accept(shuriken);
+            ShurikenProjectile arrow = new ShurikenProjectile(teamType, pos);
+            doSpawn.accept(arrow);
         });
     }
 

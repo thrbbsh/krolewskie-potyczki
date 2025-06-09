@@ -16,7 +16,7 @@ import java.util.List;
 import static com.krolewskie_potyczki.model.physics.PhysicsWorld.PPM;
 
 public class Entity {
-    protected float HP;
+    protected Float HP;
     private final Vector2 viewPos;
     private float hitboxRadius;
     private float hitboxOffsetY;
@@ -117,11 +117,12 @@ public class Entity {
     }
 
     void updateHP(float change) {
+        if (HP == null) return;
         HP = Math.min(config.totalHP, Math.max(0F, HP + change));
     }
 
     public boolean isDead() {
-        return (HP <= 0F);
+        return (HP != null && HP <= 0F);
     }
 
     protected void attack() {
@@ -147,7 +148,7 @@ public class Entity {
         return viewPos;
     }
 
-    public float getHP() {
+    public Float getHP() {
         return HP;
     }
 
