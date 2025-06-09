@@ -186,7 +186,7 @@
     ]
   },
   "enemyConstants": {
-    "basicRandomEnemySpawn": 2
+    "basicRandomEnemySpawn": 3
   },
   "zonePointsConstants": {
     "riverXStart": 1032,
