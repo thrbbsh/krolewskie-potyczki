@@ -3,6 +3,7 @@ package com.krolewskie_potyczki.controller;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.Main;
+import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.endcondition.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.entity.Arena;
@@ -34,7 +35,7 @@ public class GameController {
         arenaController = new ArenaController();
         arena = arenaController.getArena();
         endCondition = new DefaultGameEndCondition();
-        enemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
+        enemySpawn = (5f + (float) (Math.random() * 1f)) / Arena.ELIXIR_SPEED;
 
         deckController = new DeckController(arena, gameView.getArenaView(), arenaController);
     }
@@ -65,17 +66,17 @@ public class GameController {
         if (enemySpawnTimer >= enemySpawn) {
             EntityType type;
             double spawnChance = Math.random();
-            if (spawnChance < 0.142) type = EntityType.SQUARE;
-            else if (spawnChance < 0.284) type = EntityType.TRIANGLE;
-            else if (spawnChance < 0.426) type = EntityType.SKELETON_ARMY;
-            else if (spawnChance < 0.568) type = EntityType.TOMBSTONE;
-            else if (spawnChance < 0.71) type = EntityType.INFERNO;
-            else if (spawnChance < 0.852) type = EntityType.ARCHER_ARMY;
-            else type = EntityType.VALKYRIE;
+            if (spawnChance < 0.142) type = EntityType.ARCHER_ARMY;
+            else if (spawnChance < 0.284) type = EntityType.SQUARE;
+            else if (spawnChance < 0.426) type = EntityType.TRIANGLE;
+            else if (spawnChance < 0.568) type = EntityType.VALKYRIE;
+            else if (spawnChance < 0.71) type = EntityType.TOMBSTONE;
+            else if (spawnChance < 0.852) type = EntityType.INFERNO;
+            else type = EntityType.SKELETON_ARMY;
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
-            arenaController.spawnEntity(type, false, new Vector2(spawnX, spawnY));
-            enemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
+            arenaController.spawnEntity(type, TeamType.BOT, new Vector2(spawnX, spawnY));
+            enemySpawn = (5f + (float) (Math.random() * 1f)) / Arena.ELIXIR_SPEED;
             enemySpawnTimer  = 0f;
         }
     }

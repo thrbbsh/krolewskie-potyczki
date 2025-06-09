@@ -1,6 +1,9 @@
 package com.krolewskie_potyczki.model.factory;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.projectile.ShurikenProjectile;
+import com.krolewskie_potyczki.model.projectile.ProjectileSpawnListener;
+import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.building.Inferno;
 import com.krolewskie_potyczki.model.building.MainTower;
 import com.krolewskie_potyczki.model.building.SideTower;
@@ -17,8 +20,10 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class EntityFactory {
+    private ProjectileSpawnListener listener;
+
     public interface SpawnFunction {
-        void spawn(boolean isPlayerEntity, Vector2 pos, Consumer<Entity> doSpawn);
+        void spawn(TeamType teamType, Vector2 pos, Consumer<Entity> doSpawn);
     }
 
     private final Map<EntityType, SpawnFunction> registry = new HashMap<>();
@@ -27,56 +32,64 @@ public class EntityFactory {
     public EntityFactory() {
         gameConfig = GameConfig.getInstance();
 
-        register(EntityType.MAIN_TOWER, (isP, pos, doSpawn) -> {
-            MainTower tower = new MainTower(isP, pos);
+        register(EntityType.MAIN_TOWER, (teamType, pos, doSpawn) -> {
+            MainTower tower = new MainTower(teamType, pos);
+            tower.setProjectileSpawnListener(listener);
             doSpawn.accept(tower);
         });
-        register(EntityType.SIDE_TOWER, (isP, pos, doSpawn) -> {
-            SideTower tower = new SideTower(isP, pos);
+        register(EntityType.SIDE_TOWER, (teamType, pos, doSpawn) -> {
+            SideTower tower = new SideTower(teamType, pos);
+            tower.setProjectileSpawnListener(listener);
             doSpawn.accept(tower);
         });
-        register(EntityType.INFERNO, (isP, pos, doSpawn) -> {
-            Inferno inferno = new Inferno(isP, pos);
+        register(EntityType.INFERNO, (teamType, pos, doSpawn) -> {
+            Inferno inferno = new Inferno(teamType, pos);
             doSpawn.accept(inferno);
         });
-        register(EntityType.TRIANGLE, (isP, pos, doSpawn) -> {
-            TriangleUnit unit = new TriangleUnit(isP, pos);
+        register(EntityType.TRIANGLE, (teamType, pos, doSpawn) -> {
+            TriangleUnit unit = new TriangleUnit(teamType, pos);
             doSpawn.accept(unit);
         });
-        register(EntityType.SQUARE, (isP, pos, doSpawn) -> {
-            SquareUnit unit = new SquareUnit(isP, pos);
+        register(EntityType.SQUARE, (teamType, pos, doSpawn) -> {
+            SquareUnit unit = new SquareUnit(teamType, pos);
             doSpawn.accept(unit);
         });
-        register(EntityType.TOMBSTONE, (isP, pos, doSpawn) -> {
-            Tombstone tomb = new Tombstone(isP, pos, doSpawn);
+        register(EntityType.TOMBSTONE, (teamType, pos, doSpawn) -> {
+            Tombstone tomb = new Tombstone(teamType, pos, doSpawn);
             doSpawn.accept(tomb);
         });
-        register(EntityType.SKELETON, (isP, pos, doSpawn) -> {
-            SkeletonUnit unit = new SkeletonUnit(isP, pos);
+        register(EntityType.SKELETON, (teamType, pos, doSpawn) -> {
+            SkeletonUnit unit = new SkeletonUnit(teamType, pos);
             doSpawn.accept(unit);
         });
-        register(EntityType.ARCHER, (isP, pos, doSpawn) -> {
-            ArcherUnit unit = new ArcherUnit(isP, pos);
+        register(EntityType.ARCHER, (teamType, pos, doSpawn) -> {
+            ArcherUnit unit = new ArcherUnit(teamType, pos);
             doSpawn.accept(unit);
         });
-        register(EntityType.VALKYRIE, (isP, pos, doSpawn) -> {
-            ValkyrieUnit unit = new ValkyrieUnit(isP, pos);
+        register(EntityType.VALKYRIE, (teamType, pos, doSpawn) -> {
+            ValkyrieUnit unit = new ValkyrieUnit(teamType, pos);
             doSpawn.accept(unit);
         });
 
-        register(EntityType.SKELETON_ARMY, (isP, pos, doSpawn) -> {
-            CompositeUnit army = new SkeletonArmy(isP, pos);
+        register(EntityType.SKELETON_ARMY, (teamType, pos, doSpawn) -> {
+            CompositeUnit army = new SkeletonArmy(teamType, pos);
             List<Entity> members = army.getEntities();
             for (Entity member : members) {
                 doSpawn.accept(member);
             }
         });
-        register(EntityType.ARCHER_ARMY, (isP, pos, doSpawn) -> {
-            CompositeUnit army = new ArcherArmy(isP, pos);
+        register(EntityType.ARCHER_ARMY, (teamType, pos, doSpawn) -> {
+            CompositeUnit army = new ArcherArmy(teamType, pos);
             List<Entity> members = army.getEntities();
             for (Entity member : members) {
+                ((ArcherUnit) member).setProjectileSpawnListener(listener);
                 doSpawn.accept(member);
             }
+        });
+
+        register(EntityType.SHURIKEN, (teamType, pos, doSpawn) -> {
+            ShurikenProjectile arrow = new ShurikenProjectile(teamType, pos);
+            doSpawn.accept(arrow);
         });
     }
 
@@ -84,7 +97,7 @@ public class EntityFactory {
         registry.put(type, spawnFunction);
     }
 
-    public void spawnEntity(EntityType type, boolean isPlayerEntity, Vector2 pos, Consumer<Entity> doSpawn) {
+    public void spawnEntity(EntityType type, TeamType teamType, Vector2 pos, Consumer<Entity> doSpawn) {
         EntityConfig cfg = gameConfig.getEntityConfig(type);
         if (cfg == null) {
             throw new IllegalArgumentException("Unknown entity type: " + type);
@@ -93,6 +106,10 @@ public class EntityFactory {
         if (fn == null) {
             throw new IllegalStateException("No spawn function for type: " + type);
         }
-        fn.spawn(isPlayerEntity, pos, doSpawn);
+        fn.spawn(teamType, pos, doSpawn);
+    }
+
+    public void setProjectileSpawnListener(ProjectileSpawnListener listener) {
+        this.listener = listener;
     }
 }

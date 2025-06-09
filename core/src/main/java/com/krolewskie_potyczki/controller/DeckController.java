@@ -1,6 +1,8 @@
 package com.krolewskie_potyczki.controller;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.config.GameConfig;
+import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.entity.Arena;
 import com.krolewskie_potyczki.view.ArenaView;
@@ -8,6 +10,11 @@ import com.krolewskie_potyczki.view.CardView;
 import com.krolewskie_potyczki.model.entity.Deck;
 
 public class DeckController {
+    public static final float LEFT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().leftBorder;
+    public static final float RIGHT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().rightBorder;
+    public static final float UP_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().upBorder;
+    public static final float DOWN_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().downBorder;
+
     private final Arena arena;
     private final Deck deck;
     private final CardView[] cardViews;
@@ -45,22 +52,23 @@ public class DeckController {
         if (deck.getSelectedCardIdx() == cardIdx) {
             cardViews[cardIdx].setSelected(false);
             deck.setSelectedCardIdx(-1);
-            arenaView.setSpawnArea(false);
+            arenaView.hideGhostEntity();
         } else {
             if (deck.someCardIsSelected()) {
                 cardViews[deck.getSelectedCardIdx()].setSelected(false);
+                arenaView.hideGhostEntity();
             }
             deck.setSelectedCardIdx(cardIdx);
             cardViews[deck.getSelectedCardIdx()].setSelected(true);
-            arenaView.setSpawnArea(true);
+            arenaView.showGhostEntity(deck.getSelectedCardEntityType());
         }
     }
 
     public void onMapTouched(Vector2 pos) {
         if (!deck.someCardIsSelected() || arena.getPlayerElixir() < deck.getSelectedCardElixirCost() ||
-            !(287 <= pos.x && pos.x <= 1027 && 227 <= pos.y && pos.y <= 1062))
+            !(LEFT_BORDER <= pos.x && pos.x <= RIGHT_BORDER && DOWN_BORDER <= pos.y && pos.y <= UP_BORDER))
             return;
-        arenaController.spawnEntity(deck.getSelectedCardEntityType(), true, pos);
+        arenaController.spawnEntity(deck.getSelectedCardEntityType(), TeamType.PLAYER, pos);
         arena.spendElixir(deck.getSelectedCardElixirCost());
         int idx = deck.getSelectedCardIdx();
         cardViews[idx].setSelected(false);
@@ -68,7 +76,7 @@ public class DeckController {
         cardViews[idx].dispose();
         cardViews[idx] = arenaView.createCardView(deck.getDeckCardEntityType(idx), deck.getDeckCardElixirCost(idx), idx, this::onCardClicked);
         deck.setSelectedCardIdx(-1);
-        arenaView.setSpawnArea(false);
+        arenaView.hideGhostEntity();
     }
 
     public void update(float delta) {

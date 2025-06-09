@@ -1,35 +1,37 @@
 package com.krolewskie_potyczki.model.endcondition;
 
+import com.krolewskie_potyczki.model.config.GameConfig;
+import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.result.MatchResult;
 import com.krolewskie_potyczki.model.result.Winner;
 import com.krolewskie_potyczki.model.entity.Arena;
 
 public class DefaultGameEndCondition implements GameEndCondition {
-    private static final int MAX_CROWNS = 3;
+    private static final int MAX_CROWNS = GameConfig.getInstance().getArenaConstants().maxCrowns;
 
     public DefaultGameEndCondition() {}
 
     @Override
     public boolean isGameOver(Arena arena) {
-        return arena.crownsCount(true) >= MAX_CROWNS
-            || arena.crownsCount(false) >= MAX_CROWNS
-            || arena.mainTowerDestroyed(true)
-            || arena.mainTowerDestroyed(false)
+        return arena.crownsCount(TeamType.PLAYER) >= MAX_CROWNS
+            || arena.crownsCount(TeamType.BOT) >= MAX_CROWNS
+            || arena.mainTowerDestroyed(TeamType.PLAYER)
+            || arena.mainTowerDestroyed(TeamType.BOT)
             || arena.getTimeLeft() <= 0f;
     }
 
     @Override
     public MatchResult calculateResult(Arena arena) {
-        int pc = arena.crownsCount(true);
-        int ec = arena.crownsCount(false);
-        float php = arena.getMinTowerHP(true);
-        float ehp = arena.getMinTowerHP(false);
+        int pc = arena.crownsCount(TeamType.PLAYER);
+        int ec = arena.crownsCount(TeamType.BOT);
+        float php = arena.getMinTowerHP(TeamType.PLAYER);
+        float ehp = arena.getMinTowerHP(TeamType.BOT);
 
-        if (arena.mainTowerDestroyed(true)) {
+        if (arena.mainTowerDestroyed(TeamType.PLAYER)) {
             return new MatchResult(Winner.ENEMY, pc, ec, php, ehp);
         }
 
-        if (arena.mainTowerDestroyed(false)) {
+        if (arena.mainTowerDestroyed(TeamType.BOT)) {
             return new MatchResult(Winner.PLAYER, pc, ec, php, ehp);
         }
 

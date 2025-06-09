@@ -10,6 +10,8 @@ public class EntityConfig {
     public float spawnInterval;
     public boolean ignoresMovingUnits;
     public int elixirCost;
+    public float density;
+    public float restitution;
 
     public EntityConfig() {}
 }

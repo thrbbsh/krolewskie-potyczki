@@ -11,5 +11,6 @@ public enum EntityType {
     INFERNO,
     ARCHER,
     ARCHER_ARMY,
-    VALKYRIE
+    VALKYRIE,
+    SHURIKEN
 }

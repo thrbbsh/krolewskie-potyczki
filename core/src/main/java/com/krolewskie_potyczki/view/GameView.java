@@ -17,13 +17,16 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import com.krolewskie_potyczki.controller.GameController;
+import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.entity.Entity;
 import java.util.List;
 
 public class GameView implements Disposable {
+    public static final float SCREEN_WIDTH = GameConfig.getInstance().getZonePointsConstantsConfig().screenWidth;
+    public static final float SCREEN_HEIGHT = GameConfig.getInstance().getZonePointsConstantsConfig().screenHeight;
 
     private final Skin skin;
-    private final Stage gameStage;
+    public final Stage gameStage;
     private Label currentElixirLabel;
     private Label timerLabel;
 
@@ -37,7 +40,7 @@ public class GameView implements Disposable {
     public GameView() {
         shapeRenderer = new ShapeRenderer();
 
-        gameStage = new Stage(new FitViewport(1920, 1080));
+        gameStage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
 
         arenaView = new ArenaView(gameStage);
 

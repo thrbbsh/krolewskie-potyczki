@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
+import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class EntityView implements Disposable {
@@ -15,19 +16,19 @@ public class EntityView implements Disposable {
     private final SpriteBatch batch;
     private final Stage stage;
     private final ShapeRenderer shapeRenderer;
-    private final float totalHP;
+    private final Float totalHP;
 
     private final Sprite sprite;
-    private float HP;
+    private Float HP;
 
-    public EntityView(Stage stage, boolean isPlayers, EntityType entityType, float totalHP) {
+    public EntityView(Stage stage, TeamType teamType, EntityType entityType, Float totalHP) {
         shapeRenderer = new ShapeRenderer();
         this.stage = stage;
         this.totalHP = totalHP;
 
         String path = String.format("skins/%s/%s%s.png",
-            isPlayers ? "player" : "bot",
-            isPlayers ? "player" : "bot",
+            teamType == TeamType.PLAYER ? "player" : "bot",
+            teamType == TeamType.PLAYER ? "player" : "bot",
             entityType
         );
 
@@ -37,7 +38,7 @@ public class EntityView implements Disposable {
         batch = new SpriteBatch();
     }
 
-    public void receivePackage(Vector2 pos, float HP) {
+    public void receivePackage(Vector2 pos, Float HP) {
         sprite.setCenter(pos.x, pos.y);
         this.HP = HP;
     }
@@ -47,7 +48,7 @@ public class EntityView implements Disposable {
         batch.begin();
         sprite.draw(batch);
         batch.end();
-        drawLifeBar();
+        if (HP != null && totalHP != null) drawLifeBar();
     }
 
     private void drawLifeBar() {
@@ -88,5 +89,9 @@ public class EntityView implements Disposable {
     public void dispose() {
         texture.dispose();
         batch.dispose();
+    }
+
+    public void setGhost() {
+        sprite.setColor(1f, 1f, 1f, 0.3f);
     }
 }
