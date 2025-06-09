@@ -3,20 +3,19 @@ package com.krolewskie_potyczki.model.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class Arena {
+    public static final float ELIXIR_SPEED = GameConfig.getInstance().getArenaConstants().elixirSpeed;
+
     List<Entity> activeEntities;
     private float playerElixir;
-    private float timeLeft = 180;
+    private float timeLeft = GameConfig.getInstance().getGameConstants().matchDuration;
 
     public float getTimeLeft() {
         return timeLeft;
-    }
-
-    public float getElixirSpeed() {
-        return 1 / 2.8f;
     }
 
     public float getPlayerElixir() {
@@ -62,7 +61,7 @@ public class Arena {
     }
 
     public void updatePlayerElixir(float delta) {
-        playerElixir = Math.min(getMaxElixir(), delta * getElixirSpeed() + getPlayerElixir());
+        playerElixir = Math.min(getMaxElixir(), delta * ELIXIR_SPEED + getPlayerElixir());
     }
 
     public void updateTimer(float delta) {

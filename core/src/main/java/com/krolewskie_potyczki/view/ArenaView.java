@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
+import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.entity.Entity;
 import com.krolewskie_potyczki.model.config.EntityType;
@@ -24,6 +25,14 @@ public class ArenaView implements Disposable {
     private final Texture bgTexture;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private boolean drawSpawnArea = false;
+
+    public static final float RIVER_X_START = GameConfig.getInstance().getZonePointsConstantsConfig().riverXStart;
+    public static final float RIGHT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().rightBorder;
+    public static final float UP_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().upBorder;
+    public static final float DOWN_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().downBorder;
+
+    private static final int ARCHER_ARMY_SIZE = GameConfig.getInstance().getCompositeUnitConstantsConfig().archerArmySize;
+    private static final int SKELETON_ARMY_SIZE = GameConfig.getInstance().getCompositeUnitConstantsConfig().skeletonArmySize;
 
     public ArenaView(Stage stage) {
         this.stage = stage;
@@ -83,8 +92,8 @@ public class ArenaView implements Disposable {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0.8f, 0.8f, 0.8f, 0.5f);
         shapeRenderer.rect(
-            1030, 227,
-            875, 835
+            RIVER_X_START, DOWN_BORDER,
+            RIGHT_BORDER - RIVER_X_START, UP_BORDER - DOWN_BORDER
         );
         shapeRenderer.end();
     }
@@ -99,14 +108,14 @@ public class ArenaView implements Disposable {
     public void showGhostEntity(EntityType entityType) {
         drawSpawnArea = true;
         if (entityType == EntityType.ARCHER_ARMY) {
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < ARCHER_ARMY_SIZE; i++) {
                 EntityView entityView = new EntityView(stage, TeamType.PLAYER, EntityType.ARCHER, null);
                 ghostEntityViews.add(entityView);
                 entityView.setGhost();
             }
         }
         else if (entityType == EntityType.SKELETON_ARMY) {
-            for (int i = 0; i < 15; i++) {
+            for (int i = 0; i < SKELETON_ARMY_SIZE; i++) {
                 EntityView entityView = new EntityView(stage, TeamType.PLAYER, EntityType.SKELETON, null);
                 ghostEntityViews.add(entityView);
                 entityView.setGhost();

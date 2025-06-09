@@ -16,7 +16,7 @@ public class Inferno extends Building {
     @Override
     public void update(float delta, List<Entity> activeEntities) {
         super.update(delta, activeEntities);
-        receiveDamage(delta * config.totalHP / 30f);
+        receiveDamage(delta * config.totalHP / GameConfig.getInstance().getEntityConstants().infernoLifeTime);
     }
 
     @Override

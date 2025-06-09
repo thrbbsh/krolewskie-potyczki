@@ -11,15 +11,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.krolewskie_potyczki.controller.GameController;
+import com.krolewskie_potyczki.model.config.GameConfig;
 
 public class PauseView implements Disposable {
+    public static final float SCREEN_WIDTH = GameConfig.getInstance().getZonePointsConstantsConfig().screenWidth;
+    public static final float SCREEN_HEIGHT = GameConfig.getInstance().getZonePointsConstantsConfig().screenHeight;
+
     private final Stage stage;
 
     private final TextButton resumeButton;
     private final TextButton menuButton;
 
     public PauseView() {
-        stage = new Stage(new FitViewport(1920, 1080));
+        stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
         Skin skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
         resumeButton = new TextButton("Resume", skin);

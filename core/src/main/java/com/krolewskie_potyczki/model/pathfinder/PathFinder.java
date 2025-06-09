@@ -2,15 +2,16 @@ package com.krolewskie_potyczki.model.pathfinder;
 
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.Zone;
+import com.krolewskie_potyczki.model.config.GameConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PathFinder {
-    public static final Vector2 UPPER_BRIDGE_LEFT_POINT  = new Vector2(1032, 903);
-    public static final Vector2 UPPER_BRIDGE_RIGHT_POINT = new Vector2(1163, 903);
-    public static final Vector2 LOWER_BRIDGE_LEFT_POINT  = new Vector2(1032, 387);
-    public static final Vector2 LOWER_BRIDGE_RIGHT_POINT = new Vector2(1163, 387);
+    public static final Vector2 UPPER_BRIDGE_LEFT_POINT  = GameConfig.getInstance().getArenaConstants().upperBridgeLeftPoint;
+    public static final Vector2 UPPER_BRIDGE_RIGHT_POINT = GameConfig.getInstance().getArenaConstants().upperBridgeRightPoint;
+    public static final Vector2 LOWER_BRIDGE_LEFT_POINT  = GameConfig.getInstance().getArenaConstants().lowerBridgeLeftPoint;
+    public static final Vector2 LOWER_BRIDGE_RIGHT_POINT = GameConfig.getInstance().getArenaConstants().lowerBridgeRightPoint;
 
     public static List<Vector2> findShortestPath(Vector2 startPos, Zone startZone, Vector2 goalPos, Zone goalZone) {
         List<Vector2> cw  = findClockWisePath(startPos, startZone, goalPos, goalZone);

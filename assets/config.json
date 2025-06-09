@@ -125,7 +125,7 @@
       "totalHP": 901,
       "attackRadius": 56,
       "damage": 125,
-      "attackInterval": 1.5,
+      "attackInterval": 0.5,
       "spawnInterval": 0,
       "ignoresMovingUnits": false,
       "elixirCost": 4,
@@ -144,5 +144,59 @@
       "density": 0.001,
       "restitution": 0
     }
+  },
+  "gameConstants": {
+    "PPM": 100,
+    "matchDuration": 180
+  },
+  "entityConstants": {
+    "infernoLifeTime": 30,
+    "spawnerLifeTime": 30
+  },
+  "compositeUnitConstants": {
+    "archerArmySize": 2,
+    "skeletonArmySize": 15,
+    "entityOffsetX": 50,
+    "entityOffsetY": 50
+  },
+  "arenaConstants": {
+    "elixirSpeed": 0.35714,
+    "maxCrowns": 3,
+    "deckSize": 4,
+    "upperBridgeLeftPoint":  { "x": 1032, "y": 903 },
+    "upperBridgeRightPoint":  { "x": 1163, "y": 903 },
+    "lowerBridgeLeftPoint":  { "x": 1032, "y": 387 },
+    "lowerBridgeRightPoint":  { "x": 1163, "y": 387 },
+    "playerMainTower": { "x": 380, "y": 655 },
+    "playerSide1Tower": { "x": 470, "y": 405 },
+    "playerSide2Tower": { "x": 470, "y": 905 },
+    "botMainTower": { "x": 1815, "y": 655 },
+    "botSide1Tower": { "x": 1725, "y": 405 },
+    "botSide2Tower": { "x": 1725, "y": 905 }
+  },
+  "zonePointsConstants": {
+    "riverXStart": 1032,
+    "riverXEnd": 1158,
+    "riverWidth": 126,
+    "riverYUpperPartStart": 937,
+    "riverYUpperPartHeight": 126,
+    "riverYMidPartStart": 421,
+    "riverYMidPartHeight": 446,
+    "riverYLowerPartStart": 225,
+    "riverYLowerPartHeight": 126,
+    "leftBorder": 287,
+    "rightBorder": 1905,
+    "upBorder": 1063,
+    "downBorder": 227,
+    "screenWidth": 1920,
+    "screenHeight": 1080,
+    "basicWallWidth": 200,
+    "basicWallHeight": 200
+  },
+  "physicsWorldConstants": {
+    "velocityIterations": 6,
+    "positionIterations": 2,
+    "linearDamping": 5,
+    "angularDamping": 5
   }
 }

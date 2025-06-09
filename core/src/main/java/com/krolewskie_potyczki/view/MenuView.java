@@ -13,8 +13,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import com.krolewskie_potyczki.controller.MenuController;
+import com.krolewskie_potyczki.model.config.GameConfig;
 
 public class MenuView implements Disposable {
+    public static final float SCREEN_WIDTH = GameConfig.getInstance().getZonePointsConstantsConfig().screenWidth;
+    public static final float SCREEN_HEIGHT = GameConfig.getInstance().getZonePointsConstantsConfig().screenHeight;
+
     private final Stage stage;
     private final Skin skin;
 
@@ -23,7 +27,7 @@ public class MenuView implements Disposable {
     private TextButton exitButton;
 
     public MenuView() {
-        stage = new Stage(new FitViewport(1920, 1080));
+        stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));

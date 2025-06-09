@@ -1,12 +1,13 @@
 package com.krolewskie_potyczki.model.entity;
 
 import com.krolewskie_potyczki.model.config.EntityType;
+import com.krolewskie_potyczki.model.config.GameConfig;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class Deck {
-    public static final int DECK_SIZE = 4;
+    public static final int DECK_SIZE = GameConfig.getInstance().getArenaConstants().deckSize;
 
     Card[] deckCards;
     Queue<Card> waitingCards;

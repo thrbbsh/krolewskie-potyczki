@@ -35,7 +35,7 @@ public class GameController {
         arenaController = new ArenaController();
         arena = arenaController.getArena();
         endCondition = new DefaultGameEndCondition();
-        enemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
+        enemySpawn = (5f + (float) (Math.random() * 1f)) / Arena.ELIXIR_SPEED;
 
         deckController = new DeckController(arena, gameView.getArenaView(), arenaController);
     }
@@ -76,7 +76,7 @@ public class GameController {
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);
             arenaController.spawnEntity(type, TeamType.BOT, new Vector2(spawnX, spawnY));
-            enemySpawn = (5f + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
+            enemySpawn = (5f + (float) (Math.random() * 1f)) / Arena.ELIXIR_SPEED;
             enemySpawnTimer  = 0f;
         }
     }

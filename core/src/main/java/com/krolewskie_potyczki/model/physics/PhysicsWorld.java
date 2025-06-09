@@ -7,16 +7,36 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
+import com.krolewskie_potyczki.model.config.GameConfig;
 
 public class PhysicsWorld {
-    public static final float PPM = 100f;
+    public static final float PPM = GameConfig.getInstance().getGameConstants().PPM;
+
+    public static final float RIVER_X_START = GameConfig.getInstance().getZonePointsConstantsConfig().riverXStart;
+    public static final float RIVER_WIDTH = GameConfig.getInstance().getZonePointsConstantsConfig().riverWidth;
+    public static final float RIVER_Y_UPPER_PART_START = GameConfig.getInstance().getZonePointsConstantsConfig().riverYUpperPartStart;
+    public static final float RIVER_Y_UPPER_PART_HEIGHT = GameConfig.getInstance().getZonePointsConstantsConfig().riverYUpperPartHeight;
+    public static final float RIVER_Y_MID_PART_START = GameConfig.getInstance().getZonePointsConstantsConfig().riverYMidPartStart;
+    public static final float RIVER_Y_MID_PART_HEIGHT = GameConfig.getInstance().getZonePointsConstantsConfig().riverYMidPartHeight;
+    public static final float RIVER_Y_LOWER_PART_START = GameConfig.getInstance().getZonePointsConstantsConfig().riverYLowerPartStart;
+    public static final float RIVER_Y_LOWER_PART_HEIGHT = GameConfig.getInstance().getZonePointsConstantsConfig().riverYLowerPartHeight;
+    public static final float LEFT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().leftBorder;
+    public static final float RIGHT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().rightBorder;
+    public static final float UP_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().upBorder;
+    public static final float DOWN_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().downBorder;
+    public static final float SCREEN_WIDTH = GameConfig.getInstance().getZonePointsConstantsConfig().screenWidth;
+    public static final float SCREEN_HEIGHT = GameConfig.getInstance().getZonePointsConstantsConfig().screenHeight;
+    public static final float BASIC_WALL_WIDTH = GameConfig.getInstance().getZonePointsConstantsConfig().basicWallWidth;
+    public static final float BASIC_WALL_HEIGHT = GameConfig.getInstance().getZonePointsConstantsConfig().basicWallHeight;
+
+    private final static int VELOCITY_ITERATIONS = GameConfig.getInstance().getPhysicsWorldConstants().velocityIterations;
+    private final static int POSITION_ITERATIONS = GameConfig.getInstance().getPhysicsWorldConstants().positionIterations;
+    private final static int LINEAR_DAMPING = GameConfig.getInstance().getPhysicsWorldConstants().linearDamping;
+    private final static int ANGULAR_DAMPING = GameConfig.getInstance().getPhysicsWorldConstants().angularDamping;
 
     private final World world;
     private final Box2DDebugRenderer debugRenderer =
         new Box2DDebugRenderer(true, true, true, true, true, true);
-
-    private final static int velocityIterations = 6;
-    private final static int positionIterations = 2;
 
     private final OrthographicCamera debugCamera;
 
@@ -32,7 +52,7 @@ public class PhysicsWorld {
     }
 
     public void step(float delta) {
-        world.step(delta, velocityIterations, positionIterations);
+        world.step(delta, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
     }
 
     public World getWorld() {
@@ -58,8 +78,8 @@ public class PhysicsWorld {
         Body body = world.createBody(bd);
 
         body.setFixedRotation(true);
-        body.setLinearDamping(5f);
-        body.setAngularDamping(5f);
+        body.setLinearDamping(LINEAR_DAMPING);
+        body.setAngularDamping(ANGULAR_DAMPING);
 
         CircleShape shape = new CircleShape();
         shape.setRadius(radius);
@@ -99,13 +119,13 @@ public class PhysicsWorld {
     }
 
     private void setWalls() {
-        createWall(1032 / PhysicsWorld.PPM, 937 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM);
-        createWall(1032 / PhysicsWorld.PPM, 421 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM, 446 / PhysicsWorld.PPM);
-        createWall(1032 / PhysicsWorld.PPM, 225 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM, 126 / PhysicsWorld.PPM);
-        createWall(0 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, 1920 / PhysicsWorld.PPM, 227 / PhysicsWorld.PPM);
-        createWall(0 / PhysicsWorld.PPM, 1062 / PhysicsWorld.PPM, 1920 / PhysicsWorld.PPM, 200 / PhysicsWorld.PPM);
-        createWall(0 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, 287 / PhysicsWorld.PPM, 1080 / PhysicsWorld.PPM);
-        createWall(1905 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, 200 / PhysicsWorld.PPM, 1080 / PhysicsWorld.PPM);
+        createWall(RIVER_X_START / PhysicsWorld.PPM, RIVER_Y_UPPER_PART_START / PhysicsWorld.PPM, RIVER_WIDTH / PhysicsWorld.PPM, RIVER_Y_UPPER_PART_HEIGHT / PhysicsWorld.PPM);
+        createWall(RIVER_X_START / PhysicsWorld.PPM, RIVER_Y_MID_PART_START / PhysicsWorld.PPM, RIVER_WIDTH / PhysicsWorld.PPM, RIVER_Y_MID_PART_HEIGHT / PhysicsWorld.PPM);
+        createWall(RIVER_X_START / PhysicsWorld.PPM, RIVER_Y_LOWER_PART_START / PhysicsWorld.PPM, RIVER_WIDTH / PhysicsWorld.PPM, RIVER_Y_LOWER_PART_HEIGHT / PhysicsWorld.PPM);
+        createWall(0 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, SCREEN_WIDTH / PhysicsWorld.PPM, DOWN_BORDER / PhysicsWorld.PPM);
+        createWall(0 / PhysicsWorld.PPM, UP_BORDER / PhysicsWorld.PPM, SCREEN_WIDTH / PhysicsWorld.PPM, BASIC_WALL_HEIGHT / PhysicsWorld.PPM);
+        createWall(0 / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, LEFT_BORDER / PhysicsWorld.PPM, SCREEN_HEIGHT / PhysicsWorld.PPM);
+        createWall(RIGHT_BORDER / PhysicsWorld.PPM, 0 / PhysicsWorld.PPM, BASIC_WALL_WIDTH / PhysicsWorld.PPM, SCREEN_HEIGHT / PhysicsWorld.PPM);
     }
 
     public void destroyBody(Body body) {
