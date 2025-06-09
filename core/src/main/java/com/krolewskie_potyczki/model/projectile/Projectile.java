@@ -34,7 +34,11 @@ public class Projectile extends Entity {
             setTarget(activeEntities);
             targetNotSet = false;
         }
-        else if (currentTarget == null) HP = 0f;
+        else if (currentTarget == null || currentTarget.isDead() || !activeEntities.contains(currentTarget)) HP = 0f;
+        else {
+            movePath.clear();
+            movePath.add(currentTarget.getHitboxPos());
+        }
     }
 
     @Override
