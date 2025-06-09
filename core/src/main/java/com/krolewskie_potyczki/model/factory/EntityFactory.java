@@ -1,8 +1,7 @@
 package com.krolewskie_potyczki.model.factory;
 
 import com.badlogic.gdx.math.Vector2;
-import com.krolewskie_potyczki.model.projectile.ArrowProjectile;
-import com.krolewskie_potyczki.model.projectile.Projectile;
+import com.krolewskie_potyczki.model.projectile.ShurikenProjectile;
 import com.krolewskie_potyczki.model.projectile.ProjectileSpawnListener;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.building.Inferno;
@@ -88,9 +87,9 @@ public class EntityFactory {
             }
         });
 
-        register(EntityType.ARROW, (teamType, pos, doSpawn) -> {
-            ArrowProjectile arrow = new ArrowProjectile(teamType, pos);
-            doSpawn.accept(arrow);
+        register(EntityType.SHURIKEN, (teamType, pos, doSpawn) -> {
+            ShurikenProjectile shuriken = new ShurikenProjectile(teamType, pos);
+            doSpawn.accept(shuriken);
         });
     }
 

@@ -5,8 +5,8 @@ import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.team.TeamType;
 
-public class ArrowProjectile extends Projectile {
-    public ArrowProjectile(TeamType teamType, Vector2 pos) {
-        super(GameConfig.getInstance().getEntityConfig(EntityType.ARROW), teamType, pos);
+public class ShurikenProjectile extends Projectile {
+    public ShurikenProjectile(TeamType teamType, Vector2 pos) {
+        super(GameConfig.getInstance().getEntityConfig(EntityType.SHURIKEN), teamType, pos);
     }
 }

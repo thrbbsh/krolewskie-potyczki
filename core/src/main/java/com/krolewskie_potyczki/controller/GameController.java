@@ -66,12 +66,12 @@ public class GameController {
         if (enemySpawnTimer >= enemySpawn) {
             EntityType type;
             double spawnChance = Math.random();
-            if (spawnChance < 0.142) type = EntityType.SKELETON_ARMY;
-            else if (spawnChance < 0.284) type = EntityType.SKELETON_ARMY;
-            else if (spawnChance < 0.426) type = EntityType.SKELETON_ARMY;
-            else if (spawnChance < 0.568) type = EntityType.SKELETON_ARMY;
-            else if (spawnChance < 0.71) type = EntityType.SKELETON_ARMY;
-            else if (spawnChance < 0.852) type = EntityType.SKELETON_ARMY;
+            if (spawnChance < 0.142) type = EntityType.ARCHER_ARMY;
+            else if (spawnChance < 0.284) type = EntityType.SQUARE;
+            else if (spawnChance < 0.426) type = EntityType.TRIANGLE;
+            else if (spawnChance < 0.568) type = EntityType.VALKYRIE;
+            else if (spawnChance < 0.71) type = EntityType.TOMBSTONE;
+            else if (spawnChance < 0.852) type = EntityType.INFERNO;
             else type = EntityType.SKELETON_ARMY;
             float spawnX = 1200f + (float) (Math.random() * 550f);
             float spawnY = 250f + (float) (Math.random() * 750f);

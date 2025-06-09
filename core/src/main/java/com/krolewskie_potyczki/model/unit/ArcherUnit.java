@@ -20,6 +20,6 @@ public class ArcherUnit extends Unit implements UsesProjectiles {
     protected void attack() {
         if (currentTarget == null)
             return;
-        listener.onProjectileSpawned(EntityType.ARROW, getTeamType(), getViewPos());
+        listener.onProjectileSpawned(EntityType.SHURIKEN, getTeamType(), getViewPos());
     }
 }

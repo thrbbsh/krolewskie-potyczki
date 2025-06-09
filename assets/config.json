@@ -132,10 +132,10 @@
       "density": 1.0,
       "restitution": 0
     },
-    "ARROW": {
-      "moveSpeed": 150,
+    "SHURIKEN": {
+      "moveSpeed": 500,
       "totalHP": 1,
-      "attackRadius": 5,
+      "attackRadius": 10,
       "damage": 109,
       "attackInterval": 0.01,
       "spawnInterval": 0,
