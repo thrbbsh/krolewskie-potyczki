@@ -1,6 +1,9 @@
 package com.krolewskie_potyczki.model.factory;
 
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.model.projectile.ArrowProjectile;
+import com.krolewskie_potyczki.model.projectile.Projectile;
+import com.krolewskie_potyczki.model.projectile.ProjectileSpawnListener;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.building.Inferno;
 import com.krolewskie_potyczki.model.building.MainTower;
@@ -18,6 +21,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class EntityFactory {
+    private ProjectileSpawnListener listener;
+
     public interface SpawnFunction {
         void spawn(TeamType teamType, Vector2 pos, Consumer<Entity> doSpawn);
     }
@@ -30,10 +35,12 @@ public class EntityFactory {
 
         register(EntityType.MAIN_TOWER, (teamType, pos, doSpawn) -> {
             MainTower tower = new MainTower(teamType, pos);
+            tower.setProjectileSpawnListener(listener);
             doSpawn.accept(tower);
         });
         register(EntityType.SIDE_TOWER, (teamType, pos, doSpawn) -> {
             SideTower tower = new SideTower(teamType, pos);
+            tower.setProjectileSpawnListener(listener);
             doSpawn.accept(tower);
         });
         register(EntityType.INFERNO, (teamType, pos, doSpawn) -> {
@@ -76,8 +83,14 @@ public class EntityFactory {
             CompositeUnit army = new ArcherArmy(teamType, pos);
             List<Entity> members = army.getEntities();
             for (Entity member : members) {
+                ((ArcherUnit) member).setProjectileSpawnListener(listener);
                 doSpawn.accept(member);
             }
+        });
+
+        register(EntityType.ARROW, (teamType, pos, doSpawn) -> {
+            ArrowProjectile arrow = new ArrowProjectile(teamType, pos);
+            doSpawn.accept(arrow);
         });
     }
 
@@ -95,5 +108,9 @@ public class EntityFactory {
             throw new IllegalStateException("No spawn function for type: " + type);
         }
         fn.spawn(teamType, pos, doSpawn);
+    }
+
+    public void setProjectileSpawnListener(ProjectileSpawnListener listener) {
+        this.listener = listener;
     }
 }

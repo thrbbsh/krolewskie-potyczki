@@ -7,7 +7,7 @@ import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.entity.Entity;
 
-public abstract class Unit extends Entity {
+public class Unit extends Entity {
     Unit(EntityConfig config, TeamType teamType, Vector2 pos) {
         super(config, teamType, pos);
     }

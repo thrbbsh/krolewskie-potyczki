@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.krolewskie_potyczki.model.projectile.ProjectileSpawnListener;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.entity.Arena;
@@ -25,6 +26,7 @@ public class ArenaController {
 //        this.stage = stage;
         arena = new Arena();
         entityFactory = new EntityFactory();
+        entityFactory.setProjectileSpawnListener(this::spawnEntity);
         physicsWorld = new PhysicsWorld();
         spawnTowers();
     }

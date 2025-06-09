@@ -2,6 +2,7 @@ package com.krolewskie_potyczki.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.krolewskie_potyczki.model.projectile.ArrowProjectile;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
@@ -16,7 +17,7 @@ import java.util.List;
 import static com.krolewskie_potyczki.model.physics.PhysicsWorld.PPM;
 
 public class Entity {
-    private float HP;
+    protected float HP;
     private final Vector2 viewPos;
     private float hitboxRadius;
     private float hitboxOffsetY;
@@ -107,6 +108,7 @@ public class Entity {
                 timeSinceFirstAttack += delta;
                 timeSinceLastAttack += delta;
                 if (timeSinceLastAttack >= config.attackInterval) {
+                    if (this instanceof ArrowProjectile) System.out.println(currentTarget.config.type + " " + directDistance(currentTarget));
                     if (!(this instanceof ValkyrieUnit)) attack();
                         else ((ValkyrieUnit) this).attack(activeEntities);
                     timeSinceLastAttack -= config.attackInterval;
