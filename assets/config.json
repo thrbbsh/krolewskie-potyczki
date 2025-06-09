@@ -174,6 +174,20 @@
     "botSide1Tower": { "x": 1725, "y": 405 },
     "botSide2Tower": { "x": 1725, "y": 905 }
   },
+  "deckConstants": {
+    "spawnList": [
+      "ARCHER_ARMY",
+      "SQUARE",
+      "TRIANGLE",
+      "VALKYRIE",
+      "TOMBSTONE",
+      "INFERNO",
+      "SKELETON_ARMY"
+    ]
+  },
+  "enemyConstants": {
+    "basicRandomEnemySpawn": 5
+  },
   "zonePointsConstants": {
     "riverXStart": 1032,
     "riverXEnd": 1158,
@@ -190,13 +204,19 @@
     "downBorder": 227,
     "screenWidth": 1920,
     "screenHeight": 1080,
-    "basicWallWidth": 200,
-    "basicWallHeight": 200
+    "basicWallWidth": 300,
+    "basicWallHeight": 300
   },
   "physicsWorldConstants": {
     "velocityIterations": 6,
     "positionIterations": 2,
     "linearDamping": 5,
     "angularDamping": 5
+  },
+  "cardViewConstants": {
+    "cardViewStartX": 650,
+    "cardViewAddX": 160,
+    "cardViewY": 22.5
   }
 }
+
