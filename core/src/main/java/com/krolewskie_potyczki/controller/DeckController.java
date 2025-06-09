@@ -9,11 +9,15 @@ import com.krolewskie_potyczki.view.ArenaView;
 import com.krolewskie_potyczki.view.CardView;
 import com.krolewskie_potyczki.model.entity.Deck;
 
+import java.util.List;
+
 public class DeckController {
     public static final float LEFT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().leftBorder;
     public static final float RIGHT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().rightBorder;
     public static final float UP_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().upBorder;
     public static final float DOWN_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().downBorder;
+
+    public static final List<EntityType> SPAWN_LIST = GameConfig.getInstance().getDeckConstants().spawnList;
 
     private final Arena arena;
     private final Deck deck;
@@ -26,16 +30,7 @@ public class DeckController {
         this.arenaView = arenaView;
         this.arenaController = arenaController;
 
-        EntityType[] deckCards = new EntityType[]{
-            EntityType.ARCHER_ARMY,
-            EntityType.SQUARE,
-            EntityType.TRIANGLE,
-            EntityType.VALKYRIE,
-            EntityType.TOMBSTONE,
-            EntityType.INFERNO,
-            EntityType.SKELETON_ARMY
-        };
-        deck = new Deck(deckCards);
+        deck = new Deck(SPAWN_LIST);
 
         cardViews = new CardView[Deck.DECK_SIZE];
 

@@ -3,6 +3,7 @@ package com.krolewskie_potyczki.controller;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import com.krolewskie_potyczki.Main;
+import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.endcondition.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.config.EntityType;
@@ -13,7 +14,17 @@ import com.krolewskie_potyczki.screens.PauseScreen;
 import com.krolewskie_potyczki.model.result.MatchResult;
 import com.krolewskie_potyczki.view.GameView;
 
+import java.util.List;
+
 public class GameController {
+    public static final float RIVER_X_END = GameConfig.getInstance().getZonePointsConstantsConfig().riverXEnd;
+    public static final float RIGHT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().rightBorder;
+    public static final float UP_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().upBorder;
+    public static final float DOWN_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().downBorder;
+
+    public static final float BASIC_RANDOM_ENEMY_SPAWN = GameConfig.getInstance().getEnemyConstants().basicRandomEnemySpawn;
+    public static final List<EntityType> SPAWN_LIST = GameConfig.getInstance().getDeckConstants().spawnList;
+
     private final Main game;
     private final ArenaController arenaController;
     private final Arena arena;
@@ -64,19 +75,17 @@ public class GameController {
     private void enemyMove(float delta) {
         enemySpawnTimer += delta;
         if (enemySpawnTimer >= enemySpawn) {
-            EntityType type;
+            EntityType type = null;
             double spawnChance = Math.random();
-            if (spawnChance < 0.142) type = EntityType.ARCHER_ARMY;
-            else if (spawnChance < 0.284) type = EntityType.SQUARE;
-            else if (spawnChance < 0.426) type = EntityType.TRIANGLE;
-            else if (spawnChance < 0.568) type = EntityType.VALKYRIE;
-            else if (spawnChance < 0.71) type = EntityType.TOMBSTONE;
-            else if (spawnChance < 0.852) type = EntityType.INFERNO;
-            else type = EntityType.SKELETON_ARMY;
-            float spawnX = 1200f + (float) (Math.random() * 550f);
-            float spawnY = 250f + (float) (Math.random() * 750f);
+            for (int i = 1; i <= SPAWN_LIST.size(); i++)
+                if (spawnChance <= (float) i / (float) SPAWN_LIST.size()) {
+                    type = SPAWN_LIST.get(i - 1);
+                    break;
+                }
+            float spawnX = RIVER_X_END + (float) (Math.random() * (RIGHT_BORDER - RIVER_X_END));
+            float spawnY = DOWN_BORDER + (float) (Math.random() * (UP_BORDER - DOWN_BORDER));
             arenaController.spawnEntity(type, TeamType.BOT, new Vector2(spawnX, spawnY));
-            enemySpawn = (5f + (float) (Math.random() * 1f)) / Arena.ELIXIR_SPEED;
+            enemySpawn = (BASIC_RANDOM_ENEMY_SPAWN + (float) (Math.random() * 1f)) / Arena.ELIXIR_SPEED;
             enemySpawnTimer  = 0f;
         }
     }

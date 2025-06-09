@@ -4,6 +4,7 @@ import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Deck {
@@ -14,13 +15,13 @@ public class Deck {
 
     int selectedCardIdx;
 
-    public Deck(EntityType[] cardTypes) {
+    public Deck(List<EntityType> cardTypes) {
         deckCards = new Card[DECK_SIZE];
         waitingCards = new LinkedList<>();
 
-        for (int i = 0; i < cardTypes.length; i++)
-            if (i < DECK_SIZE) deckCards[i] = new Card(cardTypes[i]);
-                else waitingCards.add(new Card(cardTypes[i]));
+        for (int i = 0; i < cardTypes.size(); i++)
+            if (i < DECK_SIZE) deckCards[i] = new Card(cardTypes.get(i));
+                else waitingCards.add(new Card(cardTypes.get(i)));
         selectedCardIdx = -1;
     }
 

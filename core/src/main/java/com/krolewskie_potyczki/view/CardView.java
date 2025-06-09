@@ -12,8 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.krolewskie_potyczki.model.config.EntityType;
+import com.krolewskie_potyczki.model.config.GameConfig;
 
 public class CardView implements Disposable {
+    public static final float CARD_VIEW_START_X = GameConfig.getInstance().getCardViewConstants().cardViewStartX;
+    public static final float CARD_VIEW_ADD_X = GameConfig.getInstance().getCardViewConstants().cardViewAddX;
+    public static final float CARD_VIEW_Y = GameConfig.getInstance().getCardViewConstants().cardViewY;
+
     private final ImageButton imageButton;
     private final Texture elixirDropTexture;
     private final SpriteBatch batch;
@@ -27,7 +32,7 @@ public class CardView implements Disposable {
         font = new BitmapFont();
         font.getData().setScale(2.5f);
 
-        pos = new Vector2(650 + cardIdx * 160, 22.5f);
+        pos = new Vector2(CARD_VIEW_START_X + cardIdx * CARD_VIEW_ADD_X, CARD_VIEW_Y);
 
         elixirDropTexture = new Texture("images/cards/elixirDrop.png");
         batch = new SpriteBatch();

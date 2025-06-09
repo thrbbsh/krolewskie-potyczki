@@ -17,6 +17,9 @@ public class GameConfig {
     private CompositeUnitConstantsConfig compositeUnitConstants;
     private ZonePointsConstantsConfig zonePointsConstants;
     private PhysicsWorldConstantsConfig physicsWorldConstants;
+    private CardViewConstantsConfig cardViewConstants;
+    private EnemyConstantsConfig enemyConstants;
+    private DeckConstantsConfig deckConstants;
 
     private GameConfig() { }
 
@@ -64,6 +67,21 @@ public class GameConfig {
             throw new RuntimeException("'constants' section not found in config.json");
         physicsWorldConstants = json.readValue(PhysicsWorldConstantsConfig.class, physicsWorldConsts);
 
+        JsonValue cardViewConsts = root.get("cardViewConstants");
+        if (cardViewConsts == null)
+            throw new RuntimeException("'constants' section not found in config.json");
+        cardViewConstants = json.readValue(CardViewConstantsConfig.class, cardViewConsts);
+
+        JsonValue enemyConsts = root.get("enemyConstants");
+        if (enemyConsts == null)
+            throw new RuntimeException("'constants' section not found in config.json");
+        enemyConstants = json.readValue(EnemyConstantsConfig.class, enemyConsts);
+
+        JsonValue deckConsts = root.get("deckConstants");
+        if (deckConsts == null)
+            throw new RuntimeException("'constants' section not found in config.json");
+        deckConstants = json.readValue(DeckConstantsConfig.class, deckConsts);
+
         JsonValue ents = root.get("entities");
         for (JsonValue entry : ents) {
             String typeName = entry.name();
@@ -107,4 +125,14 @@ public class GameConfig {
     public PhysicsWorldConstantsConfig getPhysicsWorldConstants() {
         return physicsWorldConstants;
     }
+
+    public CardViewConstantsConfig getCardViewConstants() {
+        return cardViewConstants;
+    }
+
+    public EnemyConstantsConfig getEnemyConstants() {
+        return enemyConstants;
+    }
+
+    public DeckConstantsConfig getDeckConstants() { return deckConstants; }
 }
