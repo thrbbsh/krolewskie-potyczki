@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DeckController {
     public static final float LEFT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().leftBorder;
-    public static final float RIGHT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().rightBorder;
+    public static final float RIVER_X_START = GameConfig.getInstance().getZonePointsConstantsConfig().riverXStart;
     public static final float UP_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().upBorder;
     public static final float DOWN_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().downBorder;
 
@@ -61,7 +61,7 @@ public class DeckController {
 
     public void onMapTouched(Vector2 pos) {
         if (!deck.someCardIsSelected() || arena.getPlayerElixir() < deck.getSelectedCardElixirCost() ||
-            !(LEFT_BORDER <= pos.x && pos.x <= RIGHT_BORDER && DOWN_BORDER <= pos.y && pos.y <= UP_BORDER))
+            !(LEFT_BORDER <= pos.x && pos.x <= RIVER_X_START && DOWN_BORDER <= pos.y && pos.y <= UP_BORDER))
             return;
         arenaController.spawnEntity(deck.getSelectedCardEntityType(), TeamType.PLAYER, pos);
         arena.spendElixir(deck.getSelectedCardElixirCost());

@@ -2,13 +2,13 @@
 
 Game-parody of Clash Royale, made by Artur Rubish, Roman Volochai and Pavlo Protsenko. 
 
-![Alt text](assets/images/screenshot.png)
+![Alt text](assets/images/screenshot_new.png)
 
 ## 🚀 How to Run the Game
 
 ### ✅ Requirements:
 
-- Java 17 or higher.  
+- Java 17 or higher  
   You can download it from [Adoptium](https://adoptium.net/) or [Oracle](https://www.oracle.com/java/technologies/javase-downloads.html)
 
 ### ▶️ Launch:
