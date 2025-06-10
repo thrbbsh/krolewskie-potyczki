@@ -46,7 +46,7 @@ public class GameController {
         arenaController = new ArenaController();
         arena = arenaController.getArena();
         endCondition = new DefaultGameEndCondition();
-        enemySpawn = (5f + (float) (Math.random() * 1f)) / Arena.ELIXIR_SPEED;
+        enemySpawn = (BASIC_RANDOM_ENEMY_SPAWN + (float) (Math.random() * 1f)) / Arena.ELIXIR_SPEED;
 
         deckController = new DeckController(arena, gameView.getArenaView(), arenaController);
     }
