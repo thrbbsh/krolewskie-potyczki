@@ -2,7 +2,7 @@
 
 Game-parody of Clash Royale, made by Artur Rubish, Roman Volochai and Pavlo Protsenko. 
 
-![Alt text](assets/images/screenshot.png)
+![Alt text](assets/images/screenshot_new.png)
 
 ## 🚀 How to Run the Game
 
