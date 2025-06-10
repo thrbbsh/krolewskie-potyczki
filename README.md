@@ -8,7 +8,7 @@ Game-parody of Clash Royale, made by Artur Rubish, Roman Volochai and Pavlo Prot
 
 ### ✅ Requirements:
 
-- Java 17 or higher  
+- Java 17 or higher.  
   You can download it from [Adoptium](https://adoptium.net/) or [Oracle](https://www.oracle.com/java/technologies/javase-downloads.html)
 
 ### ▶️ Launch:
