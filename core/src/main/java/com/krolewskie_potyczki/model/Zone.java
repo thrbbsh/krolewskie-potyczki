@@ -16,7 +16,7 @@ public enum Zone {
     public static Zone getZone(Vector2 pos) {
         if (pos.x <= RIVER_X_START) return Zone.BLUE_BASE;
         if (pos.x >= RIVER_X_END) return Zone.RED_BASE;
-        if (pos.y >= RIVER_Y_MID_PART_START) return Zone.UPPER_BRIDGE;
+        if (pos.y >= RIVER_Y_MID_PART_START + 50) return Zone.UPPER_BRIDGE;
         return Zone.LOWER_BRIDGE;
     }
 }
