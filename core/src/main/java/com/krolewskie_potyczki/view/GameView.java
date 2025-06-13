@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -36,6 +37,9 @@ public class GameView implements Disposable {
     private final ArenaView arenaView;
 
     private Music gameMusic;
+    private Slider volumeSlider;
+    private final Preferences prefs;
+    private final float savedVolume;
 
     public GameView() {
         shapeRenderer = new ShapeRenderer();
@@ -46,6 +50,8 @@ public class GameView implements Disposable {
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
+        prefs = Gdx.app.getPreferences("MyGameSettings");
+        savedVolume = prefs.getFloat("musicVolume", 0.5f);
         setupMusic();
         createUI();
     }
@@ -53,7 +59,7 @@ public class GameView implements Disposable {
     private void setupMusic() {
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/GameSoundtrack.mp3"));
         gameMusic.setLooping(true);
-        gameMusic.setVolume(0.1f);
+        gameMusic.setVolume(savedVolume);
         gameMusic.play();
     }
 
@@ -68,6 +74,20 @@ public class GameView implements Disposable {
         timerLabel.setWrap(true);
         timerLabel.setAlignment(Align.center);
 
+        Label volumeLabel = new Label("Music Volume:", skin);
+        volumeSlider = new Slider(0f, 1f, 0.01f, false, skin);
+        volumeSlider.setValue(savedVolume);
+
+        volumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                float vol = volumeSlider.getValue();
+                gameMusic.setVolume(vol);
+                prefs.putFloat("musicVolume", vol);
+                prefs.flush();
+            }
+        });
+
         Table topTable = new Table();
         topTable.setFillParent(true);
         topTable.top().left();
@@ -75,6 +95,10 @@ public class GameView implements Disposable {
 
         topTable.add(pauseButton).size(250, 60).padTop(6).row();
         topTable.add(timerLabel).padTop(7).left().width(300);
+        topTable.row();
+        topTable.add(volumeSlider).width(250).height(60).pad(10);
+        topTable.row();
+        topTable.add(volumeLabel);
 
         Table bottomTable = new Table();
         bottomTable.setFillParent(true);
