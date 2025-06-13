@@ -125,7 +125,7 @@
       "totalHP": 901,
       "attackRadius": 56,
       "damage": 125,
-      "attackInterval": 0.5,
+      "attackInterval": 1,
       "spawnInterval": 0,
       "ignoresMovingUnits": false,
       "elixirCost": 4,

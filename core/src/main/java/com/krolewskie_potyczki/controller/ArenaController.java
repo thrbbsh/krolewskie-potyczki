@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.krolewskie_potyczki.model.bot.BotMoveLogic;
 import com.krolewskie_potyczki.model.building.Building;
 import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.team.TeamType;
@@ -13,7 +14,6 @@ import com.krolewskie_potyczki.model.entity.Entity;
 import com.krolewskie_potyczki.model.factory.EntityFactory;
 import com.krolewskie_potyczki.model.physics.PhysicsWorld;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ArenaController {
@@ -27,12 +27,11 @@ public class ArenaController {
     private final Arena arena;
     private final EntityFactory entityFactory;
     private final PhysicsWorld physicsWorld;
-
-//    private final Stage stage;
+    private final BotMoveLogic botMoveLogic;
 
     public ArenaController() {
-//        this.stage = stage;
         arena = new Arena();
+        botMoveLogic = new BotMoveLogic(arena);
         entityFactory = new EntityFactory();
         entityFactory.setProjectileSpawnListener(this::spawnEntity);
         physicsWorld = new PhysicsWorld();
@@ -87,22 +86,16 @@ public class ArenaController {
         physicsWorld.step(delta);
         arena.updateTimer(-delta);
         arena.updatePlayerElixir(delta);
-        List<Entity> toRemove = new ArrayList<>();
-        List<Entity> curActiveEntities = new ArrayList<>(arena.getActiveEntities());
-        for (Entity e: curActiveEntities)
-            if (e.isDead()) {
-                toRemove.add(e);
-            }
+        botMoveLogic.update(delta, this::spawnEntity);
 
-        for (Entity e : toRemove) {
-            physicsWorld.destroyBody(e.getBody());
-        }
-        toRemove.forEach(arena::removeEntity);
+        List<Entity> deadEntities = arena.getActiveEntities().stream().filter(Entity::isDead).toList();
 
-        for (Entity e : new ArrayList<>(arena.getActiveEntities()))
-            e.update(delta, arena.getActiveEntities());
+        deadEntities.forEach(entity -> {
+            physicsWorld.destroyBody(entity.getBody());
+            arena.removeEntity(entity);
+        });
 
-//        physicsWorld.debugRender(stage.getViewport().getCamera());
+        arena.getActiveEntities().stream().toList().forEach(entity -> entity.update(delta, arena.getActiveEntities()));
     }
 
     public Arena getArena() {

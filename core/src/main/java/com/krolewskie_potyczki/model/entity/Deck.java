@@ -56,5 +56,6 @@ public class Deck {
     public void selectedCardWasChosen() {
         waitingCards.add(deckCards[selectedCardIdx]);
         deckCards[selectedCardIdx] = waitingCards.poll();
+        selectedCardIdx = -1;
     }
 }

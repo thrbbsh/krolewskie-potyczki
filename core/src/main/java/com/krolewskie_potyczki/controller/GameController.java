@@ -22,8 +22,7 @@ public class GameController {
     private Screen gameScreen;
     private PauseScreen pauseScreen;
 
-    private final DeckController playerDeckController;
-    private final DeckController botDeckController;
+    private final DeckController deckController;
 
     public GameController(Main game, GameView gameView) {
         this.game = game;
@@ -33,8 +32,7 @@ public class GameController {
         arena = arenaController.getArena();
         endCondition = new DefaultGameEndCondition();
 
-        playerDeckController = new PlayerDeckController(arena, gameView.getArenaView(), arenaController);
-        botDeckController = new BotDeckController(arena, gameView.getArenaView(), arenaController);
+        deckController = new DeckController(arena, gameView.getArenaView(), arenaController);
     }
 
     public void update(float delta) {
@@ -49,8 +47,7 @@ public class GameController {
         }
 
         gameView.renderGame(delta, arena.getPlayerElixir(), arena.getMaxElixir(), arena.getTimeLeft(), arena.getActiveEntities());
-        playerDeckController.update(delta);
-        botDeckController.update(delta);
+        deckController.update(delta);
         arenaController.update(delta);
     }
 
@@ -81,6 +78,6 @@ public class GameController {
     }
 
     public void onMapTouched(Vector2 pos) {
-        playerDeckController.onMapTouched(pos);
+        deckController.onMapTouched(pos);
     }
 }
