@@ -5,123 +5,121 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import com.krolewskie_potyczki.AudioManager;
 import com.krolewskie_potyczki.controller.SettingsController;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
 public class SettingsView implements Disposable {
-    public static final float SCREEN_WIDTH = GameConfig.getInstance().getZonePointsConstantsConfig().screenWidth;
+    public static final float SCREEN_WIDTH  = GameConfig.getInstance().getZonePointsConstantsConfig().screenWidth;
     public static final float SCREEN_HEIGHT = GameConfig.getInstance().getZonePointsConstantsConfig().screenHeight;
 
     private final Stage stage;
     private final Skin skin;
-
-    private TextButton menuButton;
-    private Slider volumeSlider;
     private final Preferences prefs;
-    private final float savedVolume;
-    private int difficulty;
+
+    private Slider volumeSlider;
+    private ButtonGroup<TextButton> difficultyGroup;
+    private TextButton menuButton;
 
     public SettingsView() {
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
-
+        skin  = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
         prefs = Gdx.app.getPreferences("MyGameSettings");
-        savedVolume = prefs.getFloat("musicVolume", 0.5f);
-        difficulty = prefs.getInteger("difficulty", 2);
 
         createUI();
     }
 
+    private Label createLabel(String text, float scale) {
+        Label lbl = new Label(text, skin);
+        lbl.setFontScale(scale);
+        return lbl;
+    }
+
     private void createUI() {
-        Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("font"), Color.WHITE);
-        Label settingsLabel = new Label("SETTINGS", labelStyle);
-        settingsLabel.setFontScale(3f);
+        float savedVolume = prefs.getFloat("musicVolume",0.5f);
+        int savedDiff = prefs.getInteger("difficulty",2);
 
-        Label menuVolumeLabel = new Label("Music volume:", skin);
-        menuVolumeLabel.setFontScale(1.5f);
+        Label settingsLabel = createLabel("SETTINGS", 3f);
 
+        Label volumeLabel = createLabel("Music volume:", 1.5f);
         volumeSlider = new Slider(0f, 1f, 0.01f, false, skin);
         volumeSlider.setValue(savedVolume);
 
-        volumeSlider.addListener(new ChangeListener() {
+        Label diffLabel = createLabel("Difficulty Level:", 1.5f);
+        TextButton easy = new TextButton("Easy", skin);
+        TextButton medium = new TextButton("Medium", skin);
+        TextButton hard = new TextButton("Hard", skin);
+
+        difficultyGroup = new ButtonGroup<>(easy, medium, hard);
+        difficultyGroup.setMaxCheckCount(1);
+        difficultyGroup.setMinCheckCount(1);
+        difficultyGroup.setUncheckLast(true);
+        difficultyGroup.getButtons().get(savedDiff - 1).setChecked(true);
+
+        for (int i = 0; i < 3; i++) {
+            TextButton btn = difficultyGroup.getButtons().get(i);
+            btn.setColor(i == (savedDiff - 1) ? Color.WHITE : new Color(1f, 1f, 1f, 0.4f));
+        }
+
+        ChangeListener difficultyListener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                float vol = volumeSlider.getValue();
-                AudioManager.inst().setVolume(volumeSlider.getValue());
-                prefs.putFloat("musicVolume", vol);
-                prefs.flush();
-            }
-        });
-
-        Label difficultyLevelLabel = new Label("Difficulty Level:", skin);
-        difficultyLevelLabel.setFontScale(1.5f);
-
-        TextButton easyOption = new TextButton("Easy", skin);
-        if (difficulty != 1) easyOption.setColor(1f, 1f, 1f, 0.4f);
-        TextButton mediumOption = new TextButton("Medium", skin);
-        if (difficulty != 2) mediumOption.setColor(1f, 1f, 1f, 0.4f);
-        TextButton hardOption = new TextButton("Hard", skin);
-        if (difficulty != 3) hardOption.setColor(1f, 1f, 1f, 0.4f);
-
-        ButtonGroup<TextButton> group = new ButtonGroup<>(easyOption, mediumOption, hardOption);
-        group.setMaxCheckCount(1);
-        group.setMinCheckCount(1);
-        group.setUncheckLast(true);
-
-        ChangeListener updateVisuals = new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                for (int i = 0; i < group.getButtons().size; i++) {
-                    TextButton btn = group.getButtons().get(i);
-                    if (btn.isChecked()) {
-                        btn.setColor(1f, 1f, 1f, 1f);
-                        difficulty = i + 1;
-                        prefs.putInteger("difficulty", difficulty);
-                    } else {
-                        btn.setColor(1f, 1f, 1f, 0.4f);
-                    }
-                    prefs.flush();
+                int selected = difficultyGroup.getCheckedIndex() + 1;
+                prefs.putInteger("difficulty", selected).flush();
+                for (int j = 0; j < difficultyGroup.getButtons().size; j++) {
+                    TextButton btn = difficultyGroup.getButtons().get(j);
+                    btn.setColor(j == (selected - 1) ? Color.WHITE : new Color(1f, 1f, 1f, 0.4f));
                 }
             }
         };
 
-        easyOption.addListener(updateVisuals);
-        mediumOption.addListener(updateVisuals);
-        hardOption.addListener(updateVisuals);
+        easy.addListener(difficultyListener);
+        medium.addListener(difficultyListener);
+        hard.addListener(difficultyListener);
 
         menuButton = new TextButton("Back to menu", skin);
         menuButton.getLabel().setFontScale(2f);
 
-        Table menu = new Table();
-        menu.setFillParent(true);
+        Table table = new Table();
+        table.setFillParent(true);
+        table.top();
+        table.add(settingsLabel).padTop(100f).row();
+        table.add(volumeLabel).padTop(50f).row();
+        table.add(volumeSlider).width(350f).height(80f).padTop(20f).row();
+        table.add(diffLabel).padTop(50f).row();
+        table.add(easy).padTop(30f).row();
+        table.add(medium).padTop(10f).row();
+        table.add(hard).padTop(10f).row();
+        table.add(menuButton).size(525f, 120f).padTop(100f).row();
 
-        menu.top();
-        menu.add(settingsLabel).padTop(100).row();
-        menu.add(menuVolumeLabel).padTop(50).row();
-        menu.add(volumeSlider).width(350).height(80).padTop(20).row();
-        menu.add(difficultyLevelLabel).padTop(50).row();
-        menu.add(easyOption).padTop(30).row();
-        menu.add(mediumOption).padTop(10).row();
-        menu.add(hardOption).padTop(10).row();
-        menu.add(menuButton).size(525, 120).padTop(100).row();
-
-        stage.addActor(menu);
+        stage.addActor(table);
     }
 
     public void setController(SettingsController controller) {
-        menuButton.addListener(new ChangeListener() {
+        menuButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.onMenuClicked();
+            }
+        });
+        volumeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                controller.onMenuClicked();
+                controller.onVolumeChanged(volumeSlider.getValue());
             }
         });
     }
@@ -142,19 +140,18 @@ public class SettingsView implements Disposable {
         stage.getViewport().update(width, height, true);
     }
 
+    public void pause() { }
+
+    public void resume() { }
+
+    public void hide() {
+        if (AudioManager.inst().menuMusicIsPlaying())
+            AudioManager.inst().pauseMenuMusic();
+    }
+
     @Override
     public void dispose() {
         stage.dispose();
         skin.dispose();
-    }
-
-    public void pause() {
-    }
-
-    public void resume() {
-    }
-
-    public void hide() {
-        if (AudioManager.inst().menuMusicIsPlaying()) AudioManager.inst().pauseMenuMusic();
     }
 }
