@@ -51,6 +51,7 @@ public class DeckController {
         } else {
             if (deck.someCardIsSelected()) {
                 cardViews[deck.getSelectedCardIdx()].setSelected(false);
+                arenaView.hideGhostEntity();
             }
             deck.setSelectedCardIdx(cardIdx);
             cardViews[deck.getSelectedCardIdx()].setSelected(true);

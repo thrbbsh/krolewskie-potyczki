@@ -73,11 +73,14 @@ public class ArenaView implements Disposable {
                 entityView.receivePackage(entity.getViewPos(), entity.getHP());
                 entityView.render(delta);
             });
-        Vector3 cursorPos = stage.getViewport().getCamera().unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+        Vector2 touch = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        stage.screenToStageCoordinates(touch);
         for (int i = 0; i < ghostEntityViews.size(); i++) {
             EntityView entityView = ghostEntityViews.get(i);
-            if (ghostEntityViews.size() == 1) entityView.receivePackage(new Vector2(cursorPos.x, cursorPos.y), null);
-                else entityView.receivePackage(CompositeUnit.calculateOffsetPosition(new Vector2(cursorPos.x, cursorPos.y), i, ghostEntityViews.size()), null);
+            if (ghostEntityViews.size() == 1)
+                entityView.receivePackage(new Vector2(touch.x, touch.y), null);
+            else
+                entityView.receivePackage(CompositeUnit.calculateOffsetPosition(new Vector2(touch.x, touch.y), i, ghostEntityViews.size()), null);
             entityView.render(delta);
         }
         stage.act(delta);
