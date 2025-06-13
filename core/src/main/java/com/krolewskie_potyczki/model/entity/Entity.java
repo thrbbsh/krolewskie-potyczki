@@ -2,6 +2,7 @@ package com.krolewskie_potyczki.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
@@ -31,6 +32,8 @@ public class Entity {
     protected float timeSinceFirstAttack = 0f;
 
     private Body body;
+
+    private static final float VISION_RADIUS = GameConfig.getInstance().getEntityConstants().visionRadius;
 
     public Entity(EntityConfig config, TeamType teamType, Vector2 pos) {
         currentTarget = null;
@@ -156,7 +159,7 @@ public class Entity {
         Entity previousTarget = currentTarget;
         currentTarget = null;
         for (Entity entity : activeEntities) {
-            if (teamType == entity.teamType || !entity.canBeAttackedBy(config.type) || !(entity instanceof Tower || directDistance(entity) <= 250)) continue;
+            if (teamType == entity.teamType || !entity.canBeAttackedBy(config.type) || !(entity instanceof Tower || directDistance(entity) <= VISION_RADIUS)) continue;
             List<Vector2> curPath = PathFinder.findShortestPath(getHitboxPos(), this.zone, entity.getHitboxPos(), entity.zone);
             if (currentTarget == null || (PathFinder.routeDistance(getHitboxPos(), curPath) < PathFinder.routeDistance(getHitboxPos(), movePath))) {
                 currentTarget = entity;

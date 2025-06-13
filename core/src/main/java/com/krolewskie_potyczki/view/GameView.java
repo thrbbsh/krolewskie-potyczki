@@ -25,6 +25,8 @@ public class GameView implements Disposable {
     public static final float SCREEN_WIDTH = GameConfig.getInstance().getZonePointsConstantsConfig().screenWidth;
     public static final float SCREEN_HEIGHT = GameConfig.getInstance().getZonePointsConstantsConfig().screenHeight;
 
+    private static final float DOUBLE_ELIXIR_DURATION = GameConfig.getInstance().getGameConstants().doubleElixirDuration;
+
     private final Skin skin;
     public final Stage gameStage;
     private Label currentElixirLabel;
@@ -117,7 +119,7 @@ public class GameView implements Disposable {
         currentElixirLabel.setText(getFormattedPlayerElixir(playerElixir, maxElixir));
         timerLabel.setText("Time left: " + getFormattedTimeLeft(timeLeft));
 
-        boolean showDouble = timeLeft >= 56.5f && timeLeft <= 60f;
+        boolean showDouble = timeLeft >= DOUBLE_ELIXIR_DURATION - 3 && timeLeft <= DOUBLE_ELIXIR_DURATION;
         doubleElixirLabel.setVisible(showDouble);
 
         gameStage.act(delta);

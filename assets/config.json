@@ -147,11 +147,13 @@
   },
   "gameConstants": {
     "PPM": 100,
-    "matchDuration": 180
+    "matchDuration": 180,
+    "doubleElixirDuration": 60
   },
   "entityConstants": {
     "infernoLifeTime": 30,
-    "spawnerLifeTime": 30
+    "spawnerLifeTime": 30,
+    "visionRadius": 250
   },
   "compositeUnitConstants": {
     "archerArmySize": 2,

@@ -14,6 +14,8 @@ public class Arena {
     private float playerElixir;
     private float timeLeft = GameConfig.getInstance().getGameConstants().matchDuration;
 
+    private static final float DOUBLE_ELIXIR_DURATION = GameConfig.getInstance().getGameConstants().doubleElixirDuration;
+
     public float getTimeLeft() {
         return timeLeft;
     }
@@ -27,7 +29,7 @@ public class Arena {
     }
 
     public float getElixirSpeed() {
-        if (timeLeft < 60) return ELIXIR_SPEED * 2;
+        if (timeLeft < DOUBLE_ELIXIR_DURATION) return ELIXIR_SPEED * 2;
         return ELIXIR_SPEED;
     }
 
