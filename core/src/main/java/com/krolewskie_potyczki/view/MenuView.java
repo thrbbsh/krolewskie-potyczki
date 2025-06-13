@@ -1,8 +1,6 @@
 package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import com.krolewskie_potyczki.AudioManager;
 import com.krolewskie_potyczki.controller.MenuController;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
@@ -23,12 +22,9 @@ public class MenuView implements Disposable {
     private final Stage stage;
     private final Skin skin;
 
-    private Music menuMusic;
     private TextButton startButton;
     private TextButton settingsButton;
     private TextButton exitButton;
-
-    private final float savedVolume;
 
     public MenuView() {
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -36,18 +32,7 @@ public class MenuView implements Disposable {
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
-        Preferences prefs = Gdx.app.getPreferences("MyGameSettings");
-        savedVolume = prefs.getFloat("musicVolume", 0.5f);
-
-        setupMusic();
         createUI();
-    }
-
-    private void setupMusic() {
-        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/MenuSoundtrack.mp3"));
-        menuMusic.setLooping(true);
-        menuMusic.setVolume(savedVolume);
-        menuMusic.play();
     }
 
     private void createUI() {
@@ -104,6 +89,7 @@ public class MenuView implements Disposable {
 
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        AudioManager.inst().playMenuMusic();
     }
 
     public void render(float delta) {
@@ -121,7 +107,6 @@ public class MenuView implements Disposable {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        menuMusic.dispose();
     }
 
     public void pause() {
@@ -131,6 +116,6 @@ public class MenuView implements Disposable {
     }
 
     public void hide() {
-        if (menuMusic != null && menuMusic.isPlaying()) menuMusic.stop();
+        if (AudioManager.inst().menuMusicisPlaying()) AudioManager.inst().pauseMenuMusic();
     }
 }

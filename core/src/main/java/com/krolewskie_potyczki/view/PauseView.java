@@ -2,7 +2,6 @@ package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.krolewskie_potyczki.AudioManager;
 import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
@@ -23,8 +23,6 @@ public class PauseView implements Disposable {
     private final TextButton resumeButton;
     private final TextButton menuButton;
 
-    private final Music gameMusic;
-    private final Music menuMusic;
     private final Slider volumeSlider;
     private final Preferences prefs;
     private final float savedVolume;
@@ -32,9 +30,6 @@ public class PauseView implements Disposable {
     public PauseView() {
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
-
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/GameSoundtrack.mp3"));
-        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/MenuSoundtrack.mp3"));
 
         resumeButton = new TextButton("Resume", skin);
         menuButton = new TextButton("Menu", skin);
@@ -54,8 +49,7 @@ public class PauseView implements Disposable {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 float vol = volumeSlider.getValue();
-                menuMusic.setVolume(vol);
-                gameMusic.setVolume(vol);
+                AudioManager.inst().setVolume(vol);
                 prefs.putFloat("musicVolume", vol);
                 prefs.flush();
             }

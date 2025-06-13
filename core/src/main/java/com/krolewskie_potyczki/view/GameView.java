@@ -1,8 +1,6 @@
 package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import com.krolewskie_potyczki.AudioManager;
 import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.entity.Entity;
@@ -36,10 +35,6 @@ public class GameView implements Disposable {
     private final ShapeRenderer shapeRenderer;
     private final ArenaView arenaView;
 
-    private final Preferences prefs;
-    private Music gameMusic;
-    private float savedVolume;
-
     public GameView() {
         shapeRenderer = new ShapeRenderer();
 
@@ -49,18 +44,7 @@ public class GameView implements Disposable {
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
-        prefs = Gdx.app.getPreferences("MyGameSettings");
-        savedVolume = prefs.getFloat("musicVolume", 0.5f);
-
-        setupMusic();
         createUI();
-    }
-
-    private void setupMusic() {
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/GameSoundtrack.mp3"));
-        gameMusic.setLooping(true);
-        gameMusic.setVolume(savedVolume);
-        gameMusic.play();
     }
 
     private void createUI() {
@@ -150,6 +134,7 @@ public class GameView implements Disposable {
 
     public void show() {
         Gdx.input.setInputProcessor(gameStage);
+        AudioManager.inst().playGameMusic();
     }
 
     public void resize(int w, int h) {
@@ -158,20 +143,17 @@ public class GameView implements Disposable {
 
     @Override
     public void dispose() {
-        gameMusic.dispose();
         gameStage.dispose();
         skin.dispose();
     }
 
     public void pause() {
-        gameMusic.pause();
+        AudioManager.inst().pauseGameMusic();
     }
 
     public void resume() {
         Gdx.input.setInputProcessor(gameStage);
-        savedVolume = prefs.getFloat("musicVolume", 0.5f);
-        gameMusic.setVolume(savedVolume);
-        gameMusic.play();
+        AudioManager.inst().resumeGameMusic();
     }
 
 

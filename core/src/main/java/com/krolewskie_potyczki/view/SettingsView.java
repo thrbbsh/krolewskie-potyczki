@@ -2,7 +2,6 @@ package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import com.krolewskie_potyczki.AudioManager;
 import com.krolewskie_potyczki.controller.SettingsController;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
@@ -22,8 +22,6 @@ public class SettingsView implements Disposable {
     private final Stage stage;
     private final Skin skin;
 
-    private Music menuMusic;
-    private Music gameMusic;
     private TextButton menuButton;
     private Slider volumeSlider;
     private final Preferences prefs;
@@ -40,16 +38,7 @@ public class SettingsView implements Disposable {
         savedVolume = prefs.getFloat("musicVolume", 0.5f);
         difficulty = prefs.getInteger("difficulty", 2);
 
-        setupMusic();
         createUI();
-    }
-
-    private void setupMusic() {
-        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/MenuSoundtrack.mp3"));
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/GameSoundtrack.mp3"));
-        menuMusic.setLooping(true);
-        menuMusic.setVolume(savedVolume);
-        menuMusic.play();
     }
 
     private void createUI() {
@@ -67,8 +56,7 @@ public class SettingsView implements Disposable {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 float vol = volumeSlider.getValue();
-                menuMusic.setVolume(vol);
-                gameMusic.setVolume(vol);
+                AudioManager.inst().setVolume(volumeSlider.getValue());
                 prefs.putFloat("musicVolume", vol);
                 prefs.flush();
             }
@@ -77,7 +65,6 @@ public class SettingsView implements Disposable {
         Label difficultyLevelLabel = new Label("Difficulty Level:", skin);
         difficultyLevelLabel.setFontScale(1.5f);
 
-        System.out.println(difficulty);
         TextButton easyOption = new TextButton("Easy", skin);
         if (difficulty != 1) easyOption.setColor(1f, 1f, 1f, 0.4f);
         TextButton mediumOption = new TextButton("Medium", skin);
@@ -141,6 +128,7 @@ public class SettingsView implements Disposable {
 
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        AudioManager.inst().playMenuMusic();
     }
 
     public void render(float delta) {
@@ -158,7 +146,6 @@ public class SettingsView implements Disposable {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        menuMusic.dispose();
     }
 
     public void pause() {
@@ -168,6 +155,6 @@ public class SettingsView implements Disposable {
     }
 
     public void hide() {
-        if (menuMusic != null && menuMusic.isPlaying()) menuMusic.stop();
+        if (AudioManager.inst().menuMusicisPlaying()) AudioManager.inst().pauseMenuMusic();
     }
 }
