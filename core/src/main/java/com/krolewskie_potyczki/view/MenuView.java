@@ -1,6 +1,7 @@
 package com.krolewskie_potyczki.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,13 +25,19 @@ public class MenuView implements Disposable {
 
     private Music menuMusic;
     private TextButton startButton;
+    private TextButton settingsButton;
     private TextButton exitButton;
+
+    private final float savedVolume;
 
     public MenuView() {
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
+
+        Preferences prefs = Gdx.app.getPreferences("MyGameSettings");
+        savedVolume = prefs.getFloat("musicVolume", 0.5f);
 
         setupMusic();
         createUI();
@@ -39,7 +46,7 @@ public class MenuView implements Disposable {
     private void setupMusic() {
         menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/MenuSoundtrack.mp3"));
         menuMusic.setLooping(true);
-        menuMusic.setVolume(0.1f);
+        menuMusic.setVolume(savedVolume);
         menuMusic.play();
     }
 
@@ -54,6 +61,9 @@ public class MenuView implements Disposable {
         startButton = new TextButton("Start", skin);
         startButton.getLabel().setFontScale(2f);
 
+        settingsButton = new TextButton("Settings", skin);
+        settingsButton.getLabel().setFontScale(2f);
+
         exitButton = new TextButton("Exit", skin);
         exitButton.getLabel().setFontScale(2f);
 
@@ -64,6 +74,7 @@ public class MenuView implements Disposable {
         menu.add(crownImage).size(360, 250).padTop(20).row();
         menu.add(titleLabel).padTop(30).row();
         menu.add(startButton).size(525, 120).padTop(50).row();
+        menu.add(settingsButton).size(525, 120).padTop(20).row();
         menu.add(exitButton).padTop(20).size(525, 120);
 
         stage.addActor(menu);
@@ -74,6 +85,12 @@ public class MenuView implements Disposable {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 controller.onPlayClicked();
+            }
+        });
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                controller.onSettingsClicked();
             }
         });
 

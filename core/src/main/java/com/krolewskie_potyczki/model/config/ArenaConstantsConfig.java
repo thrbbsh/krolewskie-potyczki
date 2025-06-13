@@ -6,7 +6,6 @@ public class ArenaConstantsConfig {
     public float elixirSpeed;
     public int maxCrowns;
     public int deckSize;
-    public int basicRandomEnemySpawn;
     public Vector2 upperBridgeLeftPoint;
     public Vector2 upperBridgeRightPoint;
     public Vector2 lowerBridgeLeftPoint;

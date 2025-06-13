@@ -3,7 +3,7 @@ package com.krolewskie_potyczki.model.result;
 public record MatchResult(
     Winner winner,
     int playerCrowns,
-    int enemyCrowns,
+    int botCrowns,
     float playerMinTowerHP,
-    float enemyMinTowerHP
+    float botMinTowerHP
 ) {}

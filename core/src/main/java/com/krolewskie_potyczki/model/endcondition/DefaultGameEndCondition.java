@@ -28,7 +28,7 @@ public class DefaultGameEndCondition implements GameEndCondition {
         float ehp = arena.getMinTowerHP(TeamType.BOT);
 
         if (arena.mainTowerDestroyed(TeamType.PLAYER)) {
-            return new MatchResult(Winner.ENEMY, pc, ec, php, ehp);
+            return new MatchResult(Winner.BOT, pc, ec, php, ehp);
         }
 
         if (arena.mainTowerDestroyed(TeamType.BOT)) {
@@ -39,10 +39,10 @@ public class DefaultGameEndCondition implements GameEndCondition {
         if (pc > ec) {
             winner = Winner.PLAYER;
         } else if (pc < ec) {
-            winner = Winner.ENEMY;
+            winner = Winner.BOT;
         } else {
             if (php > ehp) winner = Winner.PLAYER;
-            else if (php < ehp) winner = Winner.ENEMY;
+            else if (php < ehp) winner = Winner.BOT;
             else winner = Winner.DRAW;
         }
 
