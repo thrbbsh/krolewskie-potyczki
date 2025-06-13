@@ -28,7 +28,7 @@ public class GameController {
         this.game = game;
         this.gameView = gameView;
 
-        arenaController = new ArenaController();
+        arenaController = new ArenaController(gameView.getArenaView());
         arena = arenaController.getArena();
         endCondition = new DefaultGameEndCondition();
 

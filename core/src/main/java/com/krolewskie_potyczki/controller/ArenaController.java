@@ -13,6 +13,7 @@ import com.krolewskie_potyczki.model.entity.Arena;
 import com.krolewskie_potyczki.model.entity.Entity;
 import com.krolewskie_potyczki.model.factory.EntityFactory;
 import com.krolewskie_potyczki.model.physics.PhysicsWorld;
+import com.krolewskie_potyczki.view.ArenaView;
 
 import java.util.List;
 
@@ -25,11 +26,14 @@ public class ArenaController {
     public static final Vector2 BOT_SIDE2_TOWER = GameConfig.getInstance().getArenaConstants().botSide2Tower;
 
     private final Arena arena;
+    private final ArenaView arenaView;
     private final EntityFactory entityFactory;
     private final PhysicsWorld physicsWorld;
     private final BotMoveLogic botMoveLogic;
 
-    public ArenaController() {
+    public ArenaController(ArenaView arenaView) {
+        this.arenaView = arenaView;
+
         arena = new Arena();
         botMoveLogic = new BotMoveLogic(arena);
         entityFactory = new EntityFactory();
@@ -96,6 +100,18 @@ public class ArenaController {
         });
 
         arena.getActiveEntities().stream().toList().forEach(entity -> entity.update(delta, arena.getActiveEntities()));
+    }
+
+    public void showGhostEntity(EntityType type) {
+        arenaView.setDrawSpawnArea(true);
+        entityFactory.spawnEntity(type, TeamType.PLAYER, new Vector2(0, 0), entity -> {
+            arenaView.addGhost(entity.getConfig().type);
+        });
+    }
+
+    public void hideGhostEntity() {
+        arenaView.clearGhost();
+        arenaView.setDrawSpawnArea(false);
     }
 
     public Arena getArena() {

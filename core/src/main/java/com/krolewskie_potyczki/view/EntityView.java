@@ -48,7 +48,8 @@ public class EntityView implements Disposable {
         batch.begin();
         sprite.draw(batch);
         batch.end();
-        if (HP != null && totalHP != null) drawLifeBar();
+        if (HP != null && totalHP != null)
+            drawLifeBar();
     }
 
     private void drawLifeBar() {
