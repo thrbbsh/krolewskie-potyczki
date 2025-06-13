@@ -36,10 +36,9 @@ public class GameView implements Disposable {
     private final ShapeRenderer shapeRenderer;
     private final ArenaView arenaView;
 
-    private Music gameMusic;
-    private Slider volumeSlider;
     private final Preferences prefs;
-    private final float savedVolume;
+    private Music gameMusic;
+    private float savedVolume;
 
     public GameView() {
         shapeRenderer = new ShapeRenderer();
@@ -52,6 +51,7 @@ public class GameView implements Disposable {
 
         prefs = Gdx.app.getPreferences("MyGameSettings");
         savedVolume = prefs.getFloat("musicVolume", 0.5f);
+
         setupMusic();
         createUI();
     }
@@ -74,20 +74,6 @@ public class GameView implements Disposable {
         timerLabel.setWrap(true);
         timerLabel.setAlignment(Align.center);
 
-        Label volumeLabel = new Label("Music Volume:", skin);
-        volumeSlider = new Slider(0f, 1f, 0.01f, false, skin);
-        volumeSlider.setValue(savedVolume);
-
-        volumeSlider.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                float vol = volumeSlider.getValue();
-                gameMusic.setVolume(vol);
-                prefs.putFloat("musicVolume", vol);
-                prefs.flush();
-            }
-        });
-
         Table topTable = new Table();
         topTable.setFillParent(true);
         topTable.top().left();
@@ -96,9 +82,6 @@ public class GameView implements Disposable {
         topTable.add(pauseButton).size(250, 60).padTop(6).row();
         topTable.add(timerLabel).padTop(7).left().width(300);
         topTable.row();
-        topTable.add(volumeSlider).width(250).height(60).pad(10);
-        topTable.row();
-        topTable.add(volumeLabel);
 
         Table bottomTable = new Table();
         bottomTable.setFillParent(true);
@@ -186,6 +169,8 @@ public class GameView implements Disposable {
 
     public void resume() {
         Gdx.input.setInputProcessor(gameStage);
+        savedVolume = prefs.getFloat("musicVolume", 0.5f);
+        gameMusic.setVolume(savedVolume);
         gameMusic.play();
     }
 

@@ -2,6 +2,7 @@ package com.krolewskie_potyczki.controller;
 
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.screens.GameScreen;
+import com.krolewskie_potyczki.screens.SettingsScreen;
 import com.krolewskie_potyczki.view.MenuView;
 
 public class MenuController {
@@ -20,6 +21,8 @@ public class MenuController {
     public void onPlayClicked() {
         game.setScreen(new GameScreen(game));
     }
+
+    public void onSettingsClicked() { game.setScreen(new SettingsScreen(game)); }
 
     public void onExitClicked() {
         game.exitGame();

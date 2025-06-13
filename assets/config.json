@@ -186,7 +186,9 @@
     ]
   },
   "botConstants": {
-    "basicRandomBotSpawn": 2
+    "easyBotSpawnSpeed": 5,
+    "mediumBotSpawnSpeed": 3,
+    "hardBotSpawnSpeed": 1.5
   },
   "zonePointsConstants": {
     "riverXStart": 1032,
