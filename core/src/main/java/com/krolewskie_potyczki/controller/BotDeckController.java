@@ -51,7 +51,8 @@ public class BotDeckController extends DeckController {
     public void update(float delta) {
         botSpawnTimer += delta;
         if (botSpawnTimer >= botSpawn) {
-            int spawnIdx = (int) (Math.random() % DECK_SIZE);
+            int spawnIdx = (int) (Math.random() * DECK_SIZE);
+            System.out.println(spawnIdx);
             deck.setSelectedCardIdx(spawnIdx);
             float spawnX = RIVER_X_END + (float) (Math.random() * (RIGHT_BORDER - RIVER_X_END));
             float spawnY = DOWN_BORDER + (float) (Math.random() * (UP_BORDER - DOWN_BORDER));
