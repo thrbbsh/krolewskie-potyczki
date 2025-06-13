@@ -104,9 +104,7 @@ public class ArenaController {
 
     public void showGhostEntity(EntityType type) {
         arenaView.setDrawSpawnArea(true);
-        entityFactory.spawnEntity(type, TeamType.PLAYER, new Vector2(0, 0), entity -> {
-            arenaView.addGhost(entity.getConfig().type);
-        });
+        entityFactory.spawnEntity(type, TeamType.PLAYER, new Vector2(0, 0), entity -> arenaView.addGhost(entity.getConfig().type));
     }
 
     public void hideGhostEntity() {
