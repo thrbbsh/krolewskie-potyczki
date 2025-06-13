@@ -7,7 +7,7 @@ import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.unit.ValkyrieUnit;
-import com.krolewskie_potyczki.model.Zone;
+import com.krolewskie_potyczki.model.pathfinder.Zone;
 import com.krolewskie_potyczki.model.building.Tower;
 import com.krolewskie_potyczki.model.pathfinder.PathFinder;
 
@@ -110,8 +110,7 @@ public class Entity {
                 timeSinceFirstAttack += delta;
                 timeSinceLastAttack += delta;
                 if (timeSinceLastAttack >= config.attackInterval) {
-                    if (!(this instanceof ValkyrieUnit)) attack();
-                        else ((ValkyrieUnit) this).attack(activeEntities);
+                    attack(activeEntities);
                     timeSinceLastAttack -= config.attackInterval;
                     attackTarget = null;
                 }
@@ -128,10 +127,10 @@ public class Entity {
         return (HP != null && HP <= 0F);
     }
 
-    protected void attack() {
-        if (currentTarget == null)
-            return;
-        currentTarget.receiveDamage(config.damage);
+    protected void attack(List<Entity> activeEntities) {
+        if (currentTarget != null) {
+            currentTarget.receiveDamage(config.damage);
+        }
     }
 
     public void receiveDamage(float amount) {
@@ -142,9 +141,7 @@ public class Entity {
         }
     }
 
-    public void onDeath() {
-        // TODO (animation, case when tower is "dead")
-    }
+    public void onDeath() {}
 
     public Vector2 getViewPos() {
         updatePosFromBody();

@@ -42,12 +42,10 @@ public class Projectile extends Entity {
     }
 
     @Override
-    protected void attack() {
-        if (currentTarget == null) {
-            HP = 0f;
-            return;
-        }
-        currentTarget.receiveDamage(config.damage);
+    protected void attack(List<Entity> activeEntities) {
         HP = 0f;
+        if (currentTarget != null) {
+            currentTarget.receiveDamage(config.damage);
+        }
     }
 }

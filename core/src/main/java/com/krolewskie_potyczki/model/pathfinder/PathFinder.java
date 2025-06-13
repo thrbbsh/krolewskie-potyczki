@@ -1,7 +1,6 @@
 package com.krolewskie_potyczki.model.pathfinder;
 
 import com.badlogic.gdx.math.Vector2;
-import com.krolewskie_potyczki.model.Zone;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
 import java.util.ArrayList;
