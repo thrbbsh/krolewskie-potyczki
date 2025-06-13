@@ -29,6 +29,7 @@ public class GameView implements Disposable {
     public final Stage gameStage;
     private Label currentElixirLabel;
     private Label timerLabel;
+    private Label doubleElixirLabel;
 
     private TextButton pauseButton;
 
@@ -58,6 +59,13 @@ public class GameView implements Disposable {
         timerLabel.setWrap(true);
         timerLabel.setAlignment(Align.center);
 
+        doubleElixirLabel = new Label("60 seconds left\nx2 Elixir", skin);
+        doubleElixirLabel.setWrap(true);
+        doubleElixirLabel.setAlignment(Align.center);
+        doubleElixirLabel.setSize(1000, 300);
+        doubleElixirLabel.setFontScale(2f);
+        doubleElixirLabel.setPosition(SCREEN_WIDTH / 2f - 500, SCREEN_HEIGHT / 2f - 100);
+
         Table topTable = new Table();
         topTable.setFillParent(true);
         topTable.top().left();
@@ -72,6 +80,7 @@ public class GameView implements Disposable {
         bottomTable.bottom().left();
 
         gameStage.addActor(bottomTable);
+        gameStage.addActor(doubleElixirLabel);
 
         bottomTable.add().expandX();
         bottomTable.add(currentElixirLabel).padRight(350).padBottom(100).right().width(300).padLeft(500);
@@ -108,6 +117,9 @@ public class GameView implements Disposable {
         currentElixirLabel.setText(getFormattedPlayerElixir(playerElixir, maxElixir));
         timerLabel.setText("Time left: " + getFormattedTimeLeft(timeLeft));
 
+        boolean showDouble = timeLeft >= 56.5f && timeLeft <= 60f;
+        doubleElixirLabel.setVisible(showDouble);
+
         gameStage.act(delta);
         gameStage.draw();
         arenaView.sync(activeEntities);
@@ -130,7 +142,6 @@ public class GameView implements Disposable {
             shapeRenderer.rect(1305 + i * 23 - 2.5f, 35, 5, 40);
         shapeRenderer.end();
     }
-
 
     public void show() {
         Gdx.input.setInputProcessor(gameStage);

@@ -8,7 +8,7 @@ import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityType;
 
 public class Arena {
-    public static final float ELIXIR_SPEED = GameConfig.getInstance().getArenaConstants().elixirSpeed;
+    private static final float ELIXIR_SPEED = GameConfig.getInstance().getArenaConstants().elixirSpeed;
 
     List<Entity> activeEntities;
     private float playerElixir;
@@ -24,6 +24,11 @@ public class Arena {
 
     public float getMaxElixir() {
         return 10;
+    }
+
+    public float getElixirSpeed() {
+        if (timeLeft < 60) return ELIXIR_SPEED * 2;
+        return ELIXIR_SPEED;
     }
 
     public Arena() {
@@ -61,7 +66,7 @@ public class Arena {
     }
 
     public void updatePlayerElixir(float delta) {
-        playerElixir = Math.min(getMaxElixir(), delta * ELIXIR_SPEED + getPlayerElixir());
+        playerElixir = Math.min(getMaxElixir(), delta * getElixirSpeed() + getPlayerElixir());
     }
 
     public void updateTimer(float delta) {

@@ -57,7 +57,7 @@ public class AudioManager {
         gameMusic.dispose();
     }
 
-    public boolean menuMusicisPlaying() {
+    public boolean menuMusicIsPlaying() {
         return menuMusic.isPlaying();
     }
 }

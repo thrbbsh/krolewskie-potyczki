@@ -33,7 +33,7 @@ public class BotDeckController extends DeckController {
         else if (difficulty == 2) speed = MEDIUM_BOT_SPAWN_SPEED;
         else speed = HARD_BOT_SPAWN_SPEED;
 
-        botSpawn = (speed + (float) (Math.random() * 1f)) / Arena.ELIXIR_SPEED;
+        botSpawn = (speed + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class BotDeckController extends DeckController {
             float spawnX = RIVER_X_END + (float) (Math.random() * (RIGHT_BORDER - RIVER_X_END));
             float spawnY = DOWN_BORDER + (float) (Math.random() * (UP_BORDER - DOWN_BORDER));
             onMapTouched(new Vector2(spawnX, spawnY));
-            botSpawn = (speed + (float) (Math.random() * 1f)) / Arena.ELIXIR_SPEED;
+            botSpawn = (speed + (float) (Math.random() * 1f)) / arena.getElixirSpeed();
             botSpawnTimer = 0f;
         }
     }

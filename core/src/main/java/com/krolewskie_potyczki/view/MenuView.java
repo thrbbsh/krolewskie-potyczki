@@ -116,6 +116,6 @@ public class MenuView implements Disposable {
     }
 
     public void hide() {
-        if (AudioManager.inst().menuMusicisPlaying()) AudioManager.inst().pauseMenuMusic();
+        if (AudioManager.inst().menuMusicIsPlaying()) AudioManager.inst().pauseMenuMusic();
     }
 }
