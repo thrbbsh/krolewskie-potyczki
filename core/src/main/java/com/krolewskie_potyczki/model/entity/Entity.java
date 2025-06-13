@@ -6,7 +6,6 @@ import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.team.TeamType;
 import com.krolewskie_potyczki.model.config.EntityConfig;
 import com.krolewskie_potyczki.model.config.EntityType;
-import com.krolewskie_potyczki.model.unit.ValkyrieUnit;
 import com.krolewskie_potyczki.model.pathfinder.Zone;
 import com.krolewskie_potyczki.model.building.Tower;
 import com.krolewskie_potyczki.model.pathfinder.PathFinder;
