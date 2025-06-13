@@ -1,7 +1,10 @@
 package com.krolewskie_potyczki.controller;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.AudioManager;
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.endcondition.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.entity.Arena;
@@ -23,6 +26,7 @@ public class GameController {
     private PauseScreen pauseScreen;
 
     private final DeckController deckController;
+    private final Preferences prefs;
 
     public GameController(Main game, GameView gameView) {
         this.game = game;
@@ -33,6 +37,7 @@ public class GameController {
         endCondition = new DefaultGameEndCondition();
 
         deckController = new DeckController(arena, gameView.getArenaView(), arenaController);
+        prefs = Gdx.app.getPreferences("MyGameSettings");
     }
 
     public void update(float delta) {
@@ -79,5 +84,11 @@ public class GameController {
 
     public void onMapTouched(Vector2 pos) {
         deckController.onMapTouched(pos);
+    }
+
+    public void onVolumeChanged(float vol) {
+        AudioManager.inst().setVolume(vol);
+        prefs.putFloat("musicVolume", vol);
+        prefs.flush();
     }
 }
