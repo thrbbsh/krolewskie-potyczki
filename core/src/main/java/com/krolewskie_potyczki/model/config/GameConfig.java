@@ -18,7 +18,7 @@ public class GameConfig {
     private ZonePointsConstantsConfig zonePointsConstants;
     private PhysicsWorldConstantsConfig physicsWorldConstants;
     private CardViewConstantsConfig cardViewConstants;
-    private EnemyConstantsConfig enemyConstants;
+    private BotConstantsConfig botConstants;
     private DeckConstantsConfig deckConstants;
 
     private GameConfig() { }
@@ -72,10 +72,10 @@ public class GameConfig {
             throw new RuntimeException("'constants' section not found in config.json");
         cardViewConstants = json.readValue(CardViewConstantsConfig.class, cardViewConsts);
 
-        JsonValue enemyConsts = root.get("enemyConstants");
-        if (enemyConsts == null)
+        JsonValue botConsts = root.get("botConstants");
+        if (botConsts == null)
             throw new RuntimeException("'constants' section not found in config.json");
-        enemyConstants = json.readValue(EnemyConstantsConfig.class, enemyConsts);
+        botConstants = json.readValue(BotConstantsConfig.class, botConsts);
 
         JsonValue deckConsts = root.get("deckConstants");
         if (deckConsts == null)
@@ -130,8 +130,8 @@ public class GameConfig {
         return cardViewConstants;
     }
 
-    public EnemyConstantsConfig getEnemyConstants() {
-        return enemyConstants;
+    public BotConstantsConfig getBotConstants() {
+        return botConstants;
     }
 
     public DeckConstantsConfig getDeckConstants() { return deckConstants; }

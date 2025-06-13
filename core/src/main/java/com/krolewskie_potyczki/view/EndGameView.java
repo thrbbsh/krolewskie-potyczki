@@ -53,20 +53,20 @@ public class EndGameView implements Disposable {
 
         String status = switch (result.winner()) {
             case PLAYER -> "You Win!";
-            case ENEMY -> "You Lose.";
+            case BOT -> "You Lose.";
             default -> "Draw.";
         };
 
-        status += "\n" + String.format("%d:%d", result.playerCrowns(), result.enemyCrowns());
+        status += "\n" + String.format("%d:%d", result.playerCrowns(), result.botCrowns());
 
         String detail = "";
 
-        if (result.playerCrowns() == result.enemyCrowns() &&
+        if (result.playerCrowns() == result.botCrowns() &&
             result.winner() != Winner.DRAW)
             detail = String.format(
-                "\nPlayer HP: %.0f\nEnemy HP: %.0f",
+                "\nPlayer HP: %.0f\nBot HP: %.0f",
                 result.playerMinTowerHP(),
-                result.enemyMinTowerHP()
+                result.botMinTowerHP()
             );
 
         endLabel.setText(status + detail);

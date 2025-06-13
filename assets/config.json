@@ -185,8 +185,8 @@
       "SKELETON_ARMY"
     ]
   },
-  "enemyConstants": {
-    "basicRandomEnemySpawn": 3
+  "botConstants": {
+    "basicRandomBotSpawn": 2
   },
   "zonePointsConstants": {
     "riverXStart": 1032,
