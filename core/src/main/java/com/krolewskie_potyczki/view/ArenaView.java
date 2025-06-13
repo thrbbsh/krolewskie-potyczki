@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.krolewskie_potyczki.model.config.GameConfig;
@@ -16,6 +15,7 @@ import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.unit.CompositeUnit;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ArenaView implements Disposable {
     private final Stage stage;
@@ -30,9 +30,6 @@ public class ArenaView implements Disposable {
     public static final float RIGHT_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().rightBorder;
     public static final float UP_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().upBorder;
     public static final float DOWN_BORDER = GameConfig.getInstance().getZonePointsConstantsConfig().downBorder;
-
-    private static final int ARCHER_ARMY_SIZE = GameConfig.getInstance().getCompositeUnitConstantsConfig().archerArmySize;
-    private static final int SKELETON_ARMY_SIZE = GameConfig.getInstance().getCompositeUnitConstantsConfig().skeletonArmySize;
 
     public ArenaView(Stage stage) {
         this.stage = stage;
@@ -73,13 +70,18 @@ public class ArenaView implements Disposable {
                 entityView.receivePackage(entity.getViewPos(), entity.getHP());
                 entityView.render(delta);
             });
-        Vector3 cursorPos = stage.getViewport().getCamera().unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-        for (int i = 0; i < ghostEntityViews.size(); i++) {
-            EntityView entityView = ghostEntityViews.get(i);
-            if (ghostEntityViews.size() == 1) entityView.receivePackage(new Vector2(cursorPos.x, cursorPos.y), null);
-                else entityView.receivePackage(CompositeUnit.calculateOffsetPosition(new Vector2(cursorPos.x, cursorPos.y), i, ghostEntityViews.size()), null);
-            entityView.render(delta);
-        }
+
+        Vector2 touch = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        stage.screenToStageCoordinates(touch);
+
+        int count = ghostEntityViews.size();
+        AtomicInteger idx = new AtomicInteger(0);
+
+        ghostEntityViews.stream().peek(view -> {
+            int i = idx.getAndIncrement();
+            view.receivePackage(CompositeUnit.calculateOffsetPosition(touch.cpy(), i, count), null);
+        }).forEach(view -> view.render(delta));
+
         stage.act(delta);
         stage.draw();
     }
@@ -105,32 +107,18 @@ public class ArenaView implements Disposable {
         stage.dispose();
     }
 
-    public void showGhostEntity(EntityType entityType) {
-        drawSpawnArea = true;
-        if (entityType == EntityType.ARCHER_ARMY) {
-            for (int i = 0; i < ARCHER_ARMY_SIZE; i++) {
-                EntityView entityView = new EntityView(stage, TeamType.PLAYER, EntityType.ARCHER, null);
-                ghostEntityViews.add(entityView);
-                entityView.setGhost();
-            }
-        }
-        else if (entityType == EntityType.SKELETON_ARMY) {
-            for (int i = 0; i < SKELETON_ARMY_SIZE; i++) {
-                EntityView entityView = new EntityView(stage, TeamType.PLAYER, EntityType.SKELETON, null);
-                ghostEntityViews.add(entityView);
-                entityView.setGhost();
-            }
-        }
-        else {
-            EntityView entityView = new EntityView(stage, TeamType.PLAYER, entityType, null);
-            ghostEntityViews.add(entityView);
-            entityView.setGhost();
-        }
+    public void addGhost(EntityType entityType) {
+        EntityView entityView = new EntityView(stage, TeamType.PLAYER, entityType, null);
+        entityView.setGhost();
+        ghostEntityViews.add(entityView);
     }
 
-    public void hideGhostEntity() {
-        drawSpawnArea = false;
+    public void clearGhost() {
         ghostEntityViews.forEach(EntityView::dispose);
         ghostEntityViews.clear();
+    }
+
+    public void setDrawSpawnArea(boolean drawSpawnArea) {
+        this.drawSpawnArea = drawSpawnArea;
     }
 }

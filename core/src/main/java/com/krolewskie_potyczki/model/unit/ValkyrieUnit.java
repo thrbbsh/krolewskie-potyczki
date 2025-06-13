@@ -6,7 +6,6 @@ import com.krolewskie_potyczki.model.config.EntityType;
 import com.krolewskie_potyczki.model.config.GameConfig;
 import com.krolewskie_potyczki.model.entity.Entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ValkyrieUnit extends Unit {
@@ -14,11 +13,12 @@ public class ValkyrieUnit extends Unit {
         super(GameConfig.getInstance().getEntityConfig(EntityType.VALKYRIE), teamType, pos);
     }
 
+    @Override
     public void attack(List<Entity> activeEntities) {
-        List<Entity> damagedEntities = new ArrayList<>();
-        for (Entity entity: activeEntities)
-            if (getTeamType() != entity.getTeamType() && entity.canBeAttackedBy(config.type) && directDistance(entity) <= config.attackRadius) damagedEntities.add(entity);
-        for (Entity ent: damagedEntities)
-            ent.receiveDamage(config.damage);
+        for (Entity entity : activeEntities) {
+            if (getTeamType() != entity.getTeamType() && entity.canBeAttackedBy(config.type) && directDistance(entity) <= config.attackRadius) {
+                entity.receiveDamage(config.damage);
+            }
+        }
     }
 }

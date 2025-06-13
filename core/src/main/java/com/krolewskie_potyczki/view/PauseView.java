@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.krolewskie_potyczki.AudioManager;
 import com.krolewskie_potyczki.controller.GameController;
 import com.krolewskie_potyczki.model.config.GameConfig;
 
@@ -24,19 +23,19 @@ public class PauseView implements Disposable {
     private final TextButton menuButton;
 
     private final Slider volumeSlider;
-    private final Preferences prefs;
     private final float savedVolume;
 
     public PauseView() {
+        Preferences prefs = Gdx.app.getPreferences("MyGameSettings");
+
         stage = new Stage(new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
         skin = new Skin(Gdx.files.internal("craftacular/craftacular-ui.json"));
 
         resumeButton = new TextButton("Resume", skin);
         menuButton = new TextButton("Menu", skin);
 
-        prefs = Gdx.app.getPreferences("MyGameSettings");
         volumeSlider = new Slider(0f, 1f, 0.01f, false, skin);
-        savedVolume = prefs.getFloat("musicVolume", 0.5f);
+        this.savedVolume = prefs.getFloat("musicVolume", 0f);
 
         createUI();
     }
@@ -44,16 +43,6 @@ public class PauseView implements Disposable {
     void createUI() {
         Label volumeLabel = new Label("Music volume:", skin);
         volumeSlider.setValue(savedVolume);
-
-        volumeSlider.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                float vol = volumeSlider.getValue();
-                AudioManager.inst().setVolume(vol);
-                prefs.putFloat("musicVolume", vol);
-                prefs.flush();
-            }
-        });
 
         stage.addActor(resumeButton);
         stage.addActor(menuButton);
@@ -81,6 +70,13 @@ public class PauseView implements Disposable {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 controller.onMenuClicked();
+            }
+        });
+
+        volumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                controller.onVolumeChanged(volumeSlider.getValue());
             }
         });
     }

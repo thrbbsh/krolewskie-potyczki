@@ -1,7 +1,10 @@
 package com.krolewskie_potyczki.controller;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
+import com.krolewskie_potyczki.AudioManager;
 import com.krolewskie_potyczki.Main;
 import com.krolewskie_potyczki.model.endcondition.DefaultGameEndCondition;
 import com.krolewskie_potyczki.model.entity.Arena;
@@ -22,19 +25,19 @@ public class GameController {
     private Screen gameScreen;
     private PauseScreen pauseScreen;
 
-    private final DeckController playerDeckController;
-    private final DeckController botDeckController;
+    private final DeckController deckController;
+    private final Preferences prefs;
 
     public GameController(Main game, GameView gameView) {
         this.game = game;
         this.gameView = gameView;
 
-        arenaController = new ArenaController();
+        arenaController = new ArenaController(gameView.getArenaView());
         arena = arenaController.getArena();
         endCondition = new DefaultGameEndCondition();
 
-        playerDeckController = new PlayerDeckController(arena, gameView.getArenaView(), arenaController);
-        botDeckController = new BotDeckController(arena, gameView.getArenaView(), arenaController);
+        deckController = new DeckController(arena, gameView.getArenaView(), arenaController);
+        prefs = Gdx.app.getPreferences("MyGameSettings");
     }
 
     public void update(float delta) {
@@ -49,8 +52,7 @@ public class GameController {
         }
 
         gameView.renderGame(delta, arena.getPlayerElixir(), arena.getMaxElixir(), arena.getTimeLeft(), arena.getActiveEntities());
-        playerDeckController.update(delta);
-        botDeckController.update(delta);
+        deckController.update(delta);
         arenaController.update(delta);
     }
 
@@ -81,6 +83,12 @@ public class GameController {
     }
 
     public void onMapTouched(Vector2 pos) {
-        playerDeckController.onMapTouched(pos);
+        deckController.onMapTouched(pos);
+    }
+
+    public void onVolumeChanged(float vol) {
+        AudioManager.inst().setVolume(vol);
+        prefs.putFloat("musicVolume", vol);
+        prefs.flush();
     }
 }
